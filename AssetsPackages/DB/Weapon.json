@@ -1,0 +1,14 @@
+{
+  "Weapon001": {
+    "id": "Weapon001",
+    "sort": 0,
+    "name": "weapon chinese",
+    "icon": "weapon icon name",
+    "type": "attack type",
+    "script": "WeaponCtrl",
+    "bullet": "BT001",
+    "range": 6,
+    "alert": 2,
+    "atk_speed": 1
+  }
+}

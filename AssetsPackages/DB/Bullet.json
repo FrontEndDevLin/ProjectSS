@@ -1,0 +1,9 @@
+{
+  "BT001": {
+    "id": "BT001",
+    "prefab": "BT001",
+    "script": "BulletCtrl",
+    "speed": 40,
+    "max_dis": 10
+  }
+}

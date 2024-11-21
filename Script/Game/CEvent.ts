@@ -1,0 +1,5 @@
+export enum CEVENT_COMPASS {
+    TOUCH_START,
+    TOUCH_END,
+    TOUCH_MOVE
+}
