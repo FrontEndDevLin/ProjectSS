@@ -1,9 +1,10 @@
-import { _decorator, Component, Node, Animation, Vec3, UITransform, v3, CircleCollider2D, Contact2DType } from 'cc';
+import { _decorator, Component, Node, Animation, Vec3, UITransform, v3, Contact2DType, CircleCollider2D, BoxCollider2D } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import WeaponManager from '../../CManager/WeaponManager';
 import { BulletManager } from '../../CManager/BulletManager';
 import CharacterManager from '../../CManager/CharacterManager';
 import { GP_UNIT } from '../../Common';
+import { GP_GROUP } from '../../ColliderType';
 const { ccclass, property } = _decorator;
 
 /**
@@ -46,11 +47,23 @@ export class WeaponCtrl extends OO_Component {
 
         let alertRange: number = this.weaponPanel.range + this.weaponPanel.alert;
         this._alertRangeCollider.radius = alertRange * GP_UNIT;
-        this._alertRangeCollider.on(Contact2DType.BEGIN_CONTACT, this._onARangeBeginContact)
+        this._alertRangeCollider.on(Contact2DType.BEGIN_CONTACT, this._onARangeBeginContact);
+        this._alertRangeCollider.on(Contact2DType.END_CONTACT, this._onARangeEndContact);
     }
 
-    private _onARangeBeginContact(selfCollider, otherCollider) {
-        console.log('碰撞到了')
+    private _onARangeBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
+        if (otherCollider.group === GP_GROUP.ENEMY) {
+            console.log('碰撞到了敌人');
+            console.log(selfCollider);
+            console.log(otherCollider);
+            // 将敌人放入队列中，结束碰撞时将敌人移出
+            // 每帧检查队列中对应节点距离角色的距离，武器指向离得最近的目标
+        }
+    }
+    private _onARangeEndContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
+        if (otherCollider.group === GP_GROUP.ENEMY) {
+            
+        }
     }
 
     start() {
