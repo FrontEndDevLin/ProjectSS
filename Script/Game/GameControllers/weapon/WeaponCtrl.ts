@@ -22,6 +22,11 @@ export class WeaponCtrl extends OO_Component {
 
     private _alertRangeCollider: CircleCollider2D = null;
 
+    // 警戒范围内的敌人
+    private _highEnemyList: string[] = [];
+    // TODO: 需要再维护一个攻击范围内的队列，当该队列中有敌人时，优先从中选择，性能会有提升
+    private _dangerEnemyList: string[] = [];
+
     // 弹头考虑分出单独的类管理
     public buildWarhead() {
 
@@ -57,13 +62,18 @@ export class WeaponCtrl extends OO_Component {
             console.log(selfCollider);
             console.log(otherCollider);
             // 将敌人放入队列中，结束碰撞时将敌人移出
-            // 每帧检查队列中对应节点距离角色的距离，武器指向离得最近的目标
+            this._highEnemyList[otherCollider.uuid] = 1;
         }
     }
     private _onARangeEndContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
         if (otherCollider.group === GP_GROUP.ENEMY) {
-            
+            console.log('移除敌人')
+            delete this._highEnemyList[otherCollider.uuid];
         }
+    }
+    // 每帧检查队列中对应节点距离角色的距离，武器指向离得最近的目标
+    private _chooseTarget() {
+
     }
 
     start() {

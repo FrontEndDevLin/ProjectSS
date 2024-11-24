@@ -3,11 +3,25 @@ import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
+interface EnemyInfo {
+    x?: number,
+    y?: number,
+    alive: number
+}
+interface EnemyMap {
+    [uuid: string]: EnemyInfo
+}
+
 @ccclass('EnemyManager')
 export class EnemyManager extends OO_UIManager {
     static instance: EnemyManager = null;
 
     public abName: string = "GP";
+
+    /**
+     * 维护一个敌人map表，每一帧更新坐标和是否存活，当敌人被消灭后，播放完阵亡动画后从表中移除
+     */
+    public enemyMap: EnemyMap = {};
 
     protected onLoad(): void {
         if (!EnemyManager.instance) {
@@ -28,9 +42,29 @@ export class EnemyManager extends OO_UIManager {
      * 临时方法，现用于给玩家角色测试使用
      */
     public initEnemy() {
+        this.createEnemy();
+    }
+
+    public createEnemy() {
         let enemyNode = this.loadUINode("enemy/Enemy01");
-        enemyNode.setPosition(v3(300, 300));
+        // 临时
+        let x = 300;
+        let y = 300;
+        enemyNode.setPosition(v3(x, y));
+        this.enemyMap[enemyNode.uuid] = {
+            x,
+            y,
+            alive: 1
+        };
         this.appendUINode(enemyNode, this.rootNode);
+    }
+    public updateEnemy(uuid: string, enemyInfo: EnemyInfo) {
+        for (let k in enemyInfo) {
+            this.enemyMap[uuid][k] = enemyInfo[k];
+        }
+    }
+    public removeEnemy(uuid: string) {
+        delete this.enemyMap[uuid]
     }
 
     start() {
