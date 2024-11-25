@@ -124,7 +124,24 @@ export class WeaponCtrl extends OO_Component {
             return;
         }
         let target: EnemyInfo = this._chooseTarget();
+        if (!target) {
+            return;
+        }
+        
         // 武器指向离得最近的目标
+        let characterLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
+        let currentVec: Vec3 = characterLoc.add(this.node.position);
+        let vecX = target.x - currentVec.x;
+        let vecY = target.y - currentVec.y;
+
+        let angle = Number( (Math.atan(vecY / vecX) * 51.3).toFixed(2) );
+        // let scaleX = 1;
+
+        // if (vecX < 0) {
+        //     scaleX = -1;
+        // }
+
+        this.node.angle = angle;
     }
 
     initAttr(attr) {
@@ -169,8 +186,10 @@ export class WeaponCtrl extends OO_Component {
 
     update(deltaTime: number) {
         // 范围检测
+        this._rotateWeapon();
+
         // let target: EnemyInfo = this._chooseTarget();
-        let target = true;
+        let target = false;
 
         // 进入范围，判断冷却时间
         if (target) {
