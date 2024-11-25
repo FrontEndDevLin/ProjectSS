@@ -3,9 +3,10 @@ import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
-interface EnemyInfo {
+export interface EnemyInfo {
     x?: number,
     y?: number,
+    dis?: number,
     alive: number
 }
 interface EnemyMap {
@@ -46,16 +47,12 @@ export class EnemyManager extends OO_UIManager {
     }
 
     public createEnemy() {
-        let enemyNode = this.loadUINode("enemy/Enemy01");
+        let enemyNode = this.loadUINode("enemy/Enemy01", "EnemyCtrl");
         // 临时
         let x = 300;
         let y = 300;
         enemyNode.setPosition(v3(x, y));
-        this.enemyMap[enemyNode.uuid] = {
-            x,
-            y,
-            alive: 1
-        };
+        this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
         this.appendUINode(enemyNode, this.rootNode);
     }
     public updateEnemy(uuid: string, enemyInfo: EnemyInfo) {
@@ -64,7 +61,24 @@ export class EnemyManager extends OO_UIManager {
         }
     }
     public removeEnemy(uuid: string) {
-        delete this.enemyMap[uuid]
+        delete this.enemyMap[uuid];
+    }
+    public getNearestEnemy(uuidList: string[]): EnemyInfo {
+        let min: number = 0;
+        let target: string = null;
+        for (let uuid in uuidList) {
+            let dis = this.enemyMap[uuid].dis;
+            if (!target) {
+                min = dis;
+                target = uuid;
+            } else {
+                if (dis < min) {
+                    min = dis;
+                    target = uuid;
+                }
+            }
+        }
+        return this.enemyMap[target];
     }
 
     start() {
