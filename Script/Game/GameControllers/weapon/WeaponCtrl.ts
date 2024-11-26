@@ -6,6 +6,7 @@ import CharacterManager from '../../CManager/CharacterManager';
 import { GP_UNIT } from '../../Common';
 import { GP_GROUP, WEAPON_DOMAIN } from '../../ColliderType';
 import { EnemyInfo, EnemyManager } from '../../CManager/EnemyManager';
+import { Callback } from '../../Interface';
 const { ccclass, property } = _decorator;
 
 /**
@@ -51,12 +52,11 @@ export class WeaponCtrl extends OO_Component {
         if (this.weaponPanel.type === 1) {
             // 当前是远程类型，需要弹头管理
         }
-
-        this._animation = this.node.getComponent(Animation);
+        this._animation = this.views["PIC"].getComponent(Animation);
         this._animation.on(Animation.EventType.FINISHED, (type, state) => {
             // console.log(type, state)
             this._attacking = false;
-        })
+        });
 
         let colliders: CircleCollider2D[] = this.node.getComponents(CircleCollider2D);
         for (let collider of colliders) {
@@ -84,7 +84,6 @@ export class WeaponCtrl extends OO_Component {
         if (otherCollider.group === GP_GROUP.ENEMY) {
             switch (selfCollider.tag) {
                 case WEAPON_DOMAIN.ALERT: {
-                    console.log('碰撞到了敌人');
                     // 将敌人放入队列中，结束碰撞时将敌人移出
                     this._highEnemyList[otherCollider.node.uuid] = 1;
                 } break;
@@ -107,16 +106,16 @@ export class WeaponCtrl extends OO_Component {
         }
     }
     // 每帧检查队列中对应节点距离角色的距离
-    private _chooseTarget(): EnemyInfo {
+    private _chooseTarget(callback: Callback) {
         // 优先判断攻击范围内的敌人
         if (Object.keys(this._dangerEnemyList).length) {
             let target: EnemyInfo = EnemyManager.instance.getNearestEnemy(this._dangerEnemyList);
-            return target;
+            callback(true, target);
         }
         // 攻击范围内无敌人，再判断警戒范围内的敌人
         if (Object.keys(this._highEnemyList).length) {
             let target: EnemyInfo = EnemyManager.instance.getNearestEnemy(this._highEnemyList);
-            return target;
+            callback(false, target);
         }
     }
     // 旋转武器(改变贴图朝向)
@@ -124,34 +123,45 @@ export class WeaponCtrl extends OO_Component {
         if (this._attacking) {
             return;
         }
-        let target: EnemyInfo = this._chooseTarget();
-        if (!target) {
-            return;
-        }
-        
-        // 武器指向离得最近的目标
-        let characterLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
-        let currentVec: Vec3 = v3(characterLoc.x + this.node.position.x, characterLoc.y + this.node.position.y);
-        let vecX = target.x - currentVec.x;
-        let vecY = target.y - currentVec.y;
+        this._chooseTarget((hasAtkTarget: boolean, target: EnemyInfo) => {
+            if (!target) {
+                return;
+            }
 
-        let angle = Number((Math.atan(vecY / vecX) * 51.3).toFixed(2));
-        // let scaleX = 1;
+            // 武器指向离得最近的目标
+            let characterLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
+            let currentVec: Vec3 = v3(characterLoc.x + this.node.position.x, characterLoc.y + this.node.position.y);
+            let vecX = target.x - currentVec.x;
+            let vecY = target.y - currentVec.y;
 
-        // if (vecX < 0) {
-        //     scaleX = -1;
-        // }
+            let angle = Number((Math.atan(vecY / vecX) * 51.3).toFixed(2));
+            // let scaleX = 1;
 
-        this.node.angle = angle;
+            // if (vecX < 0) {
+            //     scaleX = -1;
+            // }
+
+            this.node.angle = angle;
+        });
     }
 
     initAttr(attr) {
         this.weaponPanel = attr;
     }
 
-    public attack(dt: number): void {
+    private _tryAttack(dt: number) {
         if (this._cd <= 0) {
-            // attack
+            this._attack(dt);
+        } else {
+            this._cd -= dt;
+        }
+    }
+    private _attack(dt: number): void {
+        this._chooseTarget((hasAtkTarget: boolean, target: EnemyInfo) => {
+            if (!hasAtkTarget || !target) {
+                return;
+            }
+    
             // 通知BulletManager发射子弹，带上当前坐标，向量
             // 坐标为当前坐标转化为世界坐标，向量为当前节点的方向
             let { x, y } = this.node.position;
@@ -161,13 +171,12 @@ export class WeaponCtrl extends OO_Component {
                 return;
             }
             let worldLoc: Vec3 = v3(ctLoc.x + x, ctLoc.y + y);
+            // TODO: 向量要根据贴图的旋转角度计算
             let vector = v3(this.node.position).normalize();
             BulletManager.instance.createBullet(this.weaponPanel.bullet, worldLoc, vector);
             this._playAttackAni();
             this._cd = this.weaponPanel.atk_speed;
-        } else {
-            this._cd -= dt;
-        }
+        });
     }
     // 播放攻击动画
     private _playAttackAni() {
@@ -178,19 +187,10 @@ export class WeaponCtrl extends OO_Component {
     }
 
     update(deltaTime: number) {
-        /**
-         * 离开范围后(target=null)冷却继续计算，目前冷却停止
-         */
-
         // 范围检测
         this._rotateWeapon();
 
-        let target: EnemyInfo = this._chooseTarget();
-
-        // 进入范围，判断冷却时间
-        if (target) {
-            this.attack(deltaTime);
-        }
+        this._tryAttack(deltaTime);
     }
 }
 
