@@ -53,8 +53,9 @@ export class WeaponCtrl extends OO_Component {
         }
 
         this._animation = this.node.getComponent(Animation);
-        this._animation.on(Animation.EventType.PLAY, (type, state) => {
-            console.log(type, state)
+        this._animation.on(Animation.EventType.FINISHED, (type, state) => {
+            // console.log(type, state)
+            this._attacking = false;
         })
 
         let colliders: CircleCollider2D[] = this.node.getComponents(CircleCollider2D);
@@ -130,11 +131,11 @@ export class WeaponCtrl extends OO_Component {
         
         // 武器指向离得最近的目标
         let characterLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
-        let currentVec: Vec3 = characterLoc.add(this.node.position);
+        let currentVec: Vec3 = v3(characterLoc.x + this.node.position.x, characterLoc.y + this.node.position.y);
         let vecX = target.x - currentVec.x;
         let vecY = target.y - currentVec.y;
 
-        let angle = Number( (Math.atan(vecY / vecX) * 51.3).toFixed(2) );
+        let angle = Number((Math.atan(vecY / vecX) * 51.3).toFixed(2));
         // let scaleX = 1;
 
         // if (vecX < 0) {
@@ -146,15 +147,6 @@ export class WeaponCtrl extends OO_Component {
 
     initAttr(attr) {
         this.weaponPanel = attr;
-    }
-
-    // 范围检测，范围暂定为当前攻击范围+alert
-    public rangeCheck(dt: number): boolean {
-        if (this._attacking) {
-            return false;
-        }
-        // TODO: 检测是否有目标在警示范围内，有则旋转武器角度
-        return true;
     }
 
     public attack(dt: number): void {
@@ -180,16 +172,20 @@ export class WeaponCtrl extends OO_Component {
     // 播放攻击动画
     private _playAttackAni() {
         const atk_speed = this.weaponPanel.atk_speed;
+        this._attacking = true;
         // 攻击动画随着攻速变化而变化
-        this._animation.play(`${this.weaponPanel.weaponName}-atk`);
+        this._animation.play(`${this.weaponPanel.id}-atk`);
     }
 
     update(deltaTime: number) {
+        /**
+         * 离开范围后(target=null)冷却继续计算，目前冷却停止
+         */
+
         // 范围检测
         this._rotateWeapon();
 
-        // let target: EnemyInfo = this._chooseTarget();
-        let target = false;
+        let target: EnemyInfo = this._chooseTarget();
 
         // 进入范围，判断冷却时间
         if (target) {
