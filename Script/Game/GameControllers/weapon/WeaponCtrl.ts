@@ -137,13 +137,14 @@ export class WeaponCtrl extends OO_Component {
             let vecY = target.y - currentVec.y;
 
             let angle = Number((Math.atan(vecY / vecX) * 57.32).toFixed(2));
-            // let scaleX = 1;
 
-            // if (vecX < 0) {
-            //     scaleX = -1;
-            // }
+            let scaleX = 1;
+            if (vecX < 0) {
+                scaleX = -1;
+            }
 
             this.views["PIC"].angle = angle;
+            this.views["PIC"].setScale(v3(scaleX, 1));
         });
     }
 
@@ -174,7 +175,11 @@ export class WeaponCtrl extends OO_Component {
             }
             let worldLoc: Vec3 = v3(ctLoc.x + x, ctLoc.y + y);
             // 向量要根据贴图的旋转角度计算
-            let vector = getVectorByAngle(this.views["PIC"].angle);
+            let angle = this.views["PIC"].angle;
+            if (this.views["PIC"].getScale().x === -1) {
+                angle -= 180;
+            }
+            let vector = getVectorByAngle(angle);
             BulletManager.instance.createBullet(this.weaponPanel.bullet, worldLoc, vector);
             this._playAttackAni();
             this._cd = this.weaponPanel.atk_speed;

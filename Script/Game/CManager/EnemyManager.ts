@@ -49,7 +49,7 @@ export class EnemyManager extends OO_UIManager {
     public createEnemy() {
         let enemyNode = this.loadUINode("enemy/Enemy01", "EnemyCtrl");
         // 临时
-        let x = 300;
+        let x = -300;
         let y = 300;
         enemyNode.setPosition(v3(x, y));
         this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
