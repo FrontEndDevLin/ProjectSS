@@ -3,7 +3,7 @@ import { OO_Component } from '../../../OO/OO';
 import WeaponManager from '../../CManager/WeaponManager';
 import { BulletManager } from '../../CManager/BulletManager';
 import CharacterManager from '../../CManager/CharacterManager';
-import { GP_UNIT } from '../../Common';
+import { getVectorByAngle, GP_UNIT } from '../../Common';
 import { GP_GROUP, WEAPON_DOMAIN } from '../../ColliderType';
 import { EnemyInfo, EnemyManager } from '../../CManager/EnemyManager';
 import { Callback } from '../../Interface';
@@ -58,6 +58,7 @@ export class WeaponCtrl extends OO_Component {
             this._attacking = false;
         });
 
+        // 武器警戒、攻击碰撞盒子处理
         let colliders: CircleCollider2D[] = this.node.getComponents(CircleCollider2D);
         for (let collider of colliders) {
             switch (collider.tag) {
@@ -68,11 +69,9 @@ export class WeaponCtrl extends OO_Component {
                     this._attackRangeCollider = collider;
                 } break;
             }
-
             collider.on(Contact2DType.BEGIN_CONTACT, this._onWeaponDomainBeginContact, this);
             collider.on(Contact2DType.END_CONTACT, this._onWeaponDomainEndContact, this);
         }
-
         let { range, alert } = this.weaponPanel;
         this._attackRangeCollider.radius = range * GP_UNIT;
         this._alertRangeCollider.radius = (range + alert) * GP_UNIT;
@@ -111,11 +110,13 @@ export class WeaponCtrl extends OO_Component {
         if (Object.keys(this._dangerEnemyList).length) {
             let target: EnemyInfo = EnemyManager.instance.getNearestEnemy(this._dangerEnemyList);
             callback(true, target);
+            return;
         }
         // 攻击范围内无敌人，再判断警戒范围内的敌人
         if (Object.keys(this._highEnemyList).length) {
             let target: EnemyInfo = EnemyManager.instance.getNearestEnemy(this._highEnemyList);
             callback(false, target);
+            return;
         }
     }
     // 旋转武器(改变贴图朝向)
@@ -130,18 +131,19 @@ export class WeaponCtrl extends OO_Component {
 
             // 武器指向离得最近的目标
             let characterLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
+            // 将武器坐标转为地图坐标
             let currentVec: Vec3 = v3(characterLoc.x + this.node.position.x, characterLoc.y + this.node.position.y);
             let vecX = target.x - currentVec.x;
             let vecY = target.y - currentVec.y;
 
-            let angle = Number((Math.atan(vecY / vecX) * 51.3).toFixed(2));
+            let angle = Number((Math.atan(vecY / vecX) * 57.32).toFixed(2));
             // let scaleX = 1;
 
             // if (vecX < 0) {
             //     scaleX = -1;
             // }
 
-            this.node.angle = angle;
+            this.views["PIC"].angle = angle;
         });
     }
 
@@ -171,8 +173,8 @@ export class WeaponCtrl extends OO_Component {
                 return;
             }
             let worldLoc: Vec3 = v3(ctLoc.x + x, ctLoc.y + y);
-            // TODO: 向量要根据贴图的旋转角度计算
-            let vector = v3(this.node.position).normalize();
+            // 向量要根据贴图的旋转角度计算
+            let vector = getVectorByAngle(this.views["PIC"].angle);
             BulletManager.instance.createBullet(this.weaponPanel.bullet, worldLoc, vector);
             this._playAttackAni();
             this._cd = this.weaponPanel.atk_speed;
@@ -182,7 +184,8 @@ export class WeaponCtrl extends OO_Component {
     private _playAttackAni() {
         const atk_speed = this.weaponPanel.atk_speed;
         this._attacking = true;
-        // 攻击动画随着攻速变化而变化
+        // TODO: 攻击动画随着攻速变化而变化
+        // TODO: 攻击动画用帧动画，目前的效果有问题
         this._animation.play(`${this.weaponPanel.id}-atk`);
     }
 

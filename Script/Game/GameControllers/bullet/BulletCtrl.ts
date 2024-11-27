@@ -44,7 +44,7 @@ export class BulletCtrl extends OO_Component {
         let ay = dt * this._attr.speed * this._vector.y * GP_UNIT;
         let { x, y } = this.node.position;
         let newLoc = v3(x + ax, y + ay);
-        // TODO: 如果两点之间距离超过_maxDisPx，销毁
+        // 如果两点之间距离超过_maxDisPx，销毁
         if (getDistance(this._startRlt, newLoc) < this._maxDisPx) {
             this.node.setPosition(newLoc);
         } else {

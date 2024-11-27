@@ -22,13 +22,13 @@ export class DBManager extends OO_Manager {
         console.log("DB Manager loaded");
 
         // 初始化数据（武器、子弹、角色等）
-        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: JsonAsset, urls: ['Weapon', 'Bullet'] }], () => {}, err => {
-            console.log('所有数据加载完毕')
+        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: JsonAsset, urls: ["Weapon", "Bullet"] }], () => {}, err => {
+            console.log("所有数据加载完毕")
             if (err) {
                 return console.log(err)
             }
             for (let cb of this._loadedCallbackList) {
-                cb(err)
+                cb(err);
             }
             // console.log(OO_ResourceManager.instance.getAssets(this.abName, "Weapon").json);
         })
