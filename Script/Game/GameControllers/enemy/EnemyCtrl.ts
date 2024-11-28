@@ -1,12 +1,15 @@
-import { _decorator, Component, Node, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, Component, Contact2DType, Node, Vec3 } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import { EnemyManager } from '../../CManager/EnemyManager';
 import CharacterManager from '../../CManager/CharacterManager';
+import { GP_GROUP } from '../../ColliderType';
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemyCtrl')
 export class EnemyCtrl extends OO_Component {
     private _alive: boolean = true;
+
+    private _collider: BoxCollider2D = null;
 
     start() {
 
@@ -15,7 +18,21 @@ export class EnemyCtrl extends OO_Component {
     protected onLoad(): void {
         super.onLoad();
 
-        console.log("通用敌人脚本挂载")
+        this._collider = this.node.getComponent(BoxCollider2D);
+
+        this._collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
+    }
+    private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+        switch (otherCollider.group) {
+            case GP_GROUP.BULLET: {
+                // TODO: 显示伤害由一个类单独管理
+                // 当前阶段敌人直接死，伤害随意计算
+                console.log('被击中，扣血')
+            } break;
+            case GP_GROUP.CHARACTER: {
+                console.log('击中角色')
+            } break;
+        }
     }
 
     update(deltaTime: number) {

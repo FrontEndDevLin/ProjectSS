@@ -78,6 +78,10 @@ export class WeaponCtrl extends OO_Component {
     }
 
     start() { }
+    protected onDestroy(): void {
+        this._attackRangeCollider.off(Contact2DType.BEGIN_CONTACT, this._onWeaponDomainBeginContact, this);
+        this._alertRangeCollider.off(Contact2DType.END_CONTACT, this._onWeaponDomainEndContact, this);
+    }
 
     private _onWeaponDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
         if (otherCollider.group === GP_GROUP.ENEMY) {

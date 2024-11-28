@@ -41,11 +41,11 @@ export class BulletCtrl extends OO_Component {
     }
 
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
-        console.log(otherCollider.group)
-        console.log(selfCollider.group)
-        if (otherCollider.group === GP_GROUP.BULLET) {
-            console.log('被击中')
-        }
+        // console.log(otherCollider.group)
+        // console.log(selfCollider.group)
+        // if (otherCollider.group === GP_GROUP.BULLET) {
+        //     console.log('被击中')
+        // }
     }
 
     update(dt: number) {
