@@ -54,14 +54,11 @@ export class BulletManager extends OO_UIManager {
     }
 
     public createBullet(bulletId: string, position: Vec3, vector: Vec3) {
-        console.log(`创建子弹${bulletId}`)
+        // console.log(`创建子弹${bulletId}`)
         const bulletAttr = bulletDataList[0];
         let scriptName = bulletScriptMap[bulletId] || "BulletCtrl";
         const bulletNode: Node = this.loadUINode(`bullet/${bulletAttr.id}`, scriptName);
-        // 不考虑给子弹挂载脚本，可能会有性能问题
         bulletNode.setPosition(position);
-        // TODO: 根据vector设置节点的旋转属性
-
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
         const scriptComp: BulletCtrl = this.appendUINode(bulletNode).getComponent(scriptName);
         scriptComp.initAttr({ attr: bulletAttr, vector });

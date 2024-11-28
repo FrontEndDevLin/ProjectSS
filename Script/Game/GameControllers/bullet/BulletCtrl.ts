@@ -1,7 +1,8 @@
-import { _decorator, Component, Node, v3, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, Component, Contact2DType, Node, v3, Vec3 } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import { BulletAttr, BulletInitParams } from '../../Interface';
 import { getDistance, GP_UNIT } from '../../Common';
+import { GP_GROUP } from '../../ColliderType';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletCtrl')
@@ -19,6 +20,9 @@ export class BulletCtrl extends OO_Component {
 
     protected onLoad(): void {
         super.onLoad();
+
+        let collider: BoxCollider2D = this.node.getComponent(BoxCollider2D);
+        collider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
     }
 
     start() {
@@ -34,6 +38,14 @@ export class BulletCtrl extends OO_Component {
         // 初始位置
         let { x, y } = this.node.position;
         this._startRlt = new Vec3(x, y);
+    }
+
+    private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+        console.log(otherCollider.group)
+        console.log(selfCollider.group)
+        if (otherCollider.group === GP_GROUP.BULLET) {
+            console.log('被击中')
+        }
     }
 
     update(dt: number) {
