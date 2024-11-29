@@ -14,6 +14,7 @@ import { OO_AddManager } from '../OO/OO_Manager';
 import { BulletManager } from './CManager/BulletManager';
 import { DBManager } from './CManager/DBManager';
 import { EnemyManager } from './CManager/EnemyManager';
+import { DamageManager } from './CManager/DamageManager';
 
 export default class Main extends Component {
     static instance: Main = null;
@@ -52,6 +53,7 @@ export default class Main extends Component {
             OO_AddManager(EnemyManager);
             OO_AddManager(WeaponManager);
             OO_AddManager(BulletManager);
+            OO_AddManager(DamageManager);
         })
     }
 
