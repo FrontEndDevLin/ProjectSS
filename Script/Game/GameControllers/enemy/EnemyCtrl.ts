@@ -10,6 +10,8 @@ export class EnemyCtrl extends OO_Component {
     private _alive: boolean = true;
 
     private _collider: BoxCollider2D = null;
+    // temp
+    private _hp: number = 8;
 
     start() {
 

@@ -66,7 +66,7 @@ export default class Main extends Component {
             }
             MapManager.instance.showMap();
             console.log("map loaded");
-            CharacterManager.instance.initCharacter("Character01", err => {
+            CharacterManager.instance.initCharacter("CR001", err => {
                 if (err) {
                     return;
                 }

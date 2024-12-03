@@ -12,13 +12,12 @@ export default class CharacterManager extends OO_UIManager {
 
     public abName: string = "GP";
 
-    public character: string = "";
+    public characterId: string = "";
+
+    public attribute: any = null;
+    public defPanel: any = null;
 
     private _characterLoc: Vec3 = null;
-
-    public attribute: CharacterAttribute = {
-        speed: 5
-    }
 
     protected onLoad(): void {
         if (!CharacterManager.instance) {
@@ -37,24 +36,25 @@ export default class CharacterManager extends OO_UIManager {
         })
     }
 
-    public initCharacter(character: string, callback?: Callback) {
-        this.character = character;
+    public initCharacter(characterId: string, callback?: Callback) {
+        this.characterId = characterId;
+
+        let characterDb = DBManager.instance.getDbData("Character");
+        this.attribute = characterDb[characterId];
+        this.defPanel = characterDb["def_panel"];
 
         WeaponManager.instance.initWeapon(['test']);
 
-        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/character/${this.character}`] }], () => {}, err => {
+        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/character/${characterId}`] }], () => {}, err => {
             if (callback) {
                 callback(err)
             }
         });
-
-        let characterData = DBManager.instance.getDbData("Character");
-        console.log(characterData)
     }
 
     public showCharacter() {
         let characterShell: Node = this.showUI("character/Character", this.rootNode, "CharacterCtrl");
-        this.showUI(`character/${this.character}`, characterShell);
+        this.showUI(`character/${this.characterId}`, characterShell);
 
         WeaponManager.instance.showWeapon();
     }
@@ -63,6 +63,11 @@ export default class CharacterManager extends OO_UIManager {
     }
     public getCharacterLoc(): Vec3 {
         return this._characterLoc;
+    }
+
+    // 获取角色面板
+    public getCharacterPanel() {
+        return this.attribute.panel;
     }
 
     start() {
