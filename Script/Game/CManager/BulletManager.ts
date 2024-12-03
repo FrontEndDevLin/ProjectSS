@@ -28,6 +28,9 @@ const bulletDataList: BulletAttr[] = [
 const bulletScriptMap = {
 }
 
+/**
+ * 这个类要初始化一个弹头列表（来自弹头db），存储角色身上武器所携带的弹头数据，角色面板发生变化时，更新该列表的数据
+ */
 @ccclass('BulletManager')
 export class BulletManager extends OO_UIManager {
     static instance: BulletManager = null;
