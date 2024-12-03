@@ -3,6 +3,7 @@ import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { Callback, CharacterAttribute, WeaponAttribute, WeaponData } from '../Interface';
 import WeaponManager from './WeaponManager';
+import { DBManager } from './DBManager';
 const { ccclass, property } = _decorator;
 
 // 角色管理类，管理角色属性、武器等
@@ -45,7 +46,10 @@ export default class CharacterManager extends OO_UIManager {
             if (callback) {
                 callback(err)
             }
-        })
+        });
+
+        let characterData = DBManager.instance.getDbData("Character");
+        console.log(characterData)
     }
 
     public showCharacter() {
