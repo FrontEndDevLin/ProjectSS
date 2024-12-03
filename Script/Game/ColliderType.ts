@@ -17,9 +17,3 @@ export enum GP_GROUP {
 export enum CLD_ENEMY {
     ENEMY_1 = 100
 }
-
-// 弹头枚举数据放在db里比较好？
-export enum CLD_BULLET {
-    BULLET_1 = 500
-}
-

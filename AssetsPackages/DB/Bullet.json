@@ -4,6 +4,8 @@
     "prefab": "BT001",
     "script": "BulletCtrl",
     "speed": 40,
-    "max_dis": 10
+    "max_dis": 10,
+    "cld": 500,
+    "cld_desc": "弹头碰撞id"
   }
 }

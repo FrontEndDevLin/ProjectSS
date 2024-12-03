@@ -4,6 +4,7 @@ import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { BulletAttr } from '../Interface';
 import { BulletCtrl } from '../GameControllers/bullet/BulletCtrl';
 import { DBManager } from './DBManager';
+import WeaponManager from './WeaponManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -36,7 +37,7 @@ export class BulletManager extends OO_UIManager {
     static instance: BulletManager = null;
     public abName: string = "GP";
 
-    private _bulletPool = [];
+    private _bulletList = [];
 
     start() {
 
@@ -49,11 +50,21 @@ export class BulletManager extends OO_UIManager {
             this.destroy();
             return;
         }
-        // console.log(DBManager.instance.getDbData("Bullet"));
         // 初始化各种子弹预设体
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/bullet/BT001`] }], () => {}, err => {
             console.log('所有子弹预设体加载完毕')
         })
+    }
+
+    public updateBulletList() {
+        let dbData = DBManager.instance.getDbData("Bullet");
+
+        let weaponList: any[] = WeaponManager.instance.weaponList;
+        // 根据该列表，生成新的列表格式为 { 弹头Tag: { 弹头数据 } }，弹头数据需要结合角色面板进行计算
+        for (let data of weaponList) {
+            let bulletId = data.bullet;
+            // console.log(dbData[bulletId])
+        }
     }
 
     public createBullet(bulletId: string, position: Vec3, vector: Vec3) {

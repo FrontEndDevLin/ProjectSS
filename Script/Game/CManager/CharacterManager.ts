@@ -4,6 +4,7 @@ import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { Callback, CharacterAttribute, WeaponAttribute, WeaponData } from '../Interface';
 import WeaponManager from './WeaponManager';
 import { DBManager } from './DBManager';
+import { BulletManager } from './BulletManager';
 const { ccclass, property } = _decorator;
 
 // 角色管理类，管理角色属性、武器等
@@ -44,6 +45,7 @@ export default class CharacterManager extends OO_UIManager {
         this.defPanel = characterDb["def_panel"];
 
         WeaponManager.instance.initWeapon(['test']);
+        BulletManager.instance.updateBulletList();
 
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/character/${characterId}`] }], () => {}, err => {
             if (callback) {
