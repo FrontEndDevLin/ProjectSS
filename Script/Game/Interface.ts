@@ -4,7 +4,7 @@ export interface Callback {
     (error: any, data?: any): void
 }
 export interface CharacterAttribute {
-    speed: number
+    spd: number
 }
 export interface WeaponAttribute {
     range: number,
@@ -31,7 +31,7 @@ export interface BulletAttr {
     // 飞行速度，伤害、穿透数由武器决定？
     speed: number,
     // 最大飞行距离
-    maxDis: number
+    max_dis: number
 }
 
 // 子弹初始化(initAttr方法)参数

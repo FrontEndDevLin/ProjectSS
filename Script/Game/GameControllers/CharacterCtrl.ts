@@ -16,7 +16,7 @@ export class CharacterCtrl extends OO_Component {
     private _vector: Vec3 = null;
 
     // 保存一个属性副本，此属性由CharacterManager维护，不可在该类中修改
-    public attribute: CharacterAttribute = CharacterManager.instance.attribute;
+    public attribute: any = CharacterManager.instance.attribute;
 
     start() {
         EventBus.on(CEVENT_COMPASS.TOUCH_START, this._compassTouchStart, this);
@@ -45,7 +45,7 @@ export class CharacterCtrl extends OO_Component {
         //     this.views["SF"].scaleX = 1;
         // }
 
-        let speed = dt * this.attribute.speed * GP_UNIT;
+        let speed = dt * this.attribute.panel.spd * GP_UNIT;
         let newPosition = this.node.position.add(new Vec3(this._vector.x * speed, this._vector.y * speed));
 
         let thresholdX = 720 / 2;
@@ -63,7 +63,6 @@ export class CharacterCtrl extends OO_Component {
         if (newPosition.y < -thresholdY) {
             newPosition.y = -thresholdY;
         }
-
         this.node.setPosition(newPosition);
     }
 

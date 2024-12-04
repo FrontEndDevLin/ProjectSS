@@ -23,8 +23,10 @@ const { ccclass, property } = _decorator;
  */
 
 const bulletDataList: BulletAttr[] = [
-    { id: "BT001", prefab: "BT001", speed: 40, maxDis: 10 }
+    { id: "BT001", prefab: "BT001", speed: 40, max_dis: 10 }
 ];
+
+let bulletDb: any = null;
 
 const bulletScriptMap = {
 }
@@ -37,7 +39,8 @@ export class BulletManager extends OO_UIManager {
     static instance: BulletManager = null;
     public abName: string = "GP";
 
-    private _bulletList = [];
+    // 存储当前装备的武器的弹头数据
+    private _bulletCldMap = {};
 
     start() {
 
@@ -53,23 +56,26 @@ export class BulletManager extends OO_UIManager {
         // 初始化各种子弹预设体
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/bullet/BT001`] }], () => {}, err => {
             console.log('所有子弹预设体加载完毕')
-        })
+        });
+
+        bulletDb = DBManager.instance.getDbData("Bullet");
     }
 
     public updateBulletList() {
-        let dbData = DBManager.instance.getDbData("Bullet");
-
         let weaponList: any[] = WeaponManager.instance.weaponList;
         // 根据该列表，生成新的列表格式为 { 弹头Tag: { 弹头数据 } }，弹头数据需要结合角色面板进行计算
         for (let data of weaponList) {
             let bulletId = data.bullet;
-            // console.log(dbData[bulletId])
+            let bData = bulletDb[bulletId];
+            // TODO: 临时设置，伤害需要经过面板计算后
+            bData.damage = 5;
+            this._bulletCldMap[bData.cld] = bData;
         }
     }
 
     public createBullet(bulletId: string, position: Vec3, vector: Vec3) {
         // console.log(`创建子弹${bulletId}`)
-        const bulletAttr = bulletDataList[0];
+        const bulletAttr = bulletDb[bulletId];
         let scriptName = bulletScriptMap[bulletId] || "BulletCtrl";
         const bulletNode: Node = this.loadUINode(`bullet/${bulletAttr.id}`, scriptName);
         bulletNode.setPosition(position);

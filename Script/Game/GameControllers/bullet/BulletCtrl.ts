@@ -31,10 +31,9 @@ export class BulletCtrl extends OO_Component {
     initAttr({ attr, vector }: BulletInitParams) {
         this._attr = attr;
         this._vector = vector;
-        this._maxDisPx = attr.maxDis * GP_UNIT;
+        this._maxDisPx = attr.max_dis * GP_UNIT;
         // 子弹运动
         this._init = true;
-
         // 初始位置
         let { x, y } = this.node.position;
         this._startRlt = new Vec3(x, y);
