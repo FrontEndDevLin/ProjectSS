@@ -3,6 +3,7 @@ import { OO_Component } from '../../../OO/OO';
 import { EnemyManager } from '../../CManager/EnemyManager';
 import CharacterManager from '../../CManager/CharacterManager';
 import { GP_GROUP } from '../../ColliderType';
+import { BulletManager } from '../../CManager/BulletManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemyCtrl')
@@ -30,12 +31,21 @@ export class EnemyCtrl extends OO_Component {
                 // TODO: 显示伤害由一个类单独管理
                 // 当前阶段敌人直接死，伤害随意计算
                 // 通过tag获取弹头数据（tag也存在弹头db里），获取的弹头数据要经过角色面板的补正
-                console.log('被击中，扣血')
+                // console.log('被击中，扣血' + )
+                let bulletDamage: number = BulletManager.instance.getBulletDamage(otherCollider.tag);
+                this._hp -= bulletDamage;
+                if (this._hp <= 0) {
+                    this.die();
+                }
             } break;
             case GP_GROUP.CHARACTER: {
                 console.log('击中角色')
             } break;
         }
+    }
+
+    public die() {
+        this.node.destroy();
     }
 
     update(deltaTime: number) {

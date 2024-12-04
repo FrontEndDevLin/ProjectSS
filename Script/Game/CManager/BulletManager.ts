@@ -5,6 +5,7 @@ import { BulletAttr } from '../Interface';
 import { BulletCtrl } from '../GameControllers/bullet/BulletCtrl';
 import { DBManager } from './DBManager';
 import WeaponManager from './WeaponManager';
+import { DamageManager } from './DamageManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -68,9 +69,12 @@ export class BulletManager extends OO_UIManager {
             let bulletId = data.bullet;
             let bData = bulletDb[bulletId];
             // TODO: 临时设置，伤害需要经过DamageManager类面板计算后
-            bData.damage = 5;
+            bData.damage = DamageManager.instance.calcBulletDamage(bulletId);
             this._bulletCldMap[bData.cld] = bData;
         }
+    }
+    public getBulletDamage(cldTag: number) {
+        return this._bulletCldMap[cldTag].damage;
     }
 
     public createBullet(bulletId: string, position: Vec3, vector: Vec3) {

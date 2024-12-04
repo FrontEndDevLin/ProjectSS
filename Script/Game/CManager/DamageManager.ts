@@ -21,11 +21,14 @@ export class DamageManager extends OO_UIManager {
         console.log("Damage Manager launch");
     }
 
-    public calcDamage(bulletAttr, panel, enemyAttr) {
-        if (true) {
-            this._showDamageTxt();
-        }
+    // 计算武器伤害
+    public calcBulletDamage(bulletId: string) {
+        // TODO: 结合角色面板
         return 5;
+    }
+    // 打中敌人时计算伤害
+    public calcDamage(bulletId: string, enemyAttr) {
+        
     }
     private _showDamageTxt() {
         
