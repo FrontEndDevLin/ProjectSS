@@ -67,7 +67,7 @@ export class BulletManager extends OO_UIManager {
         for (let data of weaponList) {
             let bulletId = data.bullet;
             let bData = bulletDb[bulletId];
-            // TODO: 临时设置，伤害需要经过面板计算后
+            // TODO: 临时设置，伤害需要经过DamageManager类面板计算后
             bData.damage = 5;
             this._bulletCldMap[bData.cld] = bData;
         }
