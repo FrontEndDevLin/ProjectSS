@@ -37,11 +37,14 @@ export default class CharacterManager extends OO_UIManager {
         })
     }
 
+    // 这个方法只调用一次
     public initCharacter(characterId: string, callback?: Callback) {
         this.characterId = characterId;
 
         let characterDb = DBManager.instance.getDbData("Character");
         this.attribute = characterDb[characterId];
+        console.log(`角色初始面板`);
+        console.log(this.attribute)
         this.defPanel = characterDb["def_panel"];
 
         WeaponManager.instance.initWeapon(['test']);

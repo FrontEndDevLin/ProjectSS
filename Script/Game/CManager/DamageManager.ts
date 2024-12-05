@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, Vec3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 const { ccclass, property } = _decorator;
 
@@ -27,11 +27,14 @@ export class DamageManager extends OO_UIManager {
         return 5;
     }
     // 打中敌人时计算伤害
-    public calcDamage(bulletId: string, enemyAttr) {
-        
+    public calcDamage(damage, enemyAttr?) {
+        // TODO:
+        return damage;
     }
-    private _showDamageTxt() {
-        
+    public showDamageTxt(damage: number, position: Vec3) {
+        if (true) { 
+            console.log(`造成伤害: ${damage}`);
+        }
     }
 
     start() {

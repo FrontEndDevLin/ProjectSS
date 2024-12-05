@@ -7,15 +7,11 @@ import { DBManager } from './DBManager';
 const { ccclass, property } = _decorator;
 
 /**
- * weaponDataList临时数据，后面应由单独的配置文件管理
- * 武器数值需要结合角色属性，道具加成的计算后反馈给weaponDataList
+ * 武器数值需要结合角色属性，道具加成的计算后反馈给weaponDB
  * 当角色属性、道具变化后，立即更新该武器列表，避免视觉延迟
  * 
  * 面板数据可以调用本类的接口获取
  */
-const weaponDataList: WeaponData[] = [
-    { name: "武器1", id: "1", icon: "wp01", type: 1, bullet: 'BT001', iconSF: null, attr: { range: 30, damage: 3 } }
-]
 
 let WeaponDB: any = null;
 
@@ -100,6 +96,8 @@ export default class WeaponManager extends OO_UIManager {
         for (let i = 0; i < 1; i++) {
             this.addWeapon(weaponIds[i])
         }
+        console.log('武器初始面板');
+        console.log(this.weaponList)
     }
     // 购买武器调用
     public addWeapon(weaponId: string): boolean {
