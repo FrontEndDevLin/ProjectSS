@@ -4,6 +4,8 @@ import { Callback, WeaponData, WeaponSlotInfo } from '../Interface';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { WeaponCtrl } from '../GameControllers/weapon/WeaponCtrl';
 import { DBManager } from './DBManager';
+import CharacterManager from './CharacterManager';
+import { DamageManager } from './DamageManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -96,8 +98,7 @@ export default class WeaponManager extends OO_UIManager {
         for (let i = 0; i < 1; i++) {
             this.addWeapon(weaponIds[i])
         }
-        console.log('武器初始面板');
-        console.log(this.weaponList)
+        console.log('武器初始面板')
     }
     // 购买武器调用
     public addWeapon(weaponId: string): boolean {
@@ -109,6 +110,18 @@ export default class WeaponManager extends OO_UIManager {
             return false;
         }
     }
+    // 更新武器数据，根据角色面板、道具
+    public updateWeaponPanel() {
+        let panel = CharacterManager.instance.getCharacterPanel();
+        for (let weaponId in WeaponDB) {
+            let weaponAttr = WeaponDB[weaponId];
+            let originPanel = weaponAttr.panel;
+            weaponAttr.r_panel = { ...originPanel };
+            // 伤害修正
+            weaponAttr.r_panel.dmg = DamageManager.instance.calcBulletDamage(weaponAttr.bullet);
+        }
+    }
+
     public removeWeapon() {
 
     }

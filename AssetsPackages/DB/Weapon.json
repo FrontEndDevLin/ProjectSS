@@ -7,8 +7,12 @@
     "type": "attack type",
     "script": "WeaponCtrl",
     "bullet": "BT001",
-    "range": 6,
-    "alert": 2,
-    "atk_speed": 1
+    "panel": {
+      "range": 6,
+      "alert": 2,
+      "atk_spd": 1,
+      "dmg": 0,
+      "dmg_desc": "当有bullet时，dmg由bullet提供"
+    }
   }
 }

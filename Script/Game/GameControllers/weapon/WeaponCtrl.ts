@@ -18,6 +18,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('WeaponCtrl')
 export class WeaponCtrl extends OO_Component {
+    public weaponData: any = {};
     public weaponPanel: any = {};
 
     private _animation: Animation = null;
@@ -49,7 +50,7 @@ export class WeaponCtrl extends OO_Component {
         // 
 
         // 远程类型
-        if (this.weaponPanel.type === 1) {
+        if (this.weaponData.type === 1) {
             // 当前是远程类型，需要弹头管理
         }
         this._animation = this.views["PIC"].getComponent(Animation);
@@ -153,7 +154,8 @@ export class WeaponCtrl extends OO_Component {
     }
 
     initAttr(attr) {
-        this.weaponPanel = attr;
+        this.weaponData = attr;
+        this.weaponPanel = attr.panel;
     }
 
     private _tryAttack(dt: number) {
@@ -184,18 +186,18 @@ export class WeaponCtrl extends OO_Component {
                 angle -= 180;
             }
             let vector = getVectorByAngle(angle);
-            BulletManager.instance.createBullet(this.weaponPanel.bullet, worldLoc, vector);
+            BulletManager.instance.createBullet(this.weaponData.bullet, worldLoc, vector);
             this._playAttackAni();
-            this._cd = this.weaponPanel.atk_speed;
+            this._cd = this.weaponPanel.atk_spd;
         });
     }
     // 播放攻击动画
     private _playAttackAni() {
-        const atk_speed = this.weaponPanel.atk_speed;
+        const atk_speed = this.weaponPanel.atk_spd;
         this._attacking = true;
         // TODO: 攻击动画随着攻速变化而变化
         // TODO: 攻击动画用帧动画，目前的效果有问题
-        this._animation.play(`${this.weaponPanel.id}-atk`);
+        this._animation.play(`${this.weaponData.id}-atk`);
     }
 
     update(deltaTime: number) {

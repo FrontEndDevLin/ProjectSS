@@ -62,6 +62,7 @@ export default class CharacterManager extends OO_UIManager {
         this.showUI(`character/${this.characterId}`, characterShell);
 
         WeaponManager.instance.showWeapon();
+        WeaponManager.instance.updateWeaponPanel();
     }
     public setCharacterLoc(loc: Vec3): void {
         this._characterLoc = loc;

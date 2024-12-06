@@ -15,6 +15,7 @@ import { BulletManager } from './CManager/BulletManager';
 import { DBManager } from './CManager/DBManager';
 import { EnemyManager } from './CManager/EnemyManager';
 import { DamageManager } from './CManager/DamageManager';
+import { ChapterManager } from './CManager/ChapterManager';
 
 export default class Main extends Component {
     static instance: Main = null;
@@ -48,6 +49,7 @@ export default class Main extends Component {
     addCustomManager() {
         OO_AddManager(DBManager);
         DBManager.instance.dbLoaded(err => {
+            OO_AddManager(ChapterManager);
             OO_AddManager(MapManager);
             OO_AddManager(CharacterManager);
             OO_AddManager(EnemyManager);
