@@ -2,7 +2,7 @@
  * 程序入口文件
  */
 
-import { _decorator, Component, Node, Prefab, SpriteFrame, PhysicsSystem2D, EPhysics2DDrawFlags } from 'cc';
+import { _decorator, Component, Node, Prefab, SpriteFrame, PhysicsSystem2D, EPhysics2DDrawFlags, find } from 'cc';
 import { Callback } from './Interface';
 import OO_UIManager from '../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../OO/Manager/OO_ResourceManager';
@@ -67,7 +67,7 @@ export default class Main extends Component {
                 return;
             }
             MapManager.instance.showMap();
-            console.log("map loaded");
+            OO_UIManager.instance.showUI("GamePlayUI", find("Canvas"));
             CharacterManager.instance.initCharacter("CR001", err => {
                 if (err) {
                     return;
@@ -84,6 +84,7 @@ export default class Main extends Component {
     protected preload(callback?: Callback): void {
         let pLoadPrefabs: string[] = [
             "Prefabs/StartMenu",
+            "Prefabs/GamePlayUI",
             "Prefabs/Compass"
         ];
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: pLoadPrefabs }], (total, current) => {

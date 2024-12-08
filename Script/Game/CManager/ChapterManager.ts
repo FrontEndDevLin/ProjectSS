@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, Widget } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 const { ccclass, property } = _decorator;
 
@@ -30,7 +30,7 @@ export class ChapterManager extends OO_UIManager {
     }
     // 进入当前关卡
     private _enterChapter() {
-        
+        // let gamePlayUI: Node = this.loadUINode("GamePlayUI");
     }
     // 结束当前关卡
     private _endChapter() {
