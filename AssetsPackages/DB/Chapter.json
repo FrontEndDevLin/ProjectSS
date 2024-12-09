@@ -1,0 +1,16 @@
+{
+  "desc": "关卡刷兵、兵强度规则",
+  "1": {
+    "chapter": 1,
+    "seconds": 20,
+    "type": "normal",
+    "roles": [
+      {
+        "rfh_time": 2,
+        "emy_type": 1,
+        "emy_cnt_max": 2,
+        "emy_cnt_min": 2
+      }
+    ]
+  }
+}

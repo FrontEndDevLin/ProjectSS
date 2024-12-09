@@ -1,10 +1,12 @@
-import { _decorator, BoxCollider2D, Component, Contact2DType, Node, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, Component, Contact2DType, Node, v3, Vec3 } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import { EnemyManager } from '../../CManager/EnemyManager';
 import CharacterManager from '../../CManager/CharacterManager';
 import { GP_GROUP } from '../../ColliderType';
 import { BulletManager } from '../../CManager/BulletManager';
 import { DamageManager } from '../../CManager/DamageManager';
+import { ChapterManager } from '../../CManager/ChapterManager';
+import { GP_UNIT } from '../../Common';
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemyCtrl')
@@ -14,6 +16,7 @@ export class EnemyCtrl extends OO_Component {
     private _collider: BoxCollider2D = null;
     // temp
     private _hp: number = 8;
+    private _spd: number = 3;
 
     start() {
 
@@ -48,25 +51,36 @@ export class EnemyCtrl extends OO_Component {
             } break;
         }
     }
+    
+    /**
+     * 不同类型的兵行动逻辑不一样，普通杂兵只会向主角移动
+     */
+    private _move(dt) {
+        if (this._alive && ChapterManager.instance.onPlaying) {
+            let characterLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
+
+            let speed = dt * this._spd * GP_UNIT;
+            let vector: Vec3 = v3(characterLoc.x - this.node.position.x, characterLoc.y - this.node.position.y).normalize();
+            let newPos: Vec3 = this.node.position.add(new Vec3(vector.x * speed, vector.y * speed));
+            this.node.setPosition(newPos);
+
+            this._updateEnemyInfo(characterLoc);
+        }
+    }
+    private _updateEnemyInfo(ctrVec: Vec3) {
+        let cX = ctrVec.x;
+        let cY = ctrVec.y;
+        let { x, y } = this.node.position;
+        let dis = Math.sqrt(Math.pow(x - cX, 2) + Math.pow(y - cY, 2));
+        EnemyManager.instance.updateEnemy(this.node.uuid, { alive: 1, dis, x, y });
+    }
 
     public die() {
         this.node.destroy();
     }
 
     update(deltaTime: number) {
-        if (this._alive) {
-            let characterLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
-            let cX = characterLoc.x;
-            let cY = characterLoc.y;
-            let { x, y } = this.node.position;
-            let dis = Math.sqrt(Math.pow(x - cX, 2) + Math.pow(y - cY, 2));
-            EnemyManager.instance.updateEnemy(this.node.uuid, {
-                alive: 1,
-                dis,
-                x,
-                y
-            });
-        }
+        this._move(deltaTime);
     }
 }
 

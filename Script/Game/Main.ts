@@ -67,7 +67,7 @@ export default class Main extends Component {
                 return;
             }
             MapManager.instance.showMap();
-            OO_UIManager.instance.showUI("GamePlayUI", find("Canvas"));
+            ChapterManager.instance.intoChapter();
             CharacterManager.instance.initCharacter("CR001", err => {
                 if (err) {
                     return;
@@ -85,6 +85,7 @@ export default class Main extends Component {
         let pLoadPrefabs: string[] = [
             "Prefabs/StartMenu",
             "Prefabs/GamePlayUI",
+            "Prefabs/Countdown",
             "Prefabs/Compass"
         ];
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: pLoadPrefabs }], (total, current) => {
