@@ -1,15 +1,38 @@
 {
-  "desc": "关卡刷兵、兵强度规则",
+  "desc": {
+    "desc": "关卡刷兵、兵强度规则, 前20关精心设计, 无尽关卡循环10-20关",
+    "type": "? 规则 normal -> 只刷小怪",
+    "boost_nml": "基础属性加成等级系数",
+    "boost_spd": "速度加成登记系数",
+    "roles": {
+      "time_node": "时间节点，在该时间节点之前按照该逻辑刷兵",
+      "time_cycle": "刷新周期",
+      "emy": "敌人id",
+      "role": "规则 normal -> 单独的； group -> 成群的",
+      "emy_max": "刷出的最大数量",
+      "emy_min": "刷出的最小数量"
+    }
+  },
   "1": {
     "chapter": 1,
     "seconds": 20,
+    "boost_nml": 1,
+    "boost_spd": 1,
     "type": "normal",
     "roles": [
       {
-        "rfh_time": 2,
-        "emy_type": 1,
-        "emy_cnt_max": 2,
-        "emy_cnt_min": 2
+        "time_node": 8,
+        "emy": 1,
+        "role": "normal",
+        "rfh_time": 1.4,
+        "emy_max": 2
+      },
+      {
+        "time_node": 20,
+        "emy": 1,
+        "role": "normal",
+        "rfh_time": 1.2,
+        "emy_max": 3
       }
     ]
   }
