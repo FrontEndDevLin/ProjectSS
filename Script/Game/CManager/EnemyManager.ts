@@ -39,6 +39,10 @@ export class EnemyManager extends OO_UIManager {
         })
     }
 
+    setRoles() {
+        
+    }
+
     /**
      * 临时方法，现用于给玩家角色测试使用
      */

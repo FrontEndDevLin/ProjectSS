@@ -23,6 +23,7 @@ export class DBManager extends OO_Manager {
 
         // 初始化数据（武器、子弹、角色等）
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: JsonAsset, urls: [
+            "Chapter",
             "Character", 
             "Weapon", 
             "Bullet"

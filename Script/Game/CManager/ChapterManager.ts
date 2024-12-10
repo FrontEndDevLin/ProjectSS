@@ -1,6 +1,7 @@
 import { _decorator, Component, Label, Node, Widget } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { CountdownCtrl } from '../UIControllers/CountdownCtrl';
+import { DBManager } from './DBManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -8,6 +9,8 @@ const { ccclass, property } = _decorator;
  * 由该类来控制当前关卡状态(准备阶段、进行中)
  * 和UI的切换，(游戏ui -> 商店ui)
  */
+let ChapterDB: any = null;
+
 @ccclass('ChapterManager')
 export class ChapterManager extends OO_UIManager {
     public onPlaying: boolean = false;
@@ -23,7 +26,10 @@ export class ChapterManager extends OO_UIManager {
             this.destroy();
             return;
         }
-        console.log('Chapter Manager loaded')
+        console.log('Chapter Manager loaded');
+
+        ChapterDB = DBManager.instance.getDbData("Chapter");
+        console.log(ChapterDB)
     }
 
     public intoChapter() {
@@ -35,6 +41,7 @@ export class ChapterManager extends OO_UIManager {
     }
     // 进入当前关卡
     private _enterChapter() {
+        // 载入刷怪规则、显示地图、角色、UI、开始计时
         console.log(`进入第${this._chapter}关`);
         this.showUI("GamePlayUI");
         let countdownNode: Node = this.showUI("Countdown");
