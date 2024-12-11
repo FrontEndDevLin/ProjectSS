@@ -62,23 +62,7 @@ export default class Main extends Component {
     public startGame(): void {
         OO_UIManager.instance.removeUI("StartMenu");
 
-        MapManager.instance.initMap(err => {
-            if (err) {
-                return;
-            }
-            MapManager.instance.showMap();
-            ChapterManager.instance.intoChapter();
-            CharacterManager.instance.initCharacter("CR001", err => {
-                if (err) {
-                    return;
-                }
-                // 进入地图，显示角色
-                CharacterManager.instance.showCharacter();
-                EnemyManager.instance.initEnemy();
-                // 加载控制器
-                OO_UIManager.instance.showUI("Compass");
-            })
-        });
+        ChapterManager.instance.characterSelect();
     }
 
     protected preload(callback?: Callback): void {

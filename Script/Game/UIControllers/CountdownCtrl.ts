@@ -1,6 +1,8 @@
 import { _decorator, Component, Label, Node } from 'cc';
 import { OO_Component } from '../../OO/OO';
 import { ChapterManager } from '../CManager/ChapterManager';
+import { EventBus } from '../../OO/Manager/OO_MsgManager';
+import { CEVENT_COUNTDOWN, CEVENT_GAME, CEVENT_PREPLAY } from '../CEvent';
 const { ccclass, property } = _decorator;
 
 /**
@@ -14,22 +16,23 @@ export class CountdownCtrl extends OO_Component {
 
     protected onLoad(): void {
         super.onLoad();
+
+        EventBus.on(CEVENT_PREPLAY.COUNTDOWN, this._preplay, this);
+        EventBus.on(CEVENT_GAME.START, this._startCountdown, this);
     }
 
-    public startCountdown(seconds: number) {
-        if (seconds < 0) {
-            return;
-        }
+    private _preplay(seconds) {
         this._seconds = seconds;
+        this._updateView();
+    }
+    private _startCountdown() {
         this._playing = true;
         this._updateView();
     }
     private _onCountdownOver() {
         this._playing = false;
-        this.onCountdownOver();
+        EventBus.emit(CEVENT_COUNTDOWN.OVER);
     }
-    // 外部维护该方法
-    public onCountdownOver() {}
 
     private _updateView() {
         this.node.getComponent(Label).string = this._seconds.toString();
@@ -37,6 +40,11 @@ export class CountdownCtrl extends OO_Component {
     
     start() {
 
+    }
+
+    protected onDestroy(): void {
+        EventBus.off(CEVENT_PREPLAY.COUNTDOWN, this._preplay, this);
+        EventBus.off(CEVENT_GAME.START, this._startCountdown, this);
     }
 
     update(dt: number) {
