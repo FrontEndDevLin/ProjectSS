@@ -39,8 +39,8 @@ export class EnemyManager extends OO_UIManager {
         })
     }
 
-    setRoles() {
-        
+    setRoles(oRole: any) {
+        console.log(oRole)
     }
 
     /**

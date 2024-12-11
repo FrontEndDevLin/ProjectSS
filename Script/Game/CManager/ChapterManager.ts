@@ -56,11 +56,10 @@ export class ChapterManager extends OO_UIManager {
             }
             // 进入地图，显示角色
             CharacterManager.instance.showCharacter();
-            EnemyManager.instance.initEnemy();
             // 加载控制器
             OO_UIManager.instance.showUI("Compass");
 
-            // TODO: 这个方法在正式进入游戏后才调用
+            // TODO: 这个方法在正式进入游戏时才调用
             this.intoChapter();
         })
     }
@@ -77,6 +76,7 @@ export class ChapterManager extends OO_UIManager {
     private _preplayChapter() {
         let chapterData = ChapterDB[this._chapter];
         EventBus.emit(CEVENT_PREPLAY.COUNTDOWN, chapterData.seconds);
+        EnemyManager.instance.setRoles(chapterData);
     }
     // 进入当前关卡
     private _enterChapter() {

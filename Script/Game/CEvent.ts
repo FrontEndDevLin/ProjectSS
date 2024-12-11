@@ -9,6 +9,7 @@ export enum CEVENT_PREPLAY {
     COUNTDOWN = 20,
     MAP,
     CHARACTER,
+    ENEMY_ROLE
 }
 
 export enum CEVENT_GAME {
