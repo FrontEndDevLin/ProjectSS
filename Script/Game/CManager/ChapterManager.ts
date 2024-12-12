@@ -4,9 +4,10 @@ import { CountdownCtrl } from '../UIControllers/CountdownCtrl';
 import { DBManager } from './DBManager';
 import MapManager from './MapManager';
 import { EventBus } from '../../OO/Manager/OO_MsgManager';
-import { CEVENT_COUNTDOWN, CEVENT_GAME, CEVENT_PREPLAY } from '../CEvent';
+import { CEVENT_COUNTDOWN, CEVENT_GAME } from '../CEvent';
 import CharacterManager from './CharacterManager';
 import { EnemyManager } from './EnemyManager';
+import { COUNTDOWN_EVENT, CountdownManager } from './CountdownManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -18,9 +19,9 @@ let ChapterDB: any = null;
 
 @ccclass('ChapterManager')
 export class ChapterManager extends OO_UIManager {
-    public onPlaying: boolean = false;
-
     static instance: ChapterManager = null;
+
+    public onPlaying: boolean = false;
 
     private _chapter: number = 1;
 
@@ -34,14 +35,15 @@ export class ChapterManager extends OO_UIManager {
         console.log('Chapter Manager loaded');
 
         ChapterDB = DBManager.instance.getDbData("Chapter");
-
-        EventBus.on(CEVENT_COUNTDOWN.OVER, this._endChapter, this);
     }
 
     public initGameItems() {
         MapManager.instance.showMap();
-        this.showUI("Countdown");
+        CountdownManager.instance.showCountdown();
         this.showUI("GamePlayUI");
+
+        CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_OVER, this._endChapter, this);
+
         this._preplayChapter();
     }
 
@@ -75,12 +77,13 @@ export class ChapterManager extends OO_UIManager {
     // 地图、角色、状态ui等在选角时就挂载，关卡结束时不卸载，用其他界面覆盖即可
     private _preplayChapter() {
         let chapterData = ChapterDB[this._chapter];
-        EventBus.emit(CEVENT_PREPLAY.COUNTDOWN, chapterData.seconds);
+        CountdownManager.instance.preplay(chapterData.seconds);
         EnemyManager.instance.setRoles(chapterData);
     }
     // 进入当前关卡
     private _enterChapter() {
         EventBus.emit(CEVENT_GAME.START);
+        CountdownManager.instance.startCountdown();
         this.onPlaying = true;
         console.log(`进入第${this._chapter}关`);
         // 载入刷怪规则、显示地图、角色、UI、开始计时
@@ -102,7 +105,7 @@ export class ChapterManager extends OO_UIManager {
     }
 
     protected onDestroy(): void {
-        EventBus.off(CEVENT_COUNTDOWN.OVER, this._endChapter, this);
+        CountdownManager.instance.off(COUNTDOWN_EVENT.TIME_OVER, this._endChapter, this);
     }
 
     update(deltaTime: number) {

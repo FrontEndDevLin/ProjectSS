@@ -9,11 +9,21 @@ import {
 import OO_ResourceManager from './OO_ResourceManager';
 import OO_Manager from '../OO_Manager';
 import { Callback } from '../Interface';
+
+interface EventAndCtx {
+    fn: Callback,
+    ctx: any
+}
+
+interface EventMap {
+    [eventName: string]: EventAndCtx[]
+}
 export default class OO_UIManager extends OO_Manager {
     static instance: OO_UIManager = null;
     public rootNode: Node = find("Canvas");
 
     public abName: string = "GUI";
+    private _eventMap: EventMap = {};
 
     protected onLoad(): void {
         if (!OO_UIManager.instance) {
@@ -37,6 +47,52 @@ export default class OO_UIManager extends OO_Manager {
     //         console.info(`[OO_UIManager]:showUI:prefab ${uiName} doesn't have script ${scriptName}`);
     //     }
     // }
+    protected runEventFn(event: number, params?) {
+        let eventList: EventAndCtx[] = this._eventMap[event];
+        if (eventList && eventList.length) {
+            eventList.forEach(item => {
+                if (item.ctx) {
+                    item.fn.apply(item.ctx, [null, params]);
+                } else {
+                    item.fn(null, params);
+                }
+            })
+        }
+    }
+    public on(event: number, callback: Callback, ctx?: any) {
+        let eventList: EventAndCtx[] = this._eventMap[event];
+        if (eventList && eventList.length) {
+            let hasCallback = false;
+            for (let eventOp of eventList) {
+                if (eventOp.fn === callback && eventOp.ctx === ctx) {
+                    hasCallback = true;
+                    break;
+                }
+            }
+            if (!hasCallback) {
+                eventList.push({ fn: callback, ctx });
+            }
+        } else {
+            this._eventMap[event] = [{ fn: callback, ctx }];
+        }
+    }
+    public off(event: number, callback: Callback, ctx?: any) {
+        let eventList: EventAndCtx[] = this._eventMap[event];
+        if (eventList && eventList.length) {
+            let hasCallback = false;
+            let i = 0;
+            for (let eventOp of eventList) {
+                if (eventOp.fn === callback && eventOp.ctx === ctx) {
+                    hasCallback = true;
+                    break;
+                }
+                i++;
+            }
+            if (hasCallback) {
+                eventList = eventList.splice(i, 1);
+            }
+        }
+    }
 
     public showUI(uiName: string, parentNode: Node = this.rootNode, scriptName?: string): Node {
         const uiNode: Node = this.loadUINode(uiName, scriptName);
@@ -56,12 +112,14 @@ export default class OO_UIManager extends OO_Manager {
             return null;
         }
         const uiNode: Node = instantiate(uiPrefab);
-        scriptName = scriptName || `${uiName}Ctrl`;
-        try {
-            uiNode.addComponent(scriptName);
-        } catch (error) {
-            console.info(`[OO_UIManager]:showUI:prefab add script ${scriptName} error`);
-            // console.info(error);
+        if (scriptName !== 'NONE') {
+            scriptName = scriptName || `${uiName}Ctrl`;
+            try {
+                uiNode.addComponent(scriptName);
+            } catch (error) {
+                console.info(`[OO_UIManager]:showUI:prefab add script ${scriptName} error`);
+                // console.info(error);
+            }
         }
         return uiNode;
     }

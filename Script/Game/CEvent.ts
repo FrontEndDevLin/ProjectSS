@@ -6,8 +6,7 @@ export enum CEVENT_COMPASS {
 
 // 进入章节前的预载，所有的都预载完后开始计时
 export enum CEVENT_PREPLAY {
-    COUNTDOWN = 20,
-    MAP,
+    MAP = 20,
     CHARACTER,
     ENEMY_ROLE
 }

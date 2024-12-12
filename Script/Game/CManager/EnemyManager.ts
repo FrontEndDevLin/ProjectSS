@@ -41,6 +41,10 @@ export class EnemyManager extends OO_UIManager {
 
     setRoles(oRole: any) {
         console.log(oRole)
+        let roles = oRole.roles;
+        for (let role of roles) {
+            console.log(role)
+        }
     }
 
     /**
