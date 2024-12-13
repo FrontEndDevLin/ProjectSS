@@ -38,8 +38,6 @@ export class EnemyManager extends OO_UIManager {
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/enemy/Enemy01`] }], () => {}, err => {
             console.log("敌人预设体加载完毕")
         })
-
-        console.log(CountdownManager.instance)
     }
 
     public startListen() {
@@ -49,11 +47,32 @@ export class EnemyManager extends OO_UIManager {
         }, this);
     }
 
+    private _roleMap: any = {
+        "timeNode": [
+            { role: "normal", emy: 1, emyMax: 2 }
+        ]
+    }
     public setRoles(oRole: any) {
         console.log(oRole)
+        let totalSeconds = oRole.seconds;
         let roles = oRole.roles;
         for (let role of roles) {
             console.log(role)
+            let rfhTime = role.rfh_time;
+            let fstRfhTime = role.fst_rfh_time || 0;
+            // 0 --> 8
+            let timeNodeStart = role.time_node_start || 0;
+            let timeNodeEnd = role.time_node_end || totalSeconds;
+            let startSeconds = totalSeconds - timeNodeStart - fstRfhTime;
+            let endSeconds = totalSeconds - timeNodeStart - timeNodeEnd;
+            console.log(startSeconds, endSeconds)
+            // let rfhCnt = Math.floor(startSeconds / rfhTime);
+
+            // let rfhSecondsList = [startSeconds];
+            // for (let i = 1; i <= rfhCnt; i++) {
+            //     rfhSecondsList.push( Number((startSeconds - rfhTime * i).toFixed(1)) )
+            // }
+            // console.log(rfhSecondsList)
         }
     }
 
