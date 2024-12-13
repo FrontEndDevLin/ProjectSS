@@ -13,10 +13,8 @@ export enum COUNTDOWN_EVENT {
 export class CountdownManager extends OO_UIManager {
     static instance: CountdownManager = null;
 
-    private _cd: number = 0;
     private _tinyCd: number = 0;
     private _seconds: number = 0;
-    private _tinySeconds: number = 0;
     private _playing: boolean = false;
 
     protected onLoad(): void {
@@ -34,7 +32,7 @@ export class CountdownManager extends OO_UIManager {
     }
 
     public preplay(seconds) {
-        this._seconds = seconds;
+        this._seconds = Math.floor(seconds);
         this.runEventFn(COUNTDOWN_EVENT.TIME_INIT, this._seconds);
     }
     public startCountdown() {
@@ -54,20 +52,16 @@ export class CountdownManager extends OO_UIManager {
         if (!this._playing) {
             return;
         }
-        this._cd += dt;
-        // this._tinyCd += dt;
-        // if (this._tinyCd >= 0.1) {
-        //     this._tinySeconds = Number((this._tinySeconds - 0.1).toFixed(1));
-        //     this._cd -= 0.1;
-        //     this.runEventFn(COUNTDOWN_EVENT.TIME_REDUCE_TINY, this._tinySeconds);
-        // }
-        if (this._cd >= 1) {
-            this._cd -= 1;
-            this._seconds -= 1;
-            this.runEventFn(COUNTDOWN_EVENT.TIME_REDUCE, this._seconds);
+        this._tinyCd += dt;
+        if (this._tinyCd >= 0.1) {
+            this._tinyCd -= 0.1;
+            this._seconds = Number((this._seconds - 0.1).toFixed(1));
             this.runEventFn(COUNTDOWN_EVENT.TIME_REDUCE_TINY, this._seconds);
-            if (this._seconds <= 0) {
-                this._onCountdownOver();
+            if (this._seconds % 1 === 0) {
+                this.runEventFn(COUNTDOWN_EVENT.TIME_REDUCE, this._seconds);
+                if (this._seconds <= 0) {
+                    this._onCountdownOver();
+                }
             }
         }
     }

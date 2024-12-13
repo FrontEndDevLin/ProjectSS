@@ -1,6 +1,7 @@
 import { _decorator, Component, Node, Prefab, v3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
+import { COUNTDOWN_EVENT, CountdownManager } from './CountdownManager';
 const { ccclass, property } = _decorator;
 
 export interface EnemyInfo {
@@ -37,9 +38,18 @@ export class EnemyManager extends OO_UIManager {
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/enemy/Enemy01`] }], () => {}, err => {
             console.log("敌人预设体加载完毕")
         })
+
+        console.log(CountdownManager.instance)
     }
 
-    setRoles(oRole: any) {
+    public startListen() {
+        CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_REDUCE_TINY, (err, tinySeconds) => {
+            // console.log(tinySeconds);
+            // tinySeconds结合当前规则进行刷怪
+        }, this);
+    }
+
+    public setRoles(oRole: any) {
         console.log(oRole)
         let roles = oRole.roles;
         for (let role of roles) {

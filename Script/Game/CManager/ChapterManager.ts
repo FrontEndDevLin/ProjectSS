@@ -40,6 +40,7 @@ export class ChapterManager extends OO_UIManager {
     public initGameItems() {
         MapManager.instance.showMap();
         CountdownManager.instance.showCountdown();
+        EnemyManager.instance.startListen();
         this.showUI("GamePlayUI");
 
         CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_OVER, this._endChapter, this);
