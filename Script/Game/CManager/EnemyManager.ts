@@ -14,6 +14,20 @@ interface EnemyMap {
     [uuid: string]: EnemyInfo
 }
 
+/**
+ * R5 5600  519
+ * 寒冰100  18.8
+ * 微星A520  380.07  -> 华南A520  268
+ * 铭瑄16g 3200  132  -> 索奈特16g 3200  114
+ * 铠侠500g nvme  225  -> 科赋256g  99
+ * 1T蓝盘  185.71  -> 2手1t  97
+ * 6750gre  1777 -> 6650xt  1598
+ * 玄武550v4  199
+ * 海景房机箱  57.42
+ * 
+ * 3494 -> 2970
+ */
+
 @ccclass('EnemyManager')
 export class EnemyManager extends OO_UIManager {
     static instance: EnemyManager = null;
@@ -41,38 +55,61 @@ export class EnemyManager extends OO_UIManager {
     }
 
     public startListen() {
-        CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_REDUCE_TINY, (err, tinySeconds) => {
-            // console.log(tinySeconds);
-            // tinySeconds结合当前规则进行刷怪
-        }, this);
+        CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_REDUCE_TINY, this._loadEnemy, this);
     }
 
     private _roleMap: any = {
-        "timeNode": [
-            { role: "normal", emy: 1, emyMax: 2 }
-        ]
+        // "timeNode": [
+        //     { role: "normal", emy: 1, emyMax: 2 }
+        // ]
     }
-    public setRoles(oRole: any) {
-        console.log(oRole)
+    public setRoles(oRole: any): boolean {
+        // console.log(oRole)
         let totalSeconds = oRole.seconds;
         let roles = oRole.roles;
         for (let role of roles) {
-            console.log(role)
+            // 刷新间隔
             let rfhTime = role.rfh_time;
+            // 首次刷出延迟时间
             let fstRfhTime = role.fst_rfh_time || 0;
-            // 0 --> 8
-            let timeNodeStart = role.time_node_start || 0;
-            let timeNodeEnd = role.time_node_end || totalSeconds;
-            let startSeconds = totalSeconds - timeNodeStart - fstRfhTime;
-            let endSeconds = totalSeconds - timeNodeStart - timeNodeEnd;
-            console.log(startSeconds, endSeconds)
-            // let rfhCnt = Math.floor(startSeconds / rfhTime);
+            // 首次刷出时间点
+            let startTime = (role.time_node_start || totalSeconds) - fstRfhTime;
+            // 结束刷出时间点
+            let endTime = role.time_node_end || 0;
+            // 刷出波次
+            let rfhCnt = Math.floor((startTime - endTime) / rfhTime);
+            let rfhSecondsList = [startTime];
+            for (let i = 1; i <= rfhCnt; i++) {
+                rfhSecondsList.push( Number((startTime - rfhTime * i).toFixed(1)) )
+            }
+            rfhSecondsList.forEach(seconds => {
+                if (!this._roleMap[seconds]) {
+                    this._roleMap[seconds] = [role];
+                } else {
+                    this._roleMap[seconds].push(role);
+                }
+            })
+        }
+        return true;
+    }
+    private _loadEnemy(err, seconds: number) {
+        if (this._roleMap.hasOwnProperty(seconds)) {
+            let timeRoles = this._roleMap[seconds];
 
-            // let rfhSecondsList = [startSeconds];
-            // for (let i = 1; i <= rfhCnt; i++) {
-            //     rfhSecondsList.push( Number((startSeconds - rfhTime * i).toFixed(1)) )
-            // }
-            // console.log(rfhSecondsList)
+            timeRoles.forEach(enemyItem => {
+                let max = enemyItem.emy_max;
+                let min = enemyItem.emy_min || max;
+                let enemyCount = 0;
+                if (max === min) {
+                    enemyCount = max;
+                } else {
+                    enemyCount = Math.floor(Math.random() * (max - min + 1) + min);
+                }
+                // console.log(`生成${enemyCount}个敌人`)
+                for (let i = 0; i < enemyCount; i++) {
+                    this.createEnemy()
+                }
+            })
         }
     }
 
@@ -86,8 +123,8 @@ export class EnemyManager extends OO_UIManager {
     public createEnemy() {
         let enemyNode = this.loadUINode("enemy/Enemy01", "EnemyCtrl");
         // 临时
-        let x = -300;
-        let y = 300;
+        let x = Math.floor(Math.random() * 600) - 300;
+        let y = Math.floor(Math.random() * 600) - 300;
         enemyNode.setPosition(v3(x, y));
         this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
         this.appendUINode(enemyNode, this.rootNode);

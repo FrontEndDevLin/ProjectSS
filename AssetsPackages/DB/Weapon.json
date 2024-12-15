@@ -10,7 +10,7 @@
     "panel": {
       "range": 6,
       "alert": 2,
-      "atk_spd": 1,
+      "atk_spd": 0.4,
       "dmg": 0,
       "dmg_desc": "当有bullet时，dmg由bullet提供"
     }

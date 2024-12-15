@@ -5,8 +5,8 @@
     "boost_nml": "基础属性加成等级系数",
     "boost_spd": "速度加成登记系数",
     "roles": {
-      "time_node_start": "时间节点 默认为0",
-      "time_node_end": "时间节点 默认为seconds",
+      "time_node_start": "时间开始节点 默认为seconds",
+      "time_node_end": "时间结束节点 默认为0",
       "time_cycle": "刷新周期",
       "emy": "敌人id",
       "role": "规则 normal -> 单独的； group -> 成群的",
@@ -23,18 +23,19 @@
     "type": "normal",
     "roles": [
       {
-        "time_node_end": 8,
+        "time_node_end": 12,
+        "fst_rfh_time": 0.2,
         "emy": 1,
         "role": "normal",
         "rfh_time": 1.4,
         "emy_max": 2
       },
       {
-        "time_node_start": 8,
+        "time_node_start": 12,
         "emy": 1,
         "role": "normal",
         "rfh_time": 1.2,
-        "emy_max": 3
+        "emy_max": 2
       }
     ]
   }
