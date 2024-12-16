@@ -141,7 +141,7 @@ export class EnemyManager extends OO_UIManager {
         let locY = getRandomNumber(-y, y);
         let characterLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
         let dis = Math.sqrt(Math.pow(locX - characterLoc.x, 2) + Math.pow(locY - characterLoc.y, 2));
-        if (dis < 100) {
+        if (dis < 160) {
             return this._createEnemyLoc();
         }
         return v3(locX, locY);

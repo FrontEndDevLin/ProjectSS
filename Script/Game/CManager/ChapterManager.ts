@@ -60,7 +60,7 @@ export class ChapterManager extends OO_UIManager {
             // 进入地图，显示角色
             CharacterManager.instance.showCharacter();
             // 加载控制器
-            OO_UIManager.instance.showUI("Compass");
+            this.showUI("Compass");
 
             // TODO: 这个方法在正式进入游戏时才调用
             this.intoChapter();
@@ -95,6 +95,7 @@ export class ChapterManager extends OO_UIManager {
          * 关卡结束通知（回收材料、升级界面、商店界面）
          */
         this.onPlaying = false;
+        this.removeUI("Compass");
 
         // 所有敌人阵亡(不爆东西)
 

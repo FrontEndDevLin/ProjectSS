@@ -27,15 +27,16 @@
         "fst_rfh_time": 0.2,
         "emy": 1,
         "role": "normal",
-        "rfh_time": 1.4,
+        "rfh_time": 1.6,
         "emy_max": 2
       },
       {
         "time_node_start": 12,
         "emy": 1,
         "role": "normal",
-        "rfh_time": 1.2,
-        "emy_max": 2
+        "rfh_time": 1.4,
+        "emy_max": 2,
+        "emy_min": 1
       }
     ]
   }
