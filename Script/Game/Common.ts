@@ -18,3 +18,10 @@ export const getVectorByAngle = function (angle: number) {
   let arc: number = angle * Math.PI / 180;
   return v3(Math.cos(arc), Math.sin(arc));
 }
+
+export const SCREEN_WIDTH: number = 720;
+export const SCREEN_HEIGHT: number = 1280;
+
+export const getRandomNumber = function(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}

@@ -1,8 +1,10 @@
-import { _decorator, Component, Node, Prefab, v3 } from 'cc';
+import { _decorator, Component, Node, Prefab, v3, Vec3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { COUNTDOWN_EVENT, CountdownManager } from './CountdownManager';
 const { ccclass, property } = _decorator;
+import { SCREEN_WIDTH, SCREEN_HEIGHT, getRandomNumber } from '../Common';
+import CharacterManager from './CharacterManager';
 
 export interface EnemyInfo {
     x?: number,
@@ -121,13 +123,28 @@ export class EnemyManager extends OO_UIManager {
     }
 
     public createEnemy() {
+        // 生成一个随机坐标，判断是否与角色距离过近（<200px），如果过近重新生成
+        let loc: Vec3 = this._createEnemyLoc();
+
         let enemyNode = this.loadUINode("enemy/Enemy01", "EnemyCtrl");
         // 临时
-        let x = Math.floor(Math.random() * 600) - 300;
-        let y = Math.floor(Math.random() * 600) - 300;
+        let { x, y } = loc;
         enemyNode.setPosition(v3(x, y));
         this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
         this.appendUINode(enemyNode, this.rootNode);
+    }
+    private _createEnemyLoc(): Vec3 {
+        let x = SCREEN_WIDTH / 2;
+        let y = SCREEN_HEIGHT / 2;
+
+        let locX = getRandomNumber(-x, x);
+        let locY = getRandomNumber(-y, y);
+        let characterLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
+        let dis = Math.sqrt(Math.pow(locX - characterLoc.x, 2) + Math.pow(locY - characterLoc.y, 2));
+        if (dis < 100) {
+            return this._createEnemyLoc();
+        }
+        return v3(locX, locY);
     }
     public updateEnemy(uuid: string, enemyInfo: EnemyInfo) {
         for (let k in enemyInfo) {
