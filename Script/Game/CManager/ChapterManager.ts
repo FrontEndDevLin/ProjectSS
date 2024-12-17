@@ -4,7 +4,7 @@ import { CountdownCtrl } from '../UIControllers/CountdownCtrl';
 import { DBManager } from './DBManager';
 import MapManager from './MapManager';
 import { EventBus } from '../../OO/Manager/OO_MsgManager';
-import { CEVENT_COUNTDOWN, CEVENT_GAME } from '../CEvent';
+import { CEVENT_GAME } from '../CEvent';
 import CharacterManager from './CharacterManager';
 import { EnemyManager } from './EnemyManager';
 import { COUNTDOWN_EVENT, CountdownManager } from './CountdownManager';
@@ -97,6 +97,7 @@ export class ChapterManager extends OO_UIManager {
         this.onPlaying = false;
         this.removeUI("Compass");
         this.hideUI("GamePlayUI");
+        EnemyManager.instance.removeAllEnemy();
         // 所有敌人阵亡(不爆东西)
 
         // 判断是否捡到宝箱，有则弹出开箱界面

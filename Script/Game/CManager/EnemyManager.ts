@@ -1,10 +1,13 @@
-import { _decorator, Component, Node, Prefab, v3, Vec3 } from 'cc';
+import { _decorator, Component, find, Node, Prefab, v3, Vec3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { COUNTDOWN_EVENT, CountdownManager } from './CountdownManager';
 const { ccclass, property } = _decorator;
 import { SCREEN_WIDTH, SCREEN_HEIGHT, getRandomNumber } from '../Common';
 import CharacterManager from './CharacterManager';
+import { EventBus } from '../../OO/Manager/OO_MsgManager';
+import { CEVENT_GAME } from '../CEvent';
+import { EnemyCtrl } from '../GameControllers/enemy/EnemyCtrl';
 
 export interface EnemyInfo {
     x?: number,
@@ -35,6 +38,7 @@ export class EnemyManager extends OO_UIManager {
     static instance: EnemyManager = null;
 
     public abName: string = "GP";
+    public rootNode: Node = null;
 
     /**
      * 维护一个敌人map表，每一帧更新坐标和是否存活，当敌人被消灭后，播放完阵亡动画后从表中移除
@@ -57,6 +61,11 @@ export class EnemyManager extends OO_UIManager {
     }
 
     public startListen() {
+        // TODO: 这里的enemyBox暂时在该方法里生成
+        let rootNode: Node = new Node("EnemyBox");
+        this.node.addChild(rootNode);
+        this.rootNode = rootNode;
+
         CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_REDUCE_TINY, this._loadEnemy, this);
     }
 
@@ -154,6 +163,11 @@ export class EnemyManager extends OO_UIManager {
     }
     // TODO:
     public removeAllEnemy() {
+        const nodeList: Node[] = this.rootNode.children;
+        nodeList.forEach(node => {
+            let ctx: EnemyCtrl = node.getComponent(EnemyCtrl);
+            ctx.dieImmediate();
+        });
         this.enemyMap = {};
     }
     public getNearestEnemy(uuidList: string[]): EnemyInfo {

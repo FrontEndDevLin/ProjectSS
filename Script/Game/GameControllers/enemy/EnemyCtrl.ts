@@ -7,6 +7,8 @@ import { BulletManager } from '../../CManager/BulletManager';
 import { DamageManager } from '../../CManager/DamageManager';
 import { ChapterManager } from '../../CManager/ChapterManager';
 import { GP_UNIT } from '../../Common';
+import { EventBus } from '../../../OO/Manager/OO_MsgManager';
+import { CEVENT_GAME } from '../../CEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemyCtrl')
@@ -76,6 +78,17 @@ export class EnemyCtrl extends OO_Component {
     }
 
     public die() {
+        EnemyManager.instance.updateEnemy(this.node.uuid, { alive: 0 });
+        // TODO: 播放死亡动画，播放完后再销毁节点
+        this._die();
+    }
+    // 干脆的死
+    public dieImmediate() {
+        // TODO: 播放死亡动画，播放完后再销毁节点
+        this.node.destroy();
+    }
+
+    private _die() {
         EnemyManager.instance.removeEnemy(this.node.uuid);
         this.node.destroy();
     }
