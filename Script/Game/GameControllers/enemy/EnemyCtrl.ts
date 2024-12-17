@@ -76,6 +76,7 @@ export class EnemyCtrl extends OO_Component {
     }
 
     public die() {
+        EnemyManager.instance.removeEnemy(this.node.uuid);
         this.node.destroy();
     }
 

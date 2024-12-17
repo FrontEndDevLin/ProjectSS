@@ -98,6 +98,10 @@ export class CompassCtrl extends OO_Component {
         
     }
 
+    protected onDestroy(): void {
+        EventBus.emit(CEVENT_COMPASS.TOUCH_END);
+    }
+
     update(deltaTime: number) {
         if (!this._touching) {
             return;

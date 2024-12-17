@@ -7,6 +7,7 @@ import { getVectorByAngle, GP_UNIT } from '../../Common';
 import { GP_GROUP, WEAPON_DOMAIN } from '../../ColliderType';
 import { EnemyInfo, EnemyManager } from '../../CManager/EnemyManager';
 import { Callback } from '../../Interface';
+import { ChapterManager } from '../../CManager/ChapterManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -201,10 +202,12 @@ export class WeaponCtrl extends OO_Component {
     }
 
     update(deltaTime: number) {
-        // 范围检测
-        this._rotateWeapon();
-
-        this._tryAttack(deltaTime);
+        if (ChapterManager.instance.onPlaying) {
+            // 范围检测
+            this._rotateWeapon();
+    
+            this._tryAttack(deltaTime);
+        }
     }
 }
 

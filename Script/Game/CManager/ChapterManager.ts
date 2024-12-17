@@ -96,7 +96,7 @@ export class ChapterManager extends OO_UIManager {
          */
         this.onPlaying = false;
         this.removeUI("Compass");
-
+        this.hideUI("GamePlayUI");
         // 所有敌人阵亡(不爆东西)
 
         // 判断是否捡到宝箱，有则弹出开箱界面

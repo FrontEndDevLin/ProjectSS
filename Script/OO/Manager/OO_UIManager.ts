@@ -4,7 +4,8 @@ import {
     find,
     instantiate,
     Prefab,
-    Component
+    Component,
+    UITransform
 } from 'cc';
 import OO_ResourceManager from './OO_ResourceManager';
 import OO_Manager from '../OO_Manager';
@@ -122,6 +123,11 @@ export default class OO_UIManager extends OO_Manager {
             }
         }
         return uiNode;
+    }
+
+    // 隐藏指定节点，隐藏后仍然可以触发事件
+    public hideUI(uiName: string, parentNode: Node = this.rootNode): void {
+        const uiNode: Node = parentNode.getChildByName(uiName);
     }
 
     public removeUI(uiName: string, parentNode: Node = this.rootNode): void {

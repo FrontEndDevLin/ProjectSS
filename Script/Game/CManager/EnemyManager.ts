@@ -125,9 +125,7 @@ export class EnemyManager extends OO_UIManager {
     public createEnemy() {
         // 生成一个随机坐标，判断是否与角色距离过近（<200px），如果过近重新生成
         let loc: Vec3 = this._createEnemyLoc();
-
         let enemyNode = this.loadUINode("enemy/Enemy01", "EnemyCtrl");
-        // 临时
         let { x, y } = loc;
         enemyNode.setPosition(v3(x, y));
         this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };
@@ -153,6 +151,10 @@ export class EnemyManager extends OO_UIManager {
     }
     public removeEnemy(uuid: string) {
         delete this.enemyMap[uuid];
+    }
+    // TODO:
+    public removeAllEnemy() {
+        this.enemyMap = {};
     }
     public getNearestEnemy(uuidList: string[]): EnemyInfo {
         let min: number = 0;
