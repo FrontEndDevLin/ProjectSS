@@ -96,15 +96,17 @@ export class ChapterManager extends OO_UIManager {
          */
         this.onPlaying = false;
         this.removeUI("Compass");
-        this.hideUI("GamePlayUI");
-        EnemyManager.instance.removeAllEnemy();
         // 所有敌人阵亡(不爆东西)
+        EnemyManager.instance.removeAllEnemy();
 
-        // 判断是否捡到宝箱，有则弹出开箱界面
+        // TODO: 判断是否捡到宝箱，有则弹出开箱界面
 
-        // 判断是否有升级，有则弹出升级界面
+        // TODO: 判断是否有升级，有则弹出升级界面
 
-        // 进入商店界面
+        /**
+         * 进入商店界面
+         *  可看到自己的武器，道具，面板，商店界面
+         */
     }
 
     protected onDestroy(): void {

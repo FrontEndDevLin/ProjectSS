@@ -43,6 +43,7 @@ export default class Main extends Component {
             if (err) {
                 return;
             }
+            return;
             OO_UIManager.instance.showUI("StartMenu");
         });
     }
