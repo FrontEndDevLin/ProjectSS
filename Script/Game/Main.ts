@@ -17,6 +17,7 @@ import { EnemyManager } from './CManager/EnemyManager';
 import { DamageManager } from './CManager/DamageManager';
 import { ChapterManager } from './CManager/ChapterManager';
 import { CountdownManager } from './CManager/CountdownManager';
+import { StoreManager } from './CManager/StoreManager';
 
 export default class Main extends Component {
     static instance: Main = null;
@@ -60,6 +61,7 @@ export default class Main extends Component {
             OO_AddManager(WeaponManager);
             OO_AddManager(BulletManager);
             OO_AddManager(DamageManager);
+            OO_AddManager(StoreManager);
         })
     }
 
