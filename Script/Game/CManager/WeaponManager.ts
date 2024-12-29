@@ -90,6 +90,23 @@ export default class WeaponManager extends OO_UIManager {
         // })
     }
 
+    private _getRandomWeapon() {
+        let keys: string[] = Object.keys(WeaponDB);
+        let len = keys.length;
+        let randomKey = keys[Math.floor(Math.random() * len)];
+        return WeaponDB[randomKey];
+    }
+
+    // 获取随机的n个武器，用于商店刷新
+    public getRandomWeapons(n?: number): any[] {
+        n = n || 4;
+        let res: any = [];
+        for (let i = 0; i < n; i++) {
+            res.push(this._getRandomWeapon());
+        }
+        return res;
+    }
+
     // 初始化武器，应在职业选后调用
     public initWeapon(weaponIds: string[]) {
         if (!this.rootNode) {
