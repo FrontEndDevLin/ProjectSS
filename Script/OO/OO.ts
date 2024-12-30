@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, UI } from 'cc';
+import { _decorator, Component, instantiate, Node, Prefab, UI } from 'cc';
 const { ccclass, property } = _decorator;
 
 import OO_MsgManager from './Manager/OO_MsgManager';
@@ -12,6 +12,7 @@ interface View {
 
 export class OO_Component extends Component {
     protected views: View = {};
+    public abName: string = "GUI";
 
     private _loadViews(root: Node, path: string = ""): void {
         let children = root.children;
@@ -22,6 +23,35 @@ export class OO_Component extends Component {
                 this._loadViews(node, `${p}/`);
             }
         }
+    }
+
+    public showUI(uiName: string, scriptName?: string): Node {
+        const uiNode: Node = this.loadUINode(uiName, scriptName);
+        if (!uiNode) {
+            return null;
+        }
+        return this.appendUINode(uiNode);
+    }
+    public appendUINode(uiNode: Node) {
+        this.node.addChild(uiNode);
+        return uiNode;
+    }
+    public loadUINode(uiName: string, scriptName?: string) {
+        let uiPrefab = OO_ResourceManager.instance.getAssets(this.abName, `Prefabs/${uiName}`) as Prefab;
+        if (!uiPrefab) {
+            return null;
+        }
+        const uiNode: Node = instantiate(uiPrefab);
+        if (scriptName !== 'NONE') {
+            scriptName = scriptName || `${uiName}Ctrl`;
+            try {
+                uiNode.addComponent(scriptName);
+            } catch (error) {
+                console.info(`[OO_Component]:showUI:prefab add script ${scriptName} error`);
+                // console.info(error);
+            }
+        }
+        return uiNode;
     }
 
     protected onLoad(): void {
