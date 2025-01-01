@@ -2,7 +2,7 @@
   "Weapon001": {
     "id": "Weapon001",
     "sort": 0,
-    "name": "weapon chinese",
+    "name": "测试手枪",
     "icon": "weapon icon name",
     "type": "attack type",
     "script": "WeaponCtrl",

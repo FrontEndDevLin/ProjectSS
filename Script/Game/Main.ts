@@ -44,9 +44,7 @@ export default class Main extends Component {
             if (err) {
                 return;
             }
-            // return;
-            OO_UIManager.instance.showUI("Prepare");
-            // OO_UIManager.instance.showUI("StartMenu");
+            OO_UIManager.instance.showUI("StartMenu");
         });
     }
 
@@ -74,7 +72,6 @@ export default class Main extends Component {
     protected preload(callback?: Callback): void {
         let pLoadPrefabs: string[] = [
             "Prefabs/Prepare",
-            "Prefabs/StoreItem",
             "Prefabs/StartMenu",
             "Prefabs/GamePlayUI",
             "Prefabs/Countdown",

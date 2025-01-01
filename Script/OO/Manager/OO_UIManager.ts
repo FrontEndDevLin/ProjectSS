@@ -107,14 +107,14 @@ export default class OO_UIManager extends OO_Manager {
         parentNode.addChild(uiNode);
         return uiNode;
     }
-    public loadUINode(uiName: string, scriptName?: string): Node {
-        let uiPrefab = OO_ResourceManager.instance.getAssets(this.abName, `Prefabs/${uiName}`) as Prefab;
+    public loadUINode(uiUrl: string, scriptName?: string): Node {
+        let uiPrefab = OO_ResourceManager.instance.getAssets(this.abName, `Prefabs/${uiUrl}`) as Prefab;
         if (!uiPrefab) {
             return null;
         }
         const uiNode: Node = instantiate(uiPrefab);
         if (scriptName !== 'NONE') {
-            scriptName = scriptName || `${uiName}Ctrl`;
+            scriptName = scriptName || `${uiUrl}Ctrl`;
             try {
                 uiNode.addComponent(scriptName);
             } catch (error) {
@@ -132,6 +132,9 @@ export default class OO_UIManager extends OO_Manager {
 
     public removeUI(uiName: string, parentNode: Node = this.rootNode): void {
         const uiNode: Node = parentNode.getChildByName(uiName);
+        if (uiName === 'character/Character') {
+            console.log(uiNode)
+        }
         if (uiNode) {
             uiNode.destroy();
             // parentNode.removeChild(uiNode);

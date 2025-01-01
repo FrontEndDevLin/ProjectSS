@@ -8,6 +8,7 @@ import { CEVENT_GAME } from '../CEvent';
 import CharacterManager from './CharacterManager';
 import { EnemyManager } from './EnemyManager';
 import { COUNTDOWN_EVENT, CountdownManager } from './CountdownManager';
+import WeaponManager from './WeaponManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -59,6 +60,7 @@ export class ChapterManager extends OO_UIManager {
             }
             // 进入地图，显示角色
             CharacterManager.instance.showCharacter();
+            WeaponManager.instance.updateWeaponPanel();
             // 加载控制器
             this.showUI("Compass");
 
@@ -107,6 +109,8 @@ export class ChapterManager extends OO_UIManager {
          * 进入商店界面
          *  可看到自己的武器，道具，面板，商店界面
          */
+        CharacterManager.instance.removeCharacter();
+        OO_UIManager.instance.showUI("Prepare");
     }
 
     protected onDestroy(): void {

@@ -1,6 +1,7 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, Prefab } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import WeaponManager from './WeaponManager';
+import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -27,7 +28,18 @@ export class StoreManager extends OO_UIManager {
     }
 
     start() {
-
+        OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
+            "Prefabs/store/StoreItem",
+            "Prefabs/store/PanelItem"
+        ] }], (total, current) => {
+            // console.log(total, current)
+        }, (err, data: any) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log(`预加载预设体'StoreItem'完成`);
+        })
     }
 
     private _refreshStore() {

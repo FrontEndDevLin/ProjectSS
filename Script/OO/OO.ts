@@ -36,14 +36,14 @@ export class OO_Component extends Component {
         this.node.addChild(uiNode);
         return uiNode;
     }
-    public loadUINode(uiName: string, scriptName?: string) {
-        let uiPrefab = OO_ResourceManager.instance.getAssets(this.abName, `Prefabs/${uiName}`) as Prefab;
+    public loadUINode(uiUrl: string, scriptName?: string) {
+        let uiPrefab = OO_ResourceManager.instance.getAssets(this.abName, `Prefabs/${uiUrl}`) as Prefab;
         if (!uiPrefab) {
             return null;
         }
         const uiNode: Node = instantiate(uiPrefab);
         if (scriptName !== 'NONE') {
-            scriptName = scriptName || `${uiName}Ctrl`;
+            scriptName = scriptName || `${uiUrl}Ctrl`;
             try {
                 uiNode.addComponent(scriptName);
             } catch (error) {

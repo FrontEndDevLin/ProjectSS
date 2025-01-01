@@ -1,4 +1,4 @@
-import { _decorator, Component, find, Node, Prefab, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, find, Node, Prefab, UIOpacity, Vec2, Vec3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { Callback, CharacterAttribute, WeaponAttribute, WeaponData } from '../Interface';
@@ -19,6 +19,7 @@ export default class CharacterManager extends OO_UIManager {
     public defPanel: any = null;
 
     private _characterLoc: Vec3 = null;
+    private _shellNode: Node = null;
 
     protected onLoad(): void {
         if (!CharacterManager.instance) {
@@ -58,11 +59,14 @@ export default class CharacterManager extends OO_UIManager {
     }
 
     public showCharacter() {
-        let characterShell: Node = this.showUI("character/Character", this.rootNode, "CharacterCtrl");
-        this.showUI(`character/${this.characterId}`, characterShell);
+        this._shellNode = this.showUI("character/Character", this.rootNode, "CharacterCtrl");
+        this.showUI(`character/${this.characterId}`, this._shellNode);
 
         WeaponManager.instance.showWeapon();
         WeaponManager.instance.updateWeaponPanel();
+    }
+    public removeCharacter() {
+        this.removeUI("Character", this.rootNode);
     }
     public setCharacterLoc(loc: Vec3): void {
         this._characterLoc = loc;
