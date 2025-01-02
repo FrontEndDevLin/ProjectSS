@@ -20,7 +20,7 @@ export class StoreCtrl extends OO_Component {
     private _updateView() {
         // console.log(StoreManager.instance.currentStore)
         for (let item of StoreManager.instance.currentStore) {
-            const uiNode: Node = this.loadUINode("store/StoreItem", "StoreItemCtrl");
+            const uiNode: Node = this.loadUINode("prepare/StoreItem", "StoreItemCtrl");
             this.views["ItemList"].addChild(uiNode);
             let storeItemCtx: StoreItemCtrl = uiNode.getComponent("StoreItemCtrl") as StoreItemCtrl;
             storeItemCtx.initPanelItem(item);

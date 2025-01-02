@@ -10,6 +10,7 @@ export class PrepareCtrl extends OO_Component {
         console.log('PrepareCtrl loaded')
 
         this.views["Store"].addComponent("StoreCtrl");
+        this.views["Weapon"].addComponent("PrepareWeaponCtrl");
     }
 
     start() {

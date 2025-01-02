@@ -29,8 +29,9 @@ export class StoreManager extends OO_UIManager {
 
     start() {
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
-            "Prefabs/store/StoreItem",
-            "Prefabs/store/PanelItem"
+            "Prefabs/prepare/StoreItem",
+            "Prefabs/prepare/PanelItem",
+            "Prefabs/prepare/WpSlotItem"
         ] }], (total, current) => {
             // console.log(total, current)
         }, (err, data: any) => {
@@ -38,7 +39,6 @@ export class StoreManager extends OO_UIManager {
                 console.log(err);
                 return;
             }
-            console.log(`预加载预设体'StoreItem'完成`);
         })
     }
 

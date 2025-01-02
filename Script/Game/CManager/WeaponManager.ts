@@ -36,7 +36,6 @@ export default class WeaponManager extends OO_UIManager {
 
     // weaponList, 管理当前武器列表
     public weaponList: any[] = [];
-    private _weaponSlotInfoList: WeaponSlotInfo[] = [];
 
     private _weaponLoc: WeaponLoc[] = [
         [ v3(4, 0) ],
@@ -143,7 +142,6 @@ export default class WeaponManager extends OO_UIManager {
 
     }
     public showWeapon() {
-        this._weaponSlotInfoList = [];
         // 将当前装备的武器列表放进预设体外壳里，并将预设体外壳挂在到character节点下
         const WeaponSheel: Node = this.loadUINode("weapon/WeaponShell");
         const weaponCnt = this.weaponList.length;
@@ -157,15 +155,6 @@ export default class WeaponManager extends OO_UIManager {
         });
 
         this.appendUINode(WeaponSheel, find("Canvas/Character"));
-    }
-    // 通过uuid获取武器面板，目前用于武器控制类获取面板
-    public getWeaponDataByUUID(uuid: string) {
-        const target = this._weaponSlotInfoList.find(item => item.uuid === uuid);
-        if (target) {
-            let weaponName = target.weaponName;
-            return this.getWeaponDataByWeaponName(weaponName);
-        }
-        return null
     }
     // 通过武器名获取面板
     public getWeaponDataByWeaponName(weaponName: string) {

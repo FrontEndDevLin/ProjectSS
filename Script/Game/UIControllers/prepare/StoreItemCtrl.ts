@@ -31,7 +31,7 @@ export class StoreItemCtrl extends OO_Component {
         }
 
         for (let item of ary) {
-            let panelNode: Node = this.loadUINode("store/PanelItem", "NONE");
+            let panelNode: Node = this.loadUINode("prepare/PanelItem", "NONE");
             panelNode.getChildByName("Label").getComponent(Label).string = `${item.label}: `;
             panelNode.getChildByName("Value").getComponent(Label).string = item.value;
             this.views["Wrap"].addChild(panelNode);
