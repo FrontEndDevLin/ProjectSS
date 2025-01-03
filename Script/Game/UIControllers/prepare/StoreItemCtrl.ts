@@ -1,14 +1,21 @@
 import { _decorator, Component, Label, Node } from 'cc';
 import { OO_Component } from '../../../OO/OO';
+import WeaponManager from '../../CManager/WeaponManager';
+import { StoreManager } from '../../CManager/StoreManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('StoreItemCtrl')
 export class StoreItemCtrl extends OO_Component {
+    private _storeItem: any = null;
+    private _storeIdx: number = 0;
+
     protected onLoad(): void {
         super.onLoad();
     }
 
-    public initPanelItem(storeItem: any) {
+    public initPanelItem(storeItem: any, storeIdx: number) {
+        this._storeItem = storeItem;
+        this._storeIdx = storeIdx;
         this.views["Top/WName/Name"].getComponent(Label).string = storeItem.name;
         let ary: any = [];
         if (storeItem.r_panel.dmg) {
@@ -36,9 +43,20 @@ export class StoreItemCtrl extends OO_Component {
             panelNode.getChildByName("Value").getComponent(Label).string = item.value;
             this.views["Wrap"].addChild(panelNode);
         }
+
+        this.views["Bottom/Assets"].on(Node.EventType.TOUCH_END, this._buyItem, this)
+    }
+
+    private _buyItem() {
+        this.views["Bottom/Assets"].off(Node.EventType.TOUCH_END, this._buyItem, this);
+        StoreManager.instance.buyItem(this._storeIdx)
     }
 
     start() {
+    }
+
+    protected onDestroy(): void {
+        // 
     }
 
     update(deltaTime: number) {

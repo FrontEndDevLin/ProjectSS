@@ -7,3 +7,8 @@ export enum CEVENT_COMPASS {
 export enum CEVENT_GAME {
     START = 40
 }
+
+export enum CEVENT_PREPARE {
+    UPDATE_STORE = 70,
+    UPDATE_WEAPON
+}

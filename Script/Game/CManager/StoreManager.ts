@@ -2,6 +2,8 @@ import { _decorator, Component, Node, Prefab } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import WeaponManager from './WeaponManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
+import { EventBus } from '../../OO/Manager/OO_MsgManager';
+import { CEVENT_PREPARE } from '../CEvent';
 const { ccclass, property } = _decorator;
 
 /**
@@ -54,6 +56,16 @@ export class StoreManager extends OO_UIManager {
         this._refTime = 0;
         // TODO: 刷新价格根据当前关卡决定
         this.refCost = 0;
+    }
+
+    public buyItem(idx) {
+        const item = this.currentStore[idx];
+        WeaponManager.instance.addWeapon(item.id);
+        this.currentStore.splice(idx, 1);
+
+        // TODO: 需要调用StoreCtrl的_updateView和PrepareWeaponCtrl.updateWeaponView
+        EventBus.emit(CEVENT_PREPARE.UPDATE_STORE);
+        EventBus.emit(CEVENT_PREPARE.UPDATE_WEAPON);
     }
 
     public refreshStore() {
