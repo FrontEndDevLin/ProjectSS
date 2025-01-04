@@ -32,8 +32,7 @@ export class StoreManager extends OO_UIManager {
     start() {
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
             "Prefabs/prepare/StoreItem",
-            "Prefabs/prepare/PanelItem",
-            "Prefabs/prepare/WpSlotItem"
+            "Prefabs/prepare/PanelItem"
         ] }], (total, current) => {
             // console.log(total, current)
         }, (err, data: any) => {
@@ -61,7 +60,7 @@ export class StoreManager extends OO_UIManager {
     public buyItem(idx) {
         const item = this.currentStore[idx];
         WeaponManager.instance.addWeapon(item.id);
-        this.currentStore.splice(idx, 1);
+        this.currentStore[idx] = null;
 
         // TODO: 需要调用StoreCtrl的_updateView和PrepareWeaponCtrl.updateWeaponView
         EventBus.emit(CEVENT_PREPARE.UPDATE_STORE);

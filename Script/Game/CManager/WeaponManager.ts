@@ -76,6 +76,12 @@ export default class WeaponManager extends OO_UIManager {
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: ["Prefabs/weapon/Weapon001"] }], () => {}, err => {
             console.log('武器预设体加载完毕')
         })
+
+        OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
+            "Prefabs/prepare/WpItem"
+        ] }], (total, current) => {
+        }, (err, data: any) => {
+        })
     }
     // 预加载所有图标
     private _preloadWeaponIcon() {

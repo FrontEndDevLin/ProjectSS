@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "95b77504-17b2-4fae-b69b-f3a8071cf2ec",
+  "uuid": "3a07d16e-d976-4bca-8256-d2de09755c4d",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "WpSlotItem"
+    "syncNodeName": "WpItem"
   }
 }

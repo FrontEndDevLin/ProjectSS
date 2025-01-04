@@ -1,5 +1,6 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, Prefab } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
+import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
 export enum COUNTDOWN_EVENT {
@@ -25,6 +26,18 @@ export class CountdownManager extends OO_UIManager {
             return;
         }
         console.log('Countdown Manager loaded');
+
+        let pLoadPrefabs: string[] = [
+            "Prefabs/Countdown"
+        ];
+        OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: pLoadPrefabs }], (total, current) => {
+            // console.log(total, current)
+        }, (err, data: any) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+        })
     }
 
     showCountdown() {

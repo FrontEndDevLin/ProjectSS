@@ -17,12 +17,20 @@ export class PrepareWeaponCtrl extends OO_Component {
         EventBus.on(CEVENT_PREPARE.UPDATE_WEAPON, this.updateWeaponView, this)
     }
 
+    // 更新界面的武器列表
     public updateWeaponView() {
         let weaponList: any[] = WeaponManager.instance.weaponList;
-        for (let wItem of weaponList) {
-            let slotNode: Node = this.loadUINode("prepare/WpSlotItem", "NONE");
-            this.views["WeaponList"].addChild(slotNode);
-        }
+
+        this.views["WeaponList"].children.forEach((slotNode: Node, i) => {
+            const wItem = weaponList[i];
+            if (wItem) {
+                let wpIconNode: Node = this.loadUINode("prepare/WpItem", "NONE");
+                slotNode.removeAllChildren();
+                slotNode.addChild(wpIconNode);
+            } else {
+                slotNode.removeAllChildren();
+            }
+        })
     }
 
     update(deltaTime: number) {

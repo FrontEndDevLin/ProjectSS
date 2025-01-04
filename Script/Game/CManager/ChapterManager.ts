@@ -69,6 +69,9 @@ export class ChapterManager extends OO_UIManager {
         })
     }
 
+    public getCurrentChapter(): number {
+        return this._chapter;
+    }
     public intoChapter() {
         this._enterChapter();
     }
@@ -98,6 +101,7 @@ export class ChapterManager extends OO_UIManager {
          */
         this.onPlaying = false;
         this.removeUI("Compass");
+        this.removeUI("GamePlayUI");
         // 所有敌人阵亡(不爆东西)
         EnemyManager.instance.removeAllEnemy();
 
