@@ -46,7 +46,7 @@ export class ChapterManager extends OO_UIManager {
 
         CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_OVER, this._endChapter, this);
 
-        this._preplayChapter();
+        this._preplayChapter(1);
     }
 
     // 进入角色选择界面，当前不做
@@ -58,12 +58,9 @@ export class ChapterManager extends OO_UIManager {
             if (err) {
                 return;
             }
-            // 进入地图，显示角色
-            CharacterManager.instance.showCharacter();
-            WeaponManager.instance.updateWeaponPanel();
+            // 进入地图，
             // 加载控制器
             this.showUI("Compass");
-
             // TODO: 这个方法在正式进入游戏时才调用
             this.intoChapter();
         })
@@ -81,14 +78,25 @@ export class ChapterManager extends OO_UIManager {
     }
     // 预载下一关的数据，在游戏开始前的选角、游戏中途的商店界面触发
     // 地图、角色、状态ui等在选角时就挂载，关卡结束时不卸载，用其他界面覆盖即可
-    private _preplayChapter() {
-        let chapterData = ChapterDB[this._chapter];
+    private _preplayChapter(chapter?: number) {
+        if (!chapter) {
+            chapter = this._chapter + 1;
+        }
+        console.log(`预载第${chapter}波数据`);
+        let chapterData = ChapterDB[chapter];
+        if (!chapterData) {
+            return;
+        }
         CountdownManager.instance.preplay(chapterData.seconds);
         EnemyManager.instance.setRoles(chapterData);
     }
     // 进入当前关卡
     private _enterChapter() {
         EventBus.emit(CEVENT_GAME.START);
+        OO_UIManager.instance.removeUI("Prepare");
+        // 显示角色
+        CharacterManager.instance.addCharacter();
+        CharacterManager.instance.showWeapon();
         CountdownManager.instance.startCountdown();
         this.onPlaying = true;
         console.log(`进入第${this._chapter}关`);
@@ -100,8 +108,8 @@ export class ChapterManager extends OO_UIManager {
          * 关卡结束通知（回收材料、升级界面、商店界面）
          */
         this.onPlaying = false;
-        this.removeUI("Compass");
-        this.removeUI("GamePlayUI");
+        // this.removeUI("Compass");
+        // this.removeUI("GamePlayUI");
         // 所有敌人阵亡(不爆东西)
         EnemyManager.instance.removeAllEnemy();
 
@@ -115,6 +123,7 @@ export class ChapterManager extends OO_UIManager {
          */
         CharacterManager.instance.removeCharacter();
         OO_UIManager.instance.showUI("Prepare");
+        this._preplayChapter();
     }
 
     protected onDestroy(): void {

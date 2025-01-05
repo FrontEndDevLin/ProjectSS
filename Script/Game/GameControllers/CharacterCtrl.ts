@@ -5,6 +5,7 @@ import { OO_Component } from '../../OO/OO';
 import { CharacterAttribute } from '../Interface';
 import CharacterManager from '../CManager/CharacterManager';
 import { GP_UNIT } from '../Common';
+import { ChapterManager } from '../CManager/ChapterManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -73,6 +74,9 @@ export class CharacterCtrl extends OO_Component {
     }
 
     update(deltaTime: number) {
+        if (!ChapterManager.instance.onPlaying) {
+            return;
+        }
         if (this._moving) {
             this._move(deltaTime);
         }

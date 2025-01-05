@@ -58,10 +58,11 @@ export default class CharacterManager extends OO_UIManager {
         });
     }
 
-    public showCharacter() {
+    public addCharacter() {
         this._shellNode = this.showUI("character/Character", this.rootNode, "CharacterCtrl");
         this.showUI(`character/${this.characterId}`, this._shellNode);
-
+    }
+    public showWeapon() {
         WeaponManager.instance.showWeapon();
         WeaponManager.instance.updateWeaponPanel();
     }

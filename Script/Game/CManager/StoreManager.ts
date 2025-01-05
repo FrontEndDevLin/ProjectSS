@@ -62,7 +62,7 @@ export class StoreManager extends OO_UIManager {
         WeaponManager.instance.addWeapon(item.id);
         this.currentStore[idx] = null;
 
-        // TODO: 需要调用StoreCtrl的_updateView和PrepareWeaponCtrl.updateWeaponView
+        // 调用StoreCtrl的_updateView和PrepareWeaponCtrl.updateWeaponView
         EventBus.emit(CEVENT_PREPARE.UPDATE_STORE);
         EventBus.emit(CEVENT_PREPARE.UPDATE_WEAPON);
     }

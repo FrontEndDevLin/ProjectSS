@@ -16,11 +16,12 @@ export class PrepareCtrl extends OO_Component {
         let nextWave: number = ChapterManager.instance.getCurrentChapter() + 1;
         this.views["Bottom/GO/Txt"].getComponent(Label).string = `出发（第${nextWave}波）`
 
-        this.views["Bottom/GO"].on(Node.EventType.TOUCH_END, this._nextWave, this);
+        this.views["Bottom/GO"].once(Node.EventType.TOUCH_END, this._nextWave, this);
     }
 
     private _nextWave() {
         console.log(`准备进入下一关`);
+        ChapterManager.instance.nextChapter();
     }
 
     start() {

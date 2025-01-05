@@ -34,7 +34,7 @@ export default class Main extends Component {
             this.startGame();
         })
 
-        PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
+        // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
     }
 
     public runGame(): void {

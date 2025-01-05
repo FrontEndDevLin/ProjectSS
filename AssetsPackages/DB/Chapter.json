@@ -39,5 +39,30 @@
         "emy_min": 1
       }
     ]
+  },
+  "2": {
+    "chapter": 2,
+    "seconds": 20,
+    "boost_nml": 1,
+    "boost_spd": 1,
+    "type": "normal",
+    "roles": [
+      {
+        "time_node_end": 12,
+        "fst_rfh_time": 0.2,
+        "emy": 1,
+        "role": "normal",
+        "rfh_time": 1,
+        "emy_max": 2
+      },
+      {
+        "time_node_start": 12,
+        "emy": 1,
+        "role": "normal",
+        "rfh_time": 0.8,
+        "emy_max": 2,
+        "emy_min": 1
+      }
+    ]
   }
 }

@@ -155,6 +155,9 @@ export class EnemyManager extends OO_UIManager {
     }
     public updateEnemy(uuid: string, enemyInfo: EnemyInfo) {
         for (let k in enemyInfo) {
+            if (!this.enemyMap[uuid]) {
+                continue;
+            }
             this.enemyMap[uuid][k] = enemyInfo[k];
         }
     }
@@ -174,6 +177,9 @@ export class EnemyManager extends OO_UIManager {
         let min: number = 0;
         let target: string = null;
         for (let uuid in uuidList) {
+            if (!this.enemyMap[uuid]) {
+                continue;
+            }
             let dis = this.enemyMap[uuid].dis;
             if (!target) {
                 min = dis;
