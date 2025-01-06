@@ -1,4 +1,4 @@
-import { _decorator, Component, find, Node, Prefab, SpriteFrame, v3, Vec3 } from 'cc';
+import { _decorator, Component, find, Label, Node, Prefab, SpriteFrame, v3, Vec3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { Callback, WeaponData, WeaponSlotInfo } from '../Interface';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
@@ -103,9 +103,36 @@ export default class WeaponManager extends OO_UIManager {
         return WeaponDB[randomKey];
     }
 
-    // 
-    public showWeaponPanelUI(weaponId) {
+    public getWeaponPanelNode(weaponId): Node {
+        const weaponItem = this.getWeaponDataByWeaponId(weaponId);
+        let ary: any = [];
+        if (weaponItem.r_panel.dmg) {
+            ary.push({
+                label: "伤害",
+                value: weaponItem.r_panel.dmg
+            });
+        }
+        if (weaponItem.r_panel.atk_spd) {
+            ary.push({
+                label: "冷却",
+                value: weaponItem.r_panel.atk_spd + "s"
+            });
+        }
+        if (weaponItem.r_panel.range) {
+            ary.push({
+                label: "范围",
+                value: weaponItem.r_panel.range
+            });
+        }
+        let wpPanelNode: Node = this.loadUINode("GUI:panel/WpPanel", "NONE");
+        for (let item of ary) {
+            let panelNode: Node = this.loadUINode("GUI:panel/PanelItem", "NONE");
+            panelNode.getChildByName("Label").getComponent(Label).string = `${item.label}: `;
+            panelNode.getChildByName("Value").getComponent(Label).string = item.value;
+            wpPanelNode.addChild(panelNode);
+        }
 
+        return wpPanelNode;
     }
 
     // 获取随机的n个武器，用于商店刷新
@@ -163,17 +190,17 @@ export default class WeaponManager extends OO_UIManager {
             let weaponNode: Node = this.loadUINode("weapon/Weapon001", scriptName);
             weaponNode.setPosition(weaponLocMap[i]);
             const scriptComp: WeaponCtrl = this.appendUINode(weaponNode, WeaponSheel).getComponent(scriptName) as WeaponCtrl;
-            scriptComp.initAttr(this.getWeaponDataByWeaponName("Weapon001"));
+            scriptComp.initAttr(this.getWeaponDataByWeaponId("Weapon001"));
         });
 
         this.appendUINode(WeaponSheel, find("Canvas/Character"));
     }
     // 通过武器名获取面板
-    public getWeaponDataByWeaponName(weaponName: string) {
+    public getWeaponDataByWeaponId(weaponId: string) {
         /**
          * 面板需要提前计算好，这里只做返回
          */
-        return WeaponDB[weaponName];
+        return WeaponDB[weaponId];
     }
 
     update(deltaTime: number) {

@@ -29,9 +29,6 @@ export class StoreCtrl extends OO_Component {
                 uiNode.OO_param1 = item;
                 uiNode.OO_param2 = i;
                 slotNode.addChild(uiNode);
-
-                // let storeItemCtx: StoreItemCtrl = uiNode.getComponent("StoreItemCtrl") as StoreItemCtrl;
-                // storeItemCtx.initPanelItem(item, i);
             }
         });
         // console.log(this.views["ItemList"])

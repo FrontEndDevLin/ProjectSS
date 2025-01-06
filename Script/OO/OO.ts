@@ -37,7 +37,14 @@ export class OO_Component extends Component {
         return uiNode;
     }
     public loadUINode(uiUrl: string, scriptName?: string) {
-        let uiPrefab = OO_ResourceManager.instance.getAssets(this.abName, `Prefabs/${uiUrl}`) as Prefab;
+        let abName = this.abName;
+
+        if (uiUrl.includes(":")) {
+            let uiUrlAry: string[] = uiUrl.split(":");
+            abName = uiUrlAry[0];
+            uiUrl = uiUrlAry[1];
+        }
+        let uiPrefab = OO_ResourceManager.instance.getAssets(abName, `Prefabs/${uiUrl}`) as Prefab;
         if (!uiPrefab) {
             return null;
         }
