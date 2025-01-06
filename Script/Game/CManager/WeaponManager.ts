@@ -78,7 +78,8 @@ export default class WeaponManager extends OO_UIManager {
         })
 
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
-            "Prefabs/prepare/WpItem"
+            "Prefabs/panel/PanelItem",
+            "Prefabs/panel/WpPanel"
         ] }], (total, current) => {
         }, (err, data: any) => {
         })
@@ -100,6 +101,11 @@ export default class WeaponManager extends OO_UIManager {
         let len = keys.length;
         let randomKey = keys[Math.floor(Math.random() * len)];
         return WeaponDB[randomKey];
+    }
+
+    // 
+    public showWeaponPanelUI(weaponId) {
+
     }
 
     // 获取随机的n个武器，用于商店刷新

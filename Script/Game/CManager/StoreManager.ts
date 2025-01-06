@@ -31,8 +31,8 @@ export class StoreManager extends OO_UIManager {
 
     start() {
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
-            "Prefabs/prepare/StoreItem",
-            "Prefabs/prepare/PanelItem"
+            "Prefabs/prepare/WpItem",
+            "Prefabs/prepare/StoreItem"
         ] }], (total, current) => {
             // console.log(total, current)
         }, (err, data: any) => {

@@ -59,6 +59,9 @@ export default class CharacterManager extends OO_UIManager {
     }
 
     public addCharacter() {
+        if (!this.characterId) {
+            return console.error(`character ${this.characterId} not loaded`);
+        }
         this._shellNode = this.showUI("character/Character", this.rootNode, "CharacterCtrl");
         this.showUI(`character/${this.characterId}`, this._shellNode);
     }

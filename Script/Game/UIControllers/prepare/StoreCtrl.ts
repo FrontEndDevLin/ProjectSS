@@ -26,9 +26,12 @@ export class StoreCtrl extends OO_Component {
             const item = StoreManager.instance.currentStore[i];
             if (item) {
                 const uiNode: Node = this.loadUINode("prepare/StoreItem", "StoreItemCtrl");
+                uiNode.OO_param1 = item;
+                uiNode.OO_param2 = i;
                 slotNode.addChild(uiNode);
-                let storeItemCtx: StoreItemCtrl = uiNode.getComponent("StoreItemCtrl") as StoreItemCtrl;
-                storeItemCtx.initPanelItem(item, i);
+
+                // let storeItemCtx: StoreItemCtrl = uiNode.getComponent("StoreItemCtrl") as StoreItemCtrl;
+                // storeItemCtx.initPanelItem(item, i);
             }
         });
         // console.log(this.views["ItemList"])

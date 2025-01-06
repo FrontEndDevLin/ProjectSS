@@ -27,7 +27,7 @@ export class StoreItemCtrl extends OO_Component {
         if (storeItem.r_panel.atk_spd) {
             ary.push({
                 label: "冷却",
-                value: storeItem.r_panel.atk_spd + 's'
+                value: storeItem.r_panel.atk_spd + "s"
             });
         }
         if (storeItem.r_panel.range) {
@@ -43,16 +43,18 @@ export class StoreItemCtrl extends OO_Component {
             panelNode.getChildByName("Value").getComponent(Label).string = item.value;
             this.views["Wrap"].addChild(panelNode);
         }
-
-        this.views["Bottom/Assets"].on(Node.EventType.TOUCH_END, this._buyItem, this)
     }
 
     private _buyItem() {
         this.views["Bottom/Assets"].off(Node.EventType.TOUCH_END, this._buyItem, this);
-        StoreManager.instance.buyItem(this._storeIdx)
+        StoreManager.instance.buyItem(this._storeIdx);
     }
 
     start() {
+        const storeItem = this.node.OO_param1;
+        const storeIdx = this.node.OO_param2;
+        this._storeIdx = storeIdx;
+        this.views["Bottom/Assets"].on(Node.EventType.TOUCH_END, this._buyItem, this);
     }
 
     protected onDestroy(): void {
