@@ -4,8 +4,8 @@ import WeaponManager from '../../CManager/WeaponManager';
 import { StoreManager } from '../../CManager/StoreManager';
 const { ccclass, property } = _decorator;
 
-@ccclass('StoreItemCtrl')
-export class StoreItemCtrl extends OO_Component {
+@ccclass('ProductWpItemCtrl')
+export class ProductWpItemCtrl extends OO_Component {
     private _storeItem: any = null;
     private _storeIdx: number = 0;
 
@@ -14,7 +14,7 @@ export class StoreItemCtrl extends OO_Component {
     }
 
     private _buyItem() {
-        this.views["Bottom/Assets"].off(Node.EventType.TOUCH_END, this._buyItem, this);
+        this.views["Card/ProductOprBar/Assets"].off(Node.EventType.TOUCH_END, this._buyItem, this);
         StoreManager.instance.buyItem(this._storeIdx);
     }
 
@@ -22,12 +22,12 @@ export class StoreItemCtrl extends OO_Component {
         const storeItem = this.node.OO_param1;
         const storeIdx = this.node.OO_param2;
         this._storeIdx = storeIdx;
-        this.views["Bottom/Assets"].on(Node.EventType.TOUCH_END, this._buyItem, this);
+        this.views["Card/ProductOprBar/Assets"].on(Node.EventType.TOUCH_END, this._buyItem, this);
 
-        this.views["Top/WName/Name"].getComponent(Label).string = storeItem.name;
+        this.views["Card/ImgTxt/WName/Name"].getComponent(Label).string = storeItem.name;
 
         let wpPanelNode: Node = WeaponManager.instance.getWeaponPanelNode(storeItem.id);
-        this.node.addChild(wpPanelNode);
+        this.views["Card"].addChild(wpPanelNode);
     }
 
     protected onDestroy(): void {
