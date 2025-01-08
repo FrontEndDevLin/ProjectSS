@@ -79,7 +79,8 @@ export default class WeaponManager extends OO_UIManager {
 
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
             "Prefabs/panel/PanelItem",
-            "Prefabs/panel/WpPanel"
+            "Prefabs/panel/WpPanel",
+            "Prefabs/PreviewWp"
         ] }], (total, current) => {
         }, (err, data: any) => {
         })
