@@ -72,6 +72,9 @@ export default class Main extends Component {
     protected preload(callback?: Callback): void {
         let pLoadPrefabs: string[] = [
             "Prefabs/CharacterSelect",
+            "Prefabs/common/PanelItem",
+            "Prefabs/common/PanelWrap",
+            "Prefabs/common/CHTCard",
             "Prefabs/Prepare",
             "Prefabs/StartMenu",
             "Prefabs/GamePlayUI",

@@ -78,8 +78,6 @@ export default class WeaponManager extends OO_UIManager {
         })
 
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
-            "Prefabs/panel/PanelItem",
-            "Prefabs/panel/WpPanel",
             "Prefabs/PreviewWp"
         ] }], (total, current) => {
         }, (err, data: any) => {
@@ -125,9 +123,9 @@ export default class WeaponManager extends OO_UIManager {
                 value: weaponItem.r_panel.range
             });
         }
-        let wpPanelNode: Node = this.loadUINode("GUI:panel/WpPanel", "NONE");
+        let wpPanelNode: Node = this.loadUINode("GUI:common/PanelWrap", "NONE");
         for (let item of ary) {
-            let panelNode: Node = this.loadUINode("GUI:panel/PanelItem", "NONE");
+            let panelNode: Node = this.loadUINode("GUI:common/PanelItem", "NONE");
             panelNode.getChildByName("Label").getComponent(Label).string = `${item.label}: `;
             panelNode.getChildByName("Value").getComponent(Label).string = item.value;
             wpPanelNode.addChild(panelNode);

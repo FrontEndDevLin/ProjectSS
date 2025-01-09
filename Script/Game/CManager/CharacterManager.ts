@@ -7,6 +7,8 @@ import { DBManager } from './DBManager';
 import { BulletManager } from './BulletManager';
 const { ccclass, property } = _decorator;
 
+let CharacterDB: any = null;
+
 // 角色管理类，管理角色属性、武器等
 export default class CharacterManager extends OO_UIManager {
     static instance: CharacterManager = null;
@@ -28,6 +30,7 @@ export default class CharacterManager extends OO_UIManager {
             this.destroy();
             return;
         }
+        CharacterDB = DBManager.instance.getDbData("Character");
         console.log("Character Manager loaded")
 
         /**
@@ -42,11 +45,10 @@ export default class CharacterManager extends OO_UIManager {
     public initCharacter(characterId: string, callback?: Callback) {
         this.characterId = characterId;
 
-        let characterDb = DBManager.instance.getDbData("Character");
-        this.attribute = characterDb[characterId];
+        this.attribute = CharacterDB[characterId];
         console.log(`角色初始面板`);
         console.log(this.attribute)
-        this.defPanel = characterDb["def_panel"];
+        this.defPanel = CharacterDB["def_panel"];
 
         WeaponManager.instance.initWeapon(['test']);
         BulletManager.instance.updateBulletList();
@@ -56,6 +58,25 @@ export default class CharacterManager extends OO_UIManager {
                 callback(err)
             }
         });
+    }
+
+    public getSimpleList() {
+        if (!CharacterDB) {
+            return console.error("CharacterDB not loaded!");
+        }
+        let list: any[] = [];
+        for (let cId in CharacterDB) {
+            if (cId.includes("CR")) {
+                let item = CharacterDB[cId];
+                list.push({
+                    id: item.id,
+                    cn: item.cn,
+                    pic: item.pic,
+                    buff: item.buff
+                })
+            }
+        }
+        return list;
     }
 
     public addCharacter() {
