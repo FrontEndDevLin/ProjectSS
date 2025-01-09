@@ -60,10 +60,13 @@ export class OO_Component extends Component {
         }
         return uiNode;
     }
-
-    protected onLoad(): void {
+    public updateView() {
         this.views = {};
         this._loadViews(this.node);
+    }
+
+    protected onLoad(): void {
+        this.updateView();
     }
 }
 

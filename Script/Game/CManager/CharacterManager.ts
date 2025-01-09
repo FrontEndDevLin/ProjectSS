@@ -60,9 +60,10 @@ export default class CharacterManager extends OO_UIManager {
         });
     }
 
-    public getSimpleList() {
+    public getSimpleList(): any[] {
         if (!CharacterDB) {
-            return console.error("CharacterDB not loaded!");
+            console.error("CharacterDB not loaded!");
+            return;
         }
         let list: any[] = [];
         for (let cId in CharacterDB) {

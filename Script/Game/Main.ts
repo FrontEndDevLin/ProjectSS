@@ -75,6 +75,7 @@ export default class Main extends Component {
             "Prefabs/common/PanelItem",
             "Prefabs/common/PanelWrap",
             "Prefabs/common/CHTCard",
+            "Prefabs/common/CHTMinCard",
             "Prefabs/Prepare",
             "Prefabs/StartMenu",
             "Prefabs/GamePlayUI",
