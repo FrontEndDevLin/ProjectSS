@@ -44,7 +44,7 @@ export default class Main extends Component {
             if (err) {
                 return;
             }
-            OO_UIManager.instance.showUI("CharacterSelect");
+            ChapterManager.instance.showCharacterSelect();
         });
     }
 
@@ -65,8 +65,6 @@ export default class Main extends Component {
 
     public startGame(): void {
         OO_UIManager.instance.removeUI("StartMenu");
-
-        ChapterManager.instance.characterSelect();
     }
 
     protected preload(callback?: Callback): void {

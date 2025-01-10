@@ -38,12 +38,12 @@ export class ChapterManager extends OO_UIManager {
         ChapterDB = DBManager.instance.getDbData("Chapter");
     }
 
-    public initGameItems() {
+    // TODO: 名字乱起的
+    public _initGameItems() {
+        MapManager.instance.initMap();
         MapManager.instance.showMap();
-        CountdownManager.instance.showCountdown();
         EnemyManager.instance.startListen();
         this.showUI("GamePlayUI");
-
         CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_OVER, this._endChapter, this);
 
         this._preplayChapter(1);
@@ -51,10 +51,16 @@ export class ChapterManager extends OO_UIManager {
 
     // 进入角色选择界面，当前不做
     // 地图、角色、状态ui等在选角时就挂载，关卡结束时不卸载，用其他界面覆盖即可
-    public characterSelect() {
-        MapManager.instance.initMap();
-        this.initGameItems();
-        CharacterManager.instance.initCharacter("CR001", err => {
+    public showCharacterSelect() {
+        this.showUI("CharacterSelect");
+    }
+
+    // 角色选择完成。TODO: 下一步该选难度/武器
+    public chtSelectComplete(chrId: string) {
+        OO_UIManager.instance.removeUI("CharacterSelect");
+        this._initGameItems();
+        // initCharacter方法，在选择完角色后，进入选择难度界面时调用，目前直接调用
+        CharacterManager.instance.initCharacter(chrId, err => {
             if (err) {
                 return;
             }

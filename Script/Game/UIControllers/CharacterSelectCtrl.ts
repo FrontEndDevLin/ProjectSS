@@ -2,6 +2,7 @@ import { _decorator, Component, Label, Node } from 'cc';
 import { OO_Component } from '../../OO/OO';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import CharacterManager from '../CManager/CharacterManager';
+import { ChapterManager } from '../CManager/ChapterManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterSelectCtrl')
@@ -33,7 +34,7 @@ export class CharacterSelectCtrl extends OO_Component {
             if (!this._chtData) {
                 return console.log("角色未选择");
             } else {
-                console.log("选择好，下一步")
+                ChapterManager.instance.chtSelectComplete(this._chtData.id);
             }
         }, this);
     }

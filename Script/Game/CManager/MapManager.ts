@@ -5,8 +5,6 @@ import { Callback } from '../Interface';
 const { ccclass, property } = _decorator;
 
 export default class MapManager extends OO_UIManager {
-    
-
     static instance: MapManager = null;
     public abName: string = "Map";
 
