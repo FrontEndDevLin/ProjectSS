@@ -1,5 +1,6 @@
-import { _decorator, Component, Node, Vec3 } from 'cc';
+import { _decorator, Component, Label, Node, Prefab, Vec3, Animation } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
+import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -19,6 +20,10 @@ export class DamageManager extends OO_UIManager {
             return;
         }
         console.log("Damage Manager launch");
+
+        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/DmgTxt`] }], () => {}, err => {
+            console.log('伤害数字预设体加载完毕')
+        })
     }
 
     // 计算武器伤害
@@ -33,7 +38,13 @@ export class DamageManager extends OO_UIManager {
     }
     public showDamageTxt(damage: number, position: Vec3) {
         if (true) { 
-            console.log(`造成伤害: ${damage}`);
+            let dmgTxtNode: Node = this.loadUINode("DmgTxt", "NONE");
+            dmgTxtNode.getComponent(Label).string = `${damage}`;
+            dmgTxtNode.setPosition(position);
+            dmgTxtNode.getComponent(Animation).on(Animation.EventType.FINISHED, () => {
+                dmgTxtNode.destroy();
+            });
+            this.appendUINode(dmgTxtNode);
         }
     }
 
