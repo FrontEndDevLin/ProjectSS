@@ -38,12 +38,11 @@ export class DamageManager extends OO_UIManager {
     }
     public showDamageTxt(damage: number, position: Vec3) {
         if (true) { 
-            let dmgTxtNode: Node = this.loadUINode("DmgTxt", "NONE");
-            dmgTxtNode.getComponent(Label).string = `${damage}`;
-            dmgTxtNode.setPosition(position);
-            dmgTxtNode.getComponent(Animation).on(Animation.EventType.FINISHED, () => {
-                dmgTxtNode.destroy();
-            });
+            let dmgTxtNode: Node = this.loadUINode("DmgTxt");
+            dmgTxtNode.OO_param1 = {
+                damage,
+                position
+            };
             this.appendUINode(dmgTxtNode);
         }
     }

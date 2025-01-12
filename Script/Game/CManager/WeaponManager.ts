@@ -42,6 +42,9 @@ export default class WeaponManager extends OO_UIManager {
         [ v3(24, 0), v3(-24, 0) ],
         [ v3(22, -4), v3(-22, -4), v3(0, 24) ],
         [ v3(20, 14), v3(20, -14), v3(-20, -14), v3(-20, 14) ],
+        [ v3(20, 12), v3(20, -12), v3(-20, -12), v3(-20, 12), v3(0, 24) ],
+        [ v3(20, 14), v3(20, 0), v3(20, -14), v3(-20, -14), v3(-20, 0), v3(-20, 14) ]
+        // [ v3(20, 14), v3(20, -14), v3(-20, -14), v3(-20, 14) ]
     ]
 
     protected onLoad(): void {
@@ -149,14 +152,18 @@ export default class WeaponManager extends OO_UIManager {
         if (!this.rootNode) {
             // this.rootNode = find("Canvas/")
         }
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 2; i++) {
             this.addWeapon(weaponIds[i])
         }
         console.log('武器初始面板')
     }
+    // 能否购买武器，除了判断武器槽位外可能还需要做其他判断(合成武器)
+    public isCanByWeapon(): boolean {
+        return this.weaponList.length < this.slot;
+    }
     // 购买武器调用
     public addWeapon(weaponId: string): boolean {
-        if (this.weaponList.length <= this.slot) {
+        if (this.weaponList.length < this.slot) {
             // 临时处理
             this.weaponList.push(WeaponDB["Weapon001"]);
             return true;

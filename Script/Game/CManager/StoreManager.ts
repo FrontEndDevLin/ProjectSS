@@ -58,8 +58,16 @@ export class StoreManager extends OO_UIManager {
     }
 
     public buyItem(idx) {
+        // TODO: 确认是否能买武器
         const item = this.currentStore[idx];
-        WeaponManager.instance.addWeapon(item.id);
+        const itemId = item.id;
+
+        if (!WeaponManager.instance.isCanByWeapon()) {
+            console.log("槽位已满，无法购买武器");
+            return;
+        }
+
+        WeaponManager.instance.addWeapon(itemId);
         this.currentStore[idx] = null;
 
         // 调用StoreCtrl的_updateView和PrepareWeaponCtrl.updateWeaponView

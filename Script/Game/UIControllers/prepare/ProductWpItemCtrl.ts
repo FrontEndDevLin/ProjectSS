@@ -14,7 +14,6 @@ export class ProductWpItemCtrl extends OO_Component {
     }
 
     private _buyItem() {
-        this.views["Card/ProductOprBar/Assets"].off(Node.EventType.TOUCH_END, this._buyItem, this);
         StoreManager.instance.buyItem(this._storeIdx);
     }
 
