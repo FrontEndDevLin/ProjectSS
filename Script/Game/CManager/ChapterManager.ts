@@ -76,6 +76,9 @@ export class ChapterManager extends OO_UIManager {
     public getCurrentChapter(): number {
         return this._chapter;
     }
+    public getChapterData() {
+        return ChapterDB[this._chapter];
+    }
     public intoChapter() {
         this._enterChapter();
     }
