@@ -25,6 +25,7 @@ export class DBManager extends OO_Manager {
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: JsonAsset, urls: [
             "Chapter",
             "Character", 
+            "Enemy",
             "Weapon", 
             "Bullet"
         ]}], () => {}, err => {

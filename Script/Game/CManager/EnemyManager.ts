@@ -10,6 +10,7 @@ import { CEVENT_GAME } from '../CEvent';
 import { EnemyCtrl } from '../GameControllers/enemy/EnemyCtrl';
 import { OO_AddManager } from '../../OO/OO_Manager';
 import { DropItemManager } from './DropItemManager';
+import { DBManager } from './DBManager';
 
 export interface EnemyInfo {
     x?: number,
@@ -21,19 +22,7 @@ interface EnemyMap {
     [uuid: string]: EnemyInfo
 }
 
-/**
- * R5 5600  519
- * 寒冰100  18.8
- * 微星A520  380.07  -> 华南A520  268
- * 铭瑄16g 3200  132  -> 索奈特16g 3200  114
- * 铠侠500g nvme  225  -> 科赋256g  99
- * 1T蓝盘  185.71  -> 2手1t  97
- * 6750gre  1777 -> 6650xt  1598
- * 玄武550v4  199
- * 海景房机箱  57.42
- * 
- * 3494 -> 2970
- */
+let EnemyDB: any = null;
 
 @ccclass('EnemyManager')
 export class EnemyManager extends OO_UIManager {
@@ -56,13 +45,16 @@ export class EnemyManager extends OO_UIManager {
         }
         console.log("Enemy Manager loaded");
 
+        EnemyDB = DBManager.instance.getDbData("Enemy");
+        console.log(EnemyDB);
+
         // TODO: 这里的enemyBox暂时在该方法里生成
         let rootNode: Node = new Node("EnemyBox");
         this.node.addChild(rootNode);
         this.rootNode = rootNode;
 
         // 加载所有敌人预设
-        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/enemy/Enemy01`] }], () => {}, err => {
+        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/enemy/EMY001`] }], () => {}, err => {
             console.log("敌人预设体加载完毕")
         })
 
@@ -71,6 +63,26 @@ export class EnemyManager extends OO_UIManager {
 
     public startListen() {
         CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_REDUCE_TINY, this._loadEnemy, this);
+    }
+
+    public getDBEnemyList(attrList: string[] = ['id']): any[] {
+        if (!EnemyDB) {
+            console.error("EnemyDB not loaded");
+            return;
+        }
+        let list: any[] = [];
+        for (let emyId in EnemyDB) {
+            if (!emyId.includes("EMY")) {
+                continue;
+            }
+            let emyItem = EnemyDB[emyId];
+            let item = {};
+            for (let key of attrList) {
+                item[key] = emyItem[key];
+            }
+            list.push(item);
+        }
+        return list;
     }
 
     private _roleMap: any = {
@@ -138,7 +150,7 @@ export class EnemyManager extends OO_UIManager {
     public createEnemy() {
         // 生成一个随机坐标，判断是否与角色距离过近（<200px），如果过近重新生成
         let loc: Vec3 = this._createEnemyLoc();
-        let enemyNode = this.loadUINode("enemy/Enemy01", "EnemyCtrl");
+        let enemyNode = this.loadUINode("enemy/EMY001", "EnemyCtrl");
         let { x, y } = loc;
         enemyNode.setPosition(v3(x, y));
         this.enemyMap[enemyNode.uuid] = { x, y, dis: 0, alive: 1 };

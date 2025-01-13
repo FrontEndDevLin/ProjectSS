@@ -1,5 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
+import { EnemyManager } from './EnemyManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -13,6 +14,8 @@ const { ccclass, property } = _decorator;
 export class DropItemManager extends OO_UIManager {
     public rootNode: Node = null;
 
+    private _emyRateMap: any = {};
+
     protected onLoad(): void {
         super.onLoad();
 
@@ -21,10 +24,25 @@ export class DropItemManager extends OO_UIManager {
         this.rootNode = rootNode;
 
         console.log("DropItem Manager loaded");
+        this._initRateMap();
     }
 
     start() {
 
+    }
+
+    private _initRateMap() {
+        let emyList: any[] = EnemyManager.instance.getDBEnemyList(["id", "exp_drop_rate", "trophy_drop_rate"]);
+        for (let emyItem of emyList) {
+            this._emyRateMap[emyItem.id] = emyItem;
+        }
+    }
+
+    /**
+     * 敌人死亡后，调用该接口，由该接口决定掉落物品
+     */
+    public dropItem(emyId: string, position) {
+        // 判断当前关卡的全局掉落修正
     }
 
     update(deltaTime: number) {
