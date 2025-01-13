@@ -7,7 +7,7 @@ const { ccclass, property } = _decorator;
 export default class MapManager extends OO_UIManager {
     static instance: MapManager = null;
     public abName: string = "Map";
-
+    public rootNode: Node = null;
     public mapName: string = "";
     public mapAsset: SpriteFrame = null;
     private _mapList: string[] = ["map01", "map01"];
@@ -19,7 +19,10 @@ export default class MapManager extends OO_UIManager {
             this.destroy();
             return;
         }
-        this.rootNode = find("Canvas");
+
+        let rootNode: Node = new Node("MapWrap");
+        this.node.addChild(rootNode);
+        this.rootNode = rootNode;
 
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: ["Prefabs/Map"] }], () => {}, err => {
         })

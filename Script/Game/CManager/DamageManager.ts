@@ -11,6 +11,7 @@ const { ccclass, property } = _decorator;
 @ccclass('DamageManager')
 export class DamageManager extends OO_UIManager {
     static instance: DamageManager = null;
+    public rootNode: Node = null;
 
     protected onLoad(): void {
         if (!DamageManager.instance) {
@@ -24,6 +25,10 @@ export class DamageManager extends OO_UIManager {
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/DmgTxt`] }], () => {}, err => {
             console.log('伤害数字预设体加载完毕')
         })
+
+        let rootNode: Node = new Node("DmgTxtBox");
+        this.node.addChild(rootNode);
+        this.rootNode = rootNode;
     }
 
     // 计算武器伤害
@@ -37,7 +42,7 @@ export class DamageManager extends OO_UIManager {
         return damage;
     }
     public showDamageTxt(damage: number, position: Vec3) {
-        if (true) { 
+        if (true) {
             let dmgTxtNode: Node = this.loadUINode("DmgTxt");
             dmgTxtNode.OO_param1 = {
                 damage,

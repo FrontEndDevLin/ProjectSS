@@ -4,7 +4,7 @@
     "type": "? 规则 normal -> 只刷小怪",
     "boost_nml": "基础属性加成等级系数",
     "boost_spd": "速度加成等级系数",
-    "exp_drop_rate": "经验值爆率",
+    "exp_drop_rate": "经验值爆率(全局经验值爆率，每个敌人都有独自的爆率)",
     "trophy_drop_rate": "战利品爆率",
     "roles": {
       "time_node_start": "时间开始节点 默认为seconds",
@@ -19,7 +19,7 @@
   },
   "1": {
     "chapter": 1,
-    "seconds": 2,
+    "seconds": 20,
     "boost_nml": 1,
     "boost_spd": 1,
     "type": "normal",

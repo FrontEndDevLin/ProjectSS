@@ -8,6 +8,8 @@ import CharacterManager from './CharacterManager';
 import { EventBus } from '../../OO/Manager/OO_MsgManager';
 import { CEVENT_GAME } from '../CEvent';
 import { EnemyCtrl } from '../GameControllers/enemy/EnemyCtrl';
+import { OO_AddManager } from '../../OO/OO_Manager';
+import { DropItemManager } from './DropItemManager';
 
 export interface EnemyInfo {
     x?: number,
@@ -52,20 +54,22 @@ export class EnemyManager extends OO_UIManager {
             this.destroy();
             return;
         }
-        console.log("Enemy Manager loaded")
+        console.log("Enemy Manager loaded");
 
-        // 加载所有敌人预设
-        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/enemy/Enemy01`] }], () => {}, err => {
-            console.log("敌人预设体加载完毕")
-        })
-    }
-
-    public startListen() {
         // TODO: 这里的enemyBox暂时在该方法里生成
         let rootNode: Node = new Node("EnemyBox");
         this.node.addChild(rootNode);
         this.rootNode = rootNode;
 
+        // 加载所有敌人预设
+        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/enemy/Enemy01`] }], () => {}, err => {
+            console.log("敌人预设体加载完毕")
+        })
+
+        OO_AddManager(DropItemManager);
+    }
+
+    public startListen() {
         CountdownManager.instance.on(COUNTDOWN_EVENT.TIME_REDUCE_TINY, this._loadEnemy, this);
     }
 
