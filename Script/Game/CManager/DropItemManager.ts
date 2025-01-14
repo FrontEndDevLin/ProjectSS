@@ -13,12 +13,22 @@ const { ccclass, property } = _decorator;
 
 @ccclass('DropItemManager')
 export class DropItemManager extends OO_UIManager {
+    static instance: DropItemManager = null;
+
     public rootNode: Node = null;
 
     private _emyRateMap: any = {};
 
+    // 关卡爆率修正数据
+    private _chapterData: any = {};
+
     protected onLoad(): void {
-        super.onLoad();
+        if (!DropItemManager.instance) {
+            DropItemManager.instance = this;
+        } else {
+            this.destroy();
+            return;
+        }
 
         let rootNode: Node = new Node("DropItemBox");
         this.node.addChild(rootNode);
@@ -41,23 +51,26 @@ export class DropItemManager extends OO_UIManager {
         this._dropExp("EMY001");
     }
 
+    // 更新全局爆率修正概率
+    public updateChapterRateData() {
+        this._chapterData = ChapterManager.instance.getChapterData();
+    }
+
     /**
      * 敌人死亡后，调用该接口，由该接口决定掉落物品
      */
     public dropItem(emyId: string, position) {
-        let isDropExp = this._dropExp(emyId);
+        let isDropExp = this._isDropExp(emyId);
         if (isDropExp) {
             // TODO: 生成经验值预制体，在position周围掉落(掉落滑动动画)
         }
     }
 
     // 是否掉落经验 判断当前关卡的全局掉落修正
-    private _dropExp(emyId: string): boolean {
+    private _isDropExp(emyId: string): boolean {
         let expDropRate: number = this._emyRateMap[emyId].exp_drop_rate;
-        // TODO: chapterData在每一波刚开始时刷新即可，目前性能较差
-        let chapterData: any = ChapterManager.instance.getChapterData();
         // 经验爆率修正
-        let expDropAmend: number = chapterData.exp_drop_amend;
+        let expDropAmend: number = this._chapterData.exp_drop_amend;
 
         let rate: number = expDropRate * expDropAmend;
         if (rate >= 1) {

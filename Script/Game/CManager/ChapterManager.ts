@@ -9,6 +9,7 @@ import CharacterManager from './CharacterManager';
 import { EnemyManager } from './EnemyManager';
 import { COUNTDOWN_EVENT, CountdownManager } from './CountdownManager';
 import WeaponManager from './WeaponManager';
+import { DropItemManager } from './DropItemManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -99,6 +100,7 @@ export class ChapterManager extends OO_UIManager {
         }
         CountdownManager.instance.preplay(chapterData.seconds);
         EnemyManager.instance.setRoles(chapterData);
+        DropItemManager.instance.updateChapterRateData();
     }
     // 进入当前关卡
     private _enterChapter() {
