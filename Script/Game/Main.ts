@@ -1,5 +1,6 @@
 /**
  * 程序入口文件
+ * BV1jFCHYvEWW
  */
 
 import { _decorator, Component, Node, Prefab, SpriteFrame, PhysicsSystem2D, EPhysics2DDrawFlags, find } from 'cc';

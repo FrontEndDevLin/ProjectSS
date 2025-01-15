@@ -5,7 +5,8 @@
     "move": "移动逻辑 normal->走脸",
     "dmg": "伤害",
     "exp_drop_rate": "经验掉率",
-    "trophy_drop_rate": "战利品掉率"
+    "trophy_drop_rate": "战利品掉率",
+    "exp_cnt": "经验个数"
   },
   "EMY001": {
     "id": "EMY001",
@@ -16,6 +17,7 @@
     "hp": 5,
     "dmg": 3,
     "exp_drop_rate": 1,
-    "trophy_drop_rate": 0.05
+    "trophy_drop_rate": 0.05,
+    "exp_cnt": 1
   }
 }

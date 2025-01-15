@@ -9,6 +9,7 @@ import { ChapterManager } from '../../CManager/ChapterManager';
 import { GP_UNIT } from '../../Common';
 import { EventBus } from '../../../OO/Manager/OO_MsgManager';
 import { CEVENT_GAME } from '../../CEvent';
+import { DropItemManager } from '../../CManager/DropItemManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemyCtrl')
@@ -79,6 +80,7 @@ export class EnemyCtrl extends OO_Component {
 
     public die() {
         EnemyManager.instance.updateEnemy(this.node.uuid, { alive: 0 });
+        DropItemManager.instance.dropItem('EMY001', this.node.position);
         // TODO: 播放死亡动画，播放完后再销毁节点
         this._die();
     }
