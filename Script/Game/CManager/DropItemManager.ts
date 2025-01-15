@@ -1,7 +1,8 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, Prefab, Vec3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { EnemyManager } from './EnemyManager';
 import { ChapterManager } from './ChapterManager';
+import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -13,6 +14,8 @@ const { ccclass, property } = _decorator;
 
 @ccclass('DropItemManager')
 export class DropItemManager extends OO_UIManager {
+    public abName: string = "GP";
+
     static instance: DropItemManager = null;
 
     public rootNode: Node = null;
@@ -29,6 +32,10 @@ export class DropItemManager extends OO_UIManager {
             this.destroy();
             return;
         }
+
+        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/dropItem/Exp`] }], () => {}, err => {
+            console.log('经验块预设体加载')
+        });
 
         let rootNode: Node = new Node("DropItemBox");
         this.node.addChild(rootNode);
@@ -47,8 +54,6 @@ export class DropItemManager extends OO_UIManager {
         for (let emyItem of emyList) {
             this._emyRateMap[emyItem.id] = emyItem;
         }
-
-        this._dropExp("EMY001");
     }
 
     // 更新全局爆率修正概率
@@ -59,7 +64,7 @@ export class DropItemManager extends OO_UIManager {
     /**
      * 敌人死亡后，调用该接口，由该接口决定掉落物品
      */
-    public dropItem(emyId: string, position) {
+    public dropItem(emyId: string, position: Vec3) {
         let isDropExp = this._isDropExp(emyId);
         if (isDropExp) {
             // TODO: 生成经验值预制体，在position周围掉落(掉落滑动动画)
