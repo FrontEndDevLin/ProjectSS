@@ -25,3 +25,7 @@ export const SCREEN_HEIGHT: number = 1280;
 export const getRandomNumber = function(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+export const getFloatNumber = function (number: number, n: number = 2): number {
+  return parseFloat(number.toFixed(n));
+}

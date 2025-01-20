@@ -1,8 +1,9 @@
-import { _decorator, Component, Node, Prefab, Vec3 } from 'cc';
+import { _decorator, Component, Node, Prefab, v3, Vec3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { EnemyManager } from './EnemyManager';
 import { ChapterManager } from './ChapterManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
+import { getFloatNumber, getRandomNumber, GP_UNIT } from '../Common';
 const { ccclass, property } = _decorator;
 
 /**
@@ -67,16 +68,54 @@ export class DropItemManager extends OO_UIManager {
     public dropItem(emyId: string, position: Vec3) {
         let dropExpCnt: number = this._dropExp(emyId);
         if (dropExpCnt) {
-            // TODO: 以position为中心，生成一个方形。
-            // 随机一个方形内的坐标
-            // 在该坐标周围生成n-1个坐标（算法）
+            let vecAry: Vec3[] = this._getRandomVec3Group(dropExpCnt, position);
+            // 爆n个经验，每个经验分配到180/n的位置上
+            // 位置随机偏移
             for (let i = 0; i < dropExpCnt; i++) {
                 // 生成经验值预制体，在position周围掉落(掉落滑动动画)
                 let expNode: Node = this.loadUINode("dropItem/ExpBlock", "ExpBlockCtrl");
-                expNode.setPosition(position);
+                // expNode.setPosition(position);
+                // temp
+                expNode.setPosition(vecAry[i]);
                 this.appendUINode(expNode);
             }
         }
+    }
+
+    /**
+     * 生成坐标组
+     */
+    private _getRandomVec3Group(n: number, position: Vec3): Vec3[] {
+        // 上右下左，随机一个方向
+        const dirGroup: any[] = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
+        let dir: number[] = dirGroup[getRandomNumber(0, 3)];
+
+        let deg: number = getFloatNumber(180 / n, 2);
+        let vecAry: Vec3[] = [];
+        // 半径
+        const r: number = 1.6 * GP_UNIT;
+        let skew: number = 0;
+        for (let i = 1; i <= n; i++) {
+            let cDeg: number = getFloatNumber(deg * i);
+            let x: number = getFloatNumber(r * Math.cos(cDeg));
+            let y: number = getFloatNumber(r * Math.sin(cDeg));
+
+            if (!skew) {
+                skew = Math.floor(x / 2);
+            }
+
+            // 随机偏移
+            let skewX: number = getRandomNumber(skew, skew * 2) * [1, -1][getRandomNumber(0, 1)];
+            let skewY: number = getRandomNumber(skew, skew * 2) * [1, -1][getRandomNumber(0, 1)];
+
+            let newX: number = position.x + x * dir[0] + skewX;
+            let newY: number = position.y + y * dir[1] + skewY;
+
+            vecAry.push(v3(newX, newY));
+        }
+
+        // TODO: 以position为中心，生成一个半圆形(朝向随机，4个方向随机一个)
+        return vecAry;
     }
 
     // 是否掉落经验 判断当前关卡的全局掉落修正
@@ -88,7 +127,7 @@ export class DropItemManager extends OO_UIManager {
 
         let rate: number = expDropRate * expDropAmend;
         if (rate >= 1) {
-            return 0;
+            return emyRateData.exp_cnt;
         } else {
             return Math.random() <= rate ? emyRateData.exp_cnt : 0;
         }
