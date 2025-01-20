@@ -69,14 +69,12 @@ export class DropItemManager extends OO_UIManager {
         let dropExpCnt: number = this._dropExp(emyId);
         if (dropExpCnt) {
             let vecAry: Vec3[] = this._getRandomVec3Group(dropExpCnt, position);
-            // 爆n个经验，每个经验分配到180/n的位置上
-            // 位置随机偏移
             for (let i = 0; i < dropExpCnt; i++) {
                 // 生成经验值预制体，在position周围掉落(掉落滑动动画)
                 let expNode: Node = this.loadUINode("dropItem/ExpBlock", "ExpBlockCtrl");
-                // expNode.setPosition(position);
-                // temp
-                expNode.setPosition(vecAry[i]);
+                expNode.angle = getRandomNumber(0, 360);
+                expNode.OO_param1 = vecAry[i];
+                expNode.setPosition(position);
                 this.appendUINode(expNode);
             }
         }
@@ -93,7 +91,7 @@ export class DropItemManager extends OO_UIManager {
         let deg: number = getFloatNumber(180 / n, 2);
         let vecAry: Vec3[] = [];
         // 半径
-        const r: number = 1.6 * GP_UNIT;
+        const r: number = 0.8 * GP_UNIT;
         let skew: number = 0;
         for (let i = 1; i <= n; i++) {
             let cDeg: number = getFloatNumber(deg * i);
@@ -114,7 +112,6 @@ export class DropItemManager extends OO_UIManager {
             vecAry.push(v3(newX, newY));
         }
 
-        // TODO: 以position为中心，生成一个半圆形(朝向随机，4个方向随机一个)
         return vecAry;
     }
 
