@@ -4,7 +4,10 @@ const { ccclass, property } = _decorator;
 
 @ccclass('ExpBlockCtrl')
 export class ExpBlockCtrl extends OO_Component {
-    private _moving: boolean = true;
+    // 掉落中，动画过程不可被拾取
+    private _droping: boolean = true;
+    // 被吸收中，此时再无碰撞体积
+    private _absorbing: boolean = false;
 
     protected onLoad(): void {
         super.onLoad();
@@ -21,12 +24,23 @@ export class ExpBlockCtrl extends OO_Component {
         tween(this.node)
             .to(0.1, { position: targetVec })
             .call(() => {
-                this._moving = false;
+                this._droping = false;
             })
         .start();
     }
 
-    update(deltaTime: number) {
+    /**
+     * 被角色吸收
+     */
+    public absorb() {
+        // 吸走动画，每一帧检测角色位置朝角色位移，直到与角色位置小于5px，销毁
+        this._absorbing = true;
+    }
+
+    update(dt: number) {
+        if (!this._absorbing) {
+            return;
+        }
         
     }
 }
