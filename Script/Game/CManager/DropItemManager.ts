@@ -13,6 +13,13 @@ const { ccclass, property } = _decorator;
  *  物品掉落概率 = 该敌人自身掉宝率 * 全局掉宝率修正
  */
 
+export enum TROPHY_TYPE {
+    NONE = 0,
+    NORMAL = 1,
+    CHESS,
+    GREAT_CHESS
+}
+
 @ccclass('DropItemManager')
 export class DropItemManager extends OO_UIManager {
     public abName: string = "GP";
@@ -34,9 +41,18 @@ export class DropItemManager extends OO_UIManager {
             return;
         }
 
-        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/dropItem/ExpBlock`] }], () => {}, err => {
-            console.log('经验块预设体加载')
-        });
+        OO_ResourceManager.instance.preloadResPkg([{
+            abName: this.abName,
+            assetType: Prefab,
+            urls: [
+                `Prefabs/dropItem/ExpBlock`,
+                `Prefabs/dropItem/TrophyBlock`
+            ]}],
+            () => {},
+            err => {
+                console.log('经验块预设体加载')
+            }
+        );
 
         let rootNode: Node = new Node("DropItemBox");
         this.node.addChild(rootNode);
@@ -66,7 +82,8 @@ export class DropItemManager extends OO_UIManager {
      * 敌人死亡后，调用该接口，由该接口决定掉落物品
      */
     public dropItem(emyId: string, position: Vec3) {
-        let dropExpCnt: number = this._dropExp(emyId);
+        let emyRateData: any = this._emyRateMap[emyId];
+        let dropExpCnt: number = this._dropExp(emyRateData);
         if (dropExpCnt) {
             let vecAry: Vec3[] = this._getRandomVec3Group(dropExpCnt, position);
             for (let i = 0; i < dropExpCnt; i++) {
@@ -76,6 +93,30 @@ export class DropItemManager extends OO_UIManager {
                 expNode.OO_param1 = vecAry[i];
                 expNode.setPosition(position);
                 this.appendUINode(expNode);
+            }
+        }
+
+        let dropTrophy: number = this._dropTrophy(emyRateData);
+        if (dropTrophy) {
+            let vecAry: Vec3[] = this._getRandomVec3Group(1, position);
+            let trophyNode: Node;
+            switch (dropTrophy) {
+                case TROPHY_TYPE.NORMAL: {
+                    trophyNode = this.loadUINode("dropItem/TrophyBlock", "TrophyBlockCtrl");
+                } break;
+                case TROPHY_TYPE.CHESS: {
+
+                } break;
+                case TROPHY_TYPE.GREAT_CHESS: {
+
+                } break;
+            }
+            if (trophyNode) {
+                trophyNode.angle = getRandomNumber(0, 360);
+                trophyNode.OO_param1 = vecAry[0];
+                trophyNode.OO_param2 = dropTrophy;
+                trophyNode.setPosition(position);
+                this.appendUINode(trophyNode);
             }
         }
     }
@@ -115,9 +156,8 @@ export class DropItemManager extends OO_UIManager {
         return vecAry;
     }
 
-    // 是否掉落经验 判断当前关卡的全局掉落修正
-    private _dropExp(emyId: string): number {
-        let emyRateData: any = this._emyRateMap[emyId];
+    // 判断掉落经验 判断当前关卡的全局掉落修正
+    private _dropExp(emyRateData: any): number {
         let expDropRate: number = emyRateData.exp_drop_rate;
         // 经验爆率修正
         let expDropAmend: number = this._chapterData.exp_drop_amend;
@@ -130,8 +170,18 @@ export class DropItemManager extends OO_UIManager {
         }
     }
     // 是否掉落战利品
-    private _dropTrophy(emyId: string) {
+    private _dropTrophy(emyRateData: any): number {
+        let trophyDropRate: number = emyRateData.trophy_drop_rate;
+        // 战利品爆率修正
+        let trophyDropAmend: number = this._chapterData.trophy_drop_amend;
 
+        let rate: number = trophyDropRate * trophyDropAmend;
+        // 0->无, 1->普通战利品, 2->普通箱子, 3->极品箱子
+        if (rate >= 1) {
+            return 1;
+        } else {
+            return Math.random() <= rate ? 1 : 0;
+        }
     }
 
     update(deltaTime: number) {

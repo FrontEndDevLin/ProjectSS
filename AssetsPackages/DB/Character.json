@@ -18,7 +18,9 @@
       "spd": 5,
       "avd": 0,
       "avd_ceil": 60,
-      "avd_desc": "闪避"
+      "avd_desc": "闪避",
+      "pick_range": 4,
+      "pick_range_desc": "拾取范围，不含战利品"
     },
     "buff": {}
   }

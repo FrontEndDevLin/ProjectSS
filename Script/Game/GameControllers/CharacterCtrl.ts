@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec2, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, CircleCollider2D, Component, Contact2DType, Node, Vec2, Vec3 } from 'cc';
 import { EventBus } from '../../OO/Manager/OO_MsgManager';
 import { CEVENT_COMPASS } from '../CEvent';
 import { OO_Component } from '../../OO/OO';
@@ -15,6 +15,7 @@ const { ccclass, property } = _decorator;
 export class CharacterCtrl extends OO_Component {
     private _moving: boolean = false;
     private _vector: Vec3 = null;
+    private _pickRangeCollider: CircleCollider2D = null;
 
     // 保存一个属性副本，此属性由CharacterManager维护，不可在该类中修改
     public attribute: any = CharacterManager.instance.attribute;
@@ -23,6 +24,16 @@ export class CharacterCtrl extends OO_Component {
         EventBus.on(CEVENT_COMPASS.TOUCH_START, this._compassTouchStart, this);
         EventBus.on(CEVENT_COMPASS.TOUCH_END, this._compassTouchEnd, this);
         EventBus.on(CEVENT_COMPASS.TOUCH_MOVE, this._compassTouchMove, this);
+
+        this._pickRangeCollider = this.node.children[0].getComponent(CircleCollider2D);
+        this._pickRangeCollider.radius = this.attribute.panel.pick_range * GP_UNIT;
+
+        this._pickRangeCollider.on(Contact2DType.BEGIN_CONTACT, this._onPickDomainBeginContact, this);
+    }
+
+    private _onPickDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
+        console.log(selfCollider.tag);
+        console.log(otherCollider.tag);
     }
 
     private _compassTouchStart() {

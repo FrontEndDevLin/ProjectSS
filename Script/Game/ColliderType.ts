@@ -11,9 +11,22 @@ export enum GP_GROUP {
     CHARACTER = 1<<1,
     BULLET = 1<<2,
     ENEMY = 1<<3,
-    WEAPON_DOMAIN = 1<<4
+    WEAPON_DOMAIN = 1<<4,
+    CTR_RIM = 1<<5,
+    DROP_ITEM = 1<<6
 }
 
 export enum CLD_ENEMY {
     ENEMY_1 = 100
+}
+
+// 围绕角色的碰撞体，如拾取范围碰撞体等 8-16
+export enum CTR_RIM {
+    EXP_PICK = 9
+}
+
+// 掉落物
+export enum DROP_ITEM {
+    EXP = 17,
+    TROPHY = 18
 }
