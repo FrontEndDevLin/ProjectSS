@@ -90,7 +90,7 @@ export class DropItemManager extends OO_UIManager {
                 // 生成经验值预制体，在position周围掉落(掉落滑动动画)
                 let expNode: Node = this.loadUINode("dropItem/ExpBlock", "ExpBlockCtrl");
                 expNode.angle = getRandomNumber(0, 360);
-                expNode.OO_param1 = vecAry[i];
+                expNode.OO_param1 = { targetVec: vecAry[i] };
                 expNode.setPosition(position);
                 this.appendUINode(expNode);
             }
@@ -113,8 +113,10 @@ export class DropItemManager extends OO_UIManager {
             }
             if (trophyNode) {
                 trophyNode.angle = getRandomNumber(0, 360);
-                trophyNode.OO_param1 = vecAry[0];
-                trophyNode.OO_param2 = dropTrophy;
+                trophyNode.OO_param1 = {
+                    targetVec: vecAry[0],
+                    quality: dropTrophy
+                };
                 trophyNode.setPosition(position);
                 this.appendUINode(trophyNode);
             }

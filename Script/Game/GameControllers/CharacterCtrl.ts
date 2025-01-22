@@ -6,6 +6,7 @@ import { CharacterAttribute } from '../Interface';
 import CharacterManager from '../CManager/CharacterManager';
 import { GP_UNIT } from '../Common';
 import { ChapterManager } from '../CManager/ChapterManager';
+import { CTR_RIM, DROP_ITEM } from '../ColliderType';
 const { ccclass, property } = _decorator;
 
 /**
@@ -17,6 +18,8 @@ export class CharacterCtrl extends OO_Component {
     private _vector: Vec3 = null;
     private _pickRangeCollider: CircleCollider2D = null;
 
+    private _selfCollider: BoxCollider2D = null;
+
     // 保存一个属性副本，此属性由CharacterManager维护，不可在该类中修改
     public attribute: any = CharacterManager.instance.attribute;
 
@@ -27,13 +30,31 @@ export class CharacterCtrl extends OO_Component {
 
         this._pickRangeCollider = this.node.children[0].getComponent(CircleCollider2D);
         this._pickRangeCollider.radius = this.attribute.panel.pick_range * GP_UNIT;
-
         this._pickRangeCollider.on(Contact2DType.BEGIN_CONTACT, this._onPickDomainBeginContact, this);
+
+        this._selfCollider = this.node.children[0].getComponent(BoxCollider2D);
+        this._selfCollider.on(Contact2DType.BEGIN_CONTACT, this._onBeginContact, this);
     }
 
     private _onPickDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
-        console.log(selfCollider.tag);
-        console.log(otherCollider.tag);
+        if (selfCollider.tag === CTR_RIM.EXP_PICK) {
+            switch (otherCollider.tag) {
+                case DROP_ITEM.EXP: {
+                    otherCollider.node.OO_param2 = true;
+                } break;
+                
+                default:
+                    break;
+            }
+        }
+    }
+
+    private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
+        switch (otherCollider.tag) {
+            case DROP_ITEM.TROPHY: {
+                otherCollider.node.OO_param2 = true;
+            } break;
+        }
     }
 
     private _compassTouchStart() {
@@ -82,6 +103,8 @@ export class CharacterCtrl extends OO_Component {
         EventBus.off(CEVENT_COMPASS.TOUCH_START, this._compassTouchStart, this);
         EventBus.off(CEVENT_COMPASS.TOUCH_END, this._compassTouchEnd, this);
         EventBus.off(CEVENT_COMPASS.TOUCH_MOVE, this._compassTouchMove, this);
+
+        this._pickRangeCollider.off(Contact2DType.BEGIN_CONTACT, this._onPickDomainBeginContact, this);
     }
 
     update(deltaTime: number) {

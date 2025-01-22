@@ -3,15 +3,24 @@ import { OO_Component } from '../../../OO/OO';
 import { TROPHY_TYPE } from '../../CManager/DropItemManager';
 const { ccclass, property } = _decorator;
 
+/**
+ * OO_param1.targetVec 被爆出后，运动到的最终位置
+ * OO_param1.quality 战利品品质
+ * OO_param2 是否被捡起
+ */
 @ccclass('TrophyBlockCtrl')
 export class TrophyBlockCtrl extends OO_Component {
+    // 掉落中，动画过程不可被拾取
+    private _droping: boolean = true;
+
     protected onLoad(): void {
         super.onLoad();
     }
 
     start() {
-        const targetVec: Vec3 = this.node.OO_param1;
-        const quality: number = this.node.OO_param2;
+        const prop1 = this.node.OO_param1;
+        const targetVec: Vec3 = prop1.targetVec;
+        const quality: number = prop1.quality;
 
         switch (quality) {
             case TROPHY_TYPE.NORMAL: {
@@ -32,13 +41,24 @@ export class TrophyBlockCtrl extends OO_Component {
         tween(this.node)
             .to(0.1, { position: targetVec })
             .call(() => {
-
+                this._droping = false;
             })
             .start();
     }
 
-    update(deltaTime: number) {
-        
+    private _pickUp() {
+        if (this._droping) {
+            return;
+        }
+        let isBeenPickUp: boolean = this.node.OO_param2;
+        if (isBeenPickUp) {
+            console.log('TODO: 战利品被捡起!');
+            this.node.destroy();
+        }
+    }
+
+    update(dt: number) {
+        this._pickUp();
     }
 }
 
