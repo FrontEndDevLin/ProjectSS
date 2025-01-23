@@ -15,6 +15,12 @@ export default class CharacterManager extends OO_UIManager {
 
     public abName: string = "GP";
 
+    /**
+     * 等级计算公式
+     *  当前等级 * 20 + (当前等级 - 1)^3
+     *  const calcExp = (lev) => { return lev * 20 + Math.pow((lev - 1), 3) }
+     */
+
     public characterId: string = "";
 
     public attribute: any = null;
