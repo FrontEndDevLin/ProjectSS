@@ -89,8 +89,9 @@ export class DropItemManager extends OO_UIManager {
             for (let i = 0; i < dropExpCnt; i++) {
                 // 生成经验值预制体，在position周围掉落(掉落滑动动画)
                 let expNode: Node = this.loadUINode("dropItem/ExpBlock", "ExpBlockCtrl");
+                // TODO: 经验块大小随expCnt缩放
                 expNode.angle = getRandomNumber(0, 360);
-                expNode.OO_param1 = { targetVec: vecAry[i] };
+                expNode.OO_param1 = { targetVec: vecAry[i], expCnt: 1 };
                 expNode.setPosition(position);
                 this.appendUINode(expNode);
             }

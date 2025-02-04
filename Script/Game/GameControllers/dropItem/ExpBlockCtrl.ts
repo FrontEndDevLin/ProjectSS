@@ -6,6 +6,7 @@ const { ccclass, property } = _decorator;
 
 /**
  * OO_param1.targetVec 被爆出后，运动到的最终位置
+ * OO_param1.expCnt 经验数量
  * OO_param2 = 是否正被吸收
  */
 @ccclass('ExpBlockCtrl')
@@ -50,7 +51,7 @@ export class ExpBlockCtrl extends OO_Component {
         let dis: number = getDistance(nodeLoc, crtLoc);
         if (dis <= 5) {
             // temp 可以做爆裂开的粒子效果
-            console.log('TODO: 经验被捡起!');
+            console.log('TODO: 经验被捡起!，经验加' + this.node.OO_param1.expCnt);
             this.node.destroy();
             return;
         }
