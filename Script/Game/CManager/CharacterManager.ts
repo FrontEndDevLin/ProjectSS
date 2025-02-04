@@ -5,6 +5,8 @@ import { Callback, CharacterAttribute, WeaponAttribute, WeaponData } from '../In
 import WeaponManager from './WeaponManager';
 import { DBManager } from './DBManager';
 import { BulletManager } from './BulletManager';
+import { LevelManager } from './LevelManager';
+import { OO_AddManager } from '../../OO/OO_Manager';
 const { ccclass, property } = _decorator;
 
 let CharacterDB: any = null;
@@ -14,12 +16,6 @@ export default class CharacterManager extends OO_UIManager {
     static instance: CharacterManager = null;
 
     public abName: string = "GP";
-
-    /**
-     * 等级计算公式
-     *  当前等级 * 20 + (当前等级 - 1)^3
-     *  const calcExp = (lev) => { return lev * 20 + Math.pow((lev - 1), 3) }
-     */
 
     public characterId: string = "";
 
@@ -49,6 +45,7 @@ export default class CharacterManager extends OO_UIManager {
 
     // 这个方法只调用一次
     public initCharacter(characterId: string, callback?: Callback) {
+        OO_AddManager(LevelManager);
         this.characterId = characterId;
 
         this.attribute = CharacterDB[characterId];
@@ -64,6 +61,8 @@ export default class CharacterManager extends OO_UIManager {
                 callback(err)
             }
         });
+
+        LevelManager.instance.initLevel();
     }
 
     public getSimpleList(): any[] {
