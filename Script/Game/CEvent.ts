@@ -12,3 +12,8 @@ export enum CEVENT_PREPARE {
     UPDATE_STORE = 70,
     UPDATE_WEAPON
 }
+
+export enum CEVENT_CHARACTER {
+    EXP_CHANGE = 90,
+    LEVEL_UP
+}

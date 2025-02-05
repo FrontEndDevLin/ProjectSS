@@ -1,5 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
+import { CEVENT_CHARACTER } from '../CEvent';
 const { ccclass, property } = _decorator;
 
 /**
@@ -35,9 +36,12 @@ export class LevelManager extends OO_UIManager {
     }
     private _levelUp() {
         this.level++;
-        this.expCurrent = this.expCurrent - this.expTotal;
+        let overflowExp: number = this.expCurrent - this.expTotal;
+        this.expCurrent = 0;
         this.expTotal = this._calcExpTotal();
-        // TODO: 升级后通知各个组件更新
+        this.addExp(overflowExp);
+        // 升级后通知各个组件更新
+        this.runEventFn(CEVENT_CHARACTER.LEVEL_UP, this.level);
     }
 
     public initLevel(lev?: number, expCur?: number) {
@@ -53,6 +57,8 @@ export class LevelManager extends OO_UIManager {
         if (c >= 0) {
             this._levelUp();
         }
+
+        this.runEventFn(CEVENT_CHARACTER.EXP_CHANGE, { expCurrent: this.expCurrent, expTotal: this.expTotal });
     }
 
     update(deltaTime: number) {
