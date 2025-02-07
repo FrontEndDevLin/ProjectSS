@@ -65,8 +65,17 @@ export class ExpBlockCtrl extends OO_Component {
         this.node.setPosition(newPos);
     }
 
+    /**
+     * 被回收
+     */
+    private _recycle(dt: number) {
+        // 朝血条下方回收位置位移，知道小于2px，销毁
+    }
+
     update(dt: number) {
         this._absorb(dt);
+
+        this._recycle(dt);
     }
 }
 
