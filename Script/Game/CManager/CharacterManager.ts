@@ -40,12 +40,14 @@ export default class CharacterManager extends OO_UIManager {
          */
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/character/Character`] }], () => {}, err => {
             console.log('角色预设体外壳加载完毕')
-        })
+        });
+
+        OO_AddManager(LevelManager);
+        LevelManager.instance.initLevel();
     }
 
     // 这个方法只调用一次
     public initCharacter(characterId: string, callback?: Callback) {
-        OO_AddManager(LevelManager);
         this.characterId = characterId;
 
         this.attribute = CharacterDB[characterId];
@@ -61,8 +63,6 @@ export default class CharacterManager extends OO_UIManager {
                 callback(err)
             }
         });
-
-        LevelManager.instance.initLevel();
     }
 
     public getSimpleList(): any[] {

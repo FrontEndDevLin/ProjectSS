@@ -2,6 +2,7 @@ import { _decorator, Component, Node, tween, v3, Vec3 } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import CharacterManager from '../../CManager/CharacterManager';
 import { getDistance, GP_UNIT } from '../../Common';
+import { LevelManager } from '../../CManager/LevelManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -51,7 +52,9 @@ export class ExpBlockCtrl extends OO_Component {
         let dis: number = getDistance(nodeLoc, crtLoc);
         if (dis <= 5) {
             // temp 可以做爆裂开的粒子效果
-            console.log('TODO: 经验被捡起!，经验加' + this.node.OO_param1.expCnt);
+            let expCnt: number = this.node.OO_param1.expCnt;
+            console.log('TODO: 经验被捡起!，经验加' + expCnt);
+            LevelManager.instance.addExp(expCnt);
             this.node.destroy();
             return;
         }

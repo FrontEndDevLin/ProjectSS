@@ -4,12 +4,13 @@ import { CountdownCtrl } from '../UIControllers/CountdownCtrl';
 import { DBManager } from './DBManager';
 import MapManager from './MapManager';
 import { EventBus } from '../../OO/Manager/OO_MsgManager';
-import { CEVENT_GAME } from '../CEvent';
+import { CEVENT_CHARACTER, CEVENT_GAME } from '../CEvent';
 import CharacterManager from './CharacterManager';
 import { EnemyManager } from './EnemyManager';
 import { COUNTDOWN_EVENT, CountdownManager } from './CountdownManager';
 import WeaponManager from './WeaponManager';
 import { DropItemManager } from './DropItemManager';
+import { LevelManager } from './LevelManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -66,6 +67,11 @@ export class ChapterManager extends OO_UIManager {
             if (err) {
                 return;
             }
+            LevelManager.instance.on(CEVENT_CHARACTER.EXP_CHANGE, (err, data: any) => {
+                let expCurrent: number = data.expCurrent;
+                let expTotal: number = data.expTotal;
+                
+            });
             // 进入地图，
             // 加载控制器
             this.showUI("Compass");
