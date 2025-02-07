@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, UITransform, Widget } from 'cc';
+import { _decorator, Component, Label, Node, UITransform, v3, Widget } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { CountdownCtrl } from '../UIControllers/CountdownCtrl';
 import { DBManager } from './DBManager';
@@ -114,6 +114,7 @@ export class ChapterManager extends OO_UIManager {
         OO_UIManager.instance.removeUI("Prepare");
         // 显示角色
         CharacterManager.instance.addCharacter();
+        CharacterManager.instance.setCharacterLoc(v3(0, 0, 0));
         CharacterManager.instance.showWeapon();
         CountdownManager.instance.startCountdown();
         this.onPlaying = true;
@@ -131,6 +132,8 @@ export class ChapterManager extends OO_UIManager {
         // 所有敌人阵亡(不爆东西)
         EnemyManager.instance.removeAllEnemy();
 
+        DropItemManager.instance.resRecovery();
+
         // TODO: 判断是否捡到宝箱，有则弹出开箱界面
 
         // TODO: 判断是否有升级，有则弹出升级界面
@@ -140,6 +143,8 @@ export class ChapterManager extends OO_UIManager {
          *  可看到自己的武器，道具，面板，商店界面
          */
         CharacterManager.instance.removeCharacter();
+
+        return
         OO_UIManager.instance.showUI("Prepare");
         this._preplayChapter();
     }

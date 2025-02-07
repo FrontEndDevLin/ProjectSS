@@ -29,3 +29,8 @@ export const getRandomNumber = function(min: number, max: number): number {
 export const getFloatNumber = function (number: number, n: number = 2): number {
   return parseFloat(number.toFixed(n));
 }
+
+// 将某个世界坐标转化为符合本程序的世界坐标
+export const transportWorldPosition = function (postion: Vec3): Vec3 {
+  return v3(postion.x - SCREEN_WIDTH / 2, postion.y - SCREEN_HEIGHT / 2, 0);
+}

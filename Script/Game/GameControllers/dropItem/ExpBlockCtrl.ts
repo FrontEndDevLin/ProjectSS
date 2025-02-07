@@ -1,8 +1,9 @@
-import { _decorator, Component, Node, tween, v3, Vec3 } from 'cc';
+import { _decorator, Component, Node, tween, UITransform, v3, Vec3 } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import CharacterManager from '../../CManager/CharacterManager';
 import { getDistance, GP_UNIT } from '../../Common';
 import { LevelManager } from '../../CManager/LevelManager';
+import { DropItemManager } from '../../CManager/DropItemManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -14,6 +15,8 @@ const { ccclass, property } = _decorator;
 export class ExpBlockCtrl extends OO_Component {
     // 掉落中，动画过程不可被拾取
     private _droping: boolean = true;
+
+    private _recovering: boolean = false;
 
     protected onLoad(): void {
         super.onLoad();
@@ -36,7 +39,7 @@ export class ExpBlockCtrl extends OO_Component {
     }
 
     /**
-     * 被角色吸收
+     * 被角色吸收动画
      */
     private _absorb(dt: number) {
         // 吸走动画，每一帧检测角色位置朝角色位移，直到与角色位置小于5px，销毁
@@ -68,14 +71,40 @@ export class ExpBlockCtrl extends OO_Component {
     /**
      * 被回收
      */
-    private _recycle(dt: number) {
-        // 朝血条下方回收位置位移，知道小于2px，销毁
+    public recovery() {
+        this._droping = false;
+        this.node.OO_param2 = false;
+        this._recovering = true;
+    }
+
+    /**
+     * 经验回收动画
+     */
+    private _recovery(dt: number) {
+        // 朝血条下方回收图标位置位移，直到小于2px，销毁
+        if (!this._recovering) {
+            return;
+        }
+
+        let iconLoc: Vec3 = DropItemManager.instance.expIconWorldPos;
+        let nodeLoc: Vec3 = this.node.position;
+        let dis: number = getDistance(nodeLoc, iconLoc);
+        if (dis <= 2) {
+            console.log('TODO: 经验被回收!');
+            this.node.destroy();
+            return;
+        }
+
+        let speed = dt * 16 * GP_UNIT;
+        let vector: Vec3 = v3(iconLoc.x - nodeLoc.x, iconLoc.y - nodeLoc.y).normalize();
+        let newPos: Vec3 = nodeLoc.add(new Vec3(vector.x * speed, vector.y * speed));
+        this.node.setPosition(newPos);
     }
 
     update(dt: number) {
         this._absorb(dt);
 
-        this._recycle(dt);
+        this._recovery(dt);
     }
 }
 

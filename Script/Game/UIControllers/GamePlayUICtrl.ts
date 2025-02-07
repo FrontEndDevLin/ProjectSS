@@ -4,6 +4,9 @@ import { ChapterManager } from '../CManager/ChapterManager';
 import { EventBus } from '../../OO/Manager/OO_MsgManager';
 import { CEVENT_CHARACTER, CEVENT_GAME } from '../CEvent';
 import { LevelManager } from '../CManager/LevelManager';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, transportWorldPosition } from '../Common';
+import CharacterManager from '../CManager/CharacterManager';
+import { DropItemManager } from '../CManager/DropItemManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GamePlayUICtrl')
@@ -25,6 +28,12 @@ export class GamePlayUICtrl extends OO_Component {
 
     start() {
         EventBus.on(CEVENT_GAME.START, this._updateWave, this);
+
+        setTimeout(() => {
+            // 将Exp图标坐标转化为世界坐标，存储在DropItemManager里
+            DropItemManager.instance.expIconWorldPos = transportWorldPosition(this.views["HPUI/Collect/Exp"].worldPosition);
+            console.log(DropItemManager.instance.expIconWorldPos)
+        })
     }
 
     private _updateWave() {

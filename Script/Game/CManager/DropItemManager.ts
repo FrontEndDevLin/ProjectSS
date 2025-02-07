@@ -4,6 +4,7 @@ import { EnemyManager } from './EnemyManager';
 import { ChapterManager } from './ChapterManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { getFloatNumber, getRandomNumber, GP_UNIT } from '../Common';
+import { ExpBlockCtrl } from '../GameControllers/dropItem/ExpBlockCtrl';
 const { ccclass, property } = _decorator;
 
 /**
@@ -25,6 +26,8 @@ export class DropItemManager extends OO_UIManager {
     public abName: string = "GP";
 
     static instance: DropItemManager = null;
+
+    public expIconWorldPos: Vec3 = null;
 
     public rootNode: Node = null;
 
@@ -120,6 +123,18 @@ export class DropItemManager extends OO_UIManager {
                 };
                 trophyNode.setPosition(position);
                 this.appendUINode(trophyNode);
+            }
+        }
+    }
+
+    /**
+     * 资源回收，用于关卡结束后
+     */
+    public resRecovery() {
+        for (let dropNode of this.rootNode.children) {
+            if (dropNode.name === "ExpBlock") {
+                let expBlockCtx: ExpBlockCtrl = dropNode.getComponent("ExpBlockCtrl") as ExpBlockCtrl;
+                expBlockCtx.recovery();
             }
         }
     }
