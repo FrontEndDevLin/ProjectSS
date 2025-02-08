@@ -5,6 +5,8 @@ import { ChapterManager } from './ChapterManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { getFloatNumber, getRandomNumber, GP_UNIT } from '../Common';
 import { ExpBlockCtrl } from '../GameControllers/dropItem/ExpBlockCtrl';
+import { TrophyBlockCtrl } from '../GameControllers/dropItem/TrophyBlockCtrl';
+import { CurrencyManager } from './CurrencyManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -27,6 +29,7 @@ export class DropItemManager extends OO_UIManager {
 
     static instance: DropItemManager = null;
 
+    // 经验库存图标位置，用于关卡结束时，回收动画
     public expIconWorldPos: Vec3 = null;
 
     public rootNode: Node = null;
@@ -89,14 +92,33 @@ export class DropItemManager extends OO_UIManager {
         let dropExpCnt: number = this._dropExp(emyRateData);
         if (dropExpCnt) {
             let vecAry: Vec3[] = this._getRandomVec3Group(dropExpCnt, position);
+            // TODO: 请求CurrencyManager接口查询库存，有则+1，库存-1
+            let expandExpCnt: number = 0;
+            let storage: number = CurrencyManager.instance.getStorage();
+            if (storage >= 1) {
+                if (storage >= dropExpCnt) {
+                    expandExpCnt = dropExpCnt;
+                } else {
+                    expandExpCnt = storage;
+                }
+            }
             for (let i = 0; i < dropExpCnt; i++) {
                 // 生成经验值预制体，在position周围掉落(掉落滑动动画)
                 let expNode: Node = this.loadUINode("dropItem/ExpBlock", "ExpBlockCtrl");
-                // TODO: 经验块大小随expCnt缩放
+                let expCnt = 1;
+                // 经验块大小缩放
+                if (i < expandExpCnt) {
+                    expNode.setScale(v3(1.4, 1.4, 0));
+                    expCnt++;
+                }
                 expNode.angle = getRandomNumber(0, 360);
-                expNode.OO_param1 = { targetVec: vecAry[i], expCnt: 1 };
+                expNode.OO_param1 = { targetVec: vecAry[i], expCnt };
                 expNode.setPosition(position);
                 this.appendUINode(expNode);
+            }
+
+            if (expandExpCnt) {
+                CurrencyManager.instance.addStorage(-expandExpCnt);
             }
         }
 
@@ -116,7 +138,7 @@ export class DropItemManager extends OO_UIManager {
                 } break;
             }
             if (trophyNode) {
-                trophyNode.angle = getRandomNumber(0, 360);
+                // 战利品掉落不需要旋转角度
                 trophyNode.OO_param1 = {
                     targetVec: vecAry[0],
                     quality: dropTrophy
@@ -135,6 +157,9 @@ export class DropItemManager extends OO_UIManager {
             if (dropNode.name === "ExpBlock") {
                 let expBlockCtx: ExpBlockCtrl = dropNode.getComponent("ExpBlockCtrl") as ExpBlockCtrl;
                 expBlockCtx.recovery();
+            } else if (dropNode.name === "TrophyBlock") {
+                let trophyBlockCtx: TrophyBlockCtrl = dropNode.getComponent("TrophyBlockCtrl") as TrophyBlockCtrl;
+                trophyBlockCtx.recovery();
             }
         }
     }

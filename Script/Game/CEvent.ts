@@ -17,3 +17,8 @@ export enum CEVENT_CHARACTER {
     EXP_CHANGE = 90,
     LEVEL_UP
 }
+
+export enum CEVENT_CURRENCY {
+    CRY_CHANGE = 100,
+    STO_CHANGE
+}

@@ -1,6 +1,8 @@
-import { _decorator, Component, Node, tween, Vec3 } from 'cc';
+import { _decorator, Component, Node, tween, v3, Vec3 } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import { TROPHY_TYPE } from '../../CManager/DropItemManager';
+import CharacterManager from '../../CManager/CharacterManager';
+import { getDistance, GP_UNIT } from '../../Common';
 const { ccclass, property } = _decorator;
 
 /**
@@ -46,20 +48,37 @@ export class TrophyBlockCtrl extends OO_Component {
             .start();
     }
 
-    private _pickUp() {
+    private _pickUp(dt: number) {
         if (this._droping) {
             return;
         }
-        let isBeenPickUp: boolean = this.node.OO_param2;
-        if (isBeenPickUp) {
+        let absorbing: boolean = this.node.OO_param2;
+        if (!absorbing) {
+            return;
+        }
+
+        let crtLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
+        let nodeLoc: Vec3 = this.node.position;
+        let dis: number = getDistance(nodeLoc, crtLoc);
+        if (dis <= 3) {
             console.log('TODO: 战利品被捡起!');
             this.node.destroy();
+            return;
         }
+
+        let speed = dt * 10 * GP_UNIT;
+        let vector: Vec3 = v3(crtLoc.x - nodeLoc.x, crtLoc.y - nodeLoc.y).normalize();
+        let newPos: Vec3 = nodeLoc.add(new Vec3(vector.x * speed, vector.y * speed));
+        this.node.setPosition(newPos);
+    }
+
+    public recovery() {
+        this._droping = false;
+        this.node.OO_param2 = true;
     }
 
     update(dt: number) {
-        this._pickUp();
+        this._pickUp(dt);
     }
 }
-
 

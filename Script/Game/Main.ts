@@ -35,6 +35,14 @@ export default class Main extends Component {
         })
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
+        /**
+         * TODO:
+         *  0. 金币量 done
+         *  1. 经验回收后存储 done
+         *  2. 战利品被吸收(动画改进) done
+         *  3. 战利品回收 done
+         *  4. 经验掉落量随库存缩放
+         */
     }
 
     public runGame(): void {

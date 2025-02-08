@@ -4,6 +4,7 @@ import CharacterManager from '../../CManager/CharacterManager';
 import { getDistance, GP_UNIT } from '../../Common';
 import { LevelManager } from '../../CManager/LevelManager';
 import { DropItemManager } from '../../CManager/DropItemManager';
+import { CurrencyManager } from '../../CManager/CurrencyManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -58,6 +59,7 @@ export class ExpBlockCtrl extends OO_Component {
             let expCnt: number = this.node.OO_param1.expCnt;
             console.log('TODO: 经验被捡起!，经验加' + expCnt);
             LevelManager.instance.addExp(expCnt);
+            CurrencyManager.instance.addCurrency(expCnt);
             this.node.destroy();
             return;
         }

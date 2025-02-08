@@ -7,6 +7,7 @@ import { DBManager } from './DBManager';
 import { BulletManager } from './BulletManager';
 import { LevelManager } from './LevelManager';
 import { OO_AddManager } from '../../OO/OO_Manager';
+import { CurrencyManager } from './CurrencyManager';
 const { ccclass, property } = _decorator;
 
 let CharacterDB: any = null;
@@ -43,6 +44,7 @@ export default class CharacterManager extends OO_UIManager {
         });
 
         OO_AddManager(LevelManager);
+        OO_AddManager(CurrencyManager);
         LevelManager.instance.initLevel();
     }
 

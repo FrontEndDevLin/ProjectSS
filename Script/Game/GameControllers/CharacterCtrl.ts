@@ -37,6 +37,9 @@ export class CharacterCtrl extends OO_Component {
     }
 
     private _onPickDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
+        if (!ChapterManager.instance.onPlaying) {
+            return;
+        }
         if (selfCollider.tag === CTR_RIM.EXP_PICK) {
             switch (otherCollider.tag) {
                 case DROP_ITEM.EXP: {
