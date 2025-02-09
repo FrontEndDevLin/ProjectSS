@@ -29,7 +29,7 @@ export class GamePlayUICtrl extends OO_Component {
         CurrencyManager.instance.on(CEVENT_CURRENCY.CRY_CHANGE, this._updateCurrency, this);
         CurrencyManager.instance.on(CEVENT_CURRENCY.STO_CHANGE, this._updateStorage, this);
 
-        // TODO: 初始化显示金币、库存量
+        // 初始化显示金币、库存量
         this._updateCurrency();
         this._updateStorage();
     }

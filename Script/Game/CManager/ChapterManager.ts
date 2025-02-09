@@ -134,19 +134,19 @@ export class ChapterManager extends OO_UIManager {
 
         DropItemManager.instance.resRecovery();
 
-        // TODO: 判断是否捡到宝箱，有则弹出开箱界面
-
-        // TODO: 判断是否有升级，有则弹出升级界面
-
-        return
-        /**
-         * 进入商店界面
-         *  可看到自己的武器，道具，面板，商店界面
-         */
-        CharacterManager.instance.removeCharacter();
-
-        OO_UIManager.instance.showUI("Prepare");
-        this._preplayChapter();
+        this.scheduleOnce(() => {
+            // TODO: 判断是否捡到宝箱，有则弹出开箱界面
+    
+            // TODO: 判断是否有升级，有则弹出升级界面 LevelManager
+            /**
+             * 进入商店界面
+             *  可看到自己的武器，道具，面板，商店界面
+             */
+            CharacterManager.instance.removeCharacter();
+    
+            OO_UIManager.instance.showUI("Prepare");
+            this._preplayChapter();
+        }, 3);
     }
 
     protected onDestroy(): void {

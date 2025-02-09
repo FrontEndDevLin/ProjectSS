@@ -92,7 +92,8 @@ export class ExpBlockCtrl extends OO_Component {
         let nodeLoc: Vec3 = this.node.position;
         let dis: number = getDistance(nodeLoc, iconLoc);
         if (dis <= 2) {
-            console.log('TODO: 经验被回收!');
+            // console.log('TODO: 经验被回收!');
+            CurrencyManager.instance.addStorage(this.node.OO_param1.expCnt);
             this.node.destroy();
             return;
         }
