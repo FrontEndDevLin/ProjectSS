@@ -5,7 +5,8 @@ export enum CEVENT_COMPASS {
 }
 
 export enum CEVENT_GAME {
-    START = 40
+    START = 40,
+    PASS
 }
 
 export enum CEVENT_PREPARE {

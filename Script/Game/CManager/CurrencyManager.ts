@@ -47,7 +47,6 @@ export class CurrencyManager extends OO_UIManager {
             return false;
         }
         this._storage += n;
-
         this.runEventFn(CEVENT_CURRENCY.STO_CHANGE);
     }
 

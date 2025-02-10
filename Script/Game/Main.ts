@@ -78,7 +78,8 @@ export default class Main extends Component {
             "Prefabs/StartMenu",
             "Prefabs/GamePlayUI",
             "Prefabs/Countdown",
-            "Prefabs/Compass"
+            "Prefabs/Compass",
+            "Prefabs/LevelUp"
         ];
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: pLoadPrefabs }], (total, current) => {
             // console.log(total, current)

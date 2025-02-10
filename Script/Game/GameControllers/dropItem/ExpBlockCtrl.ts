@@ -43,6 +43,9 @@ export class ExpBlockCtrl extends OO_Component {
      * 被角色吸收动画
      */
     private _absorb(dt: number) {
+        if (this._recovering) {
+            return;
+        }
         // 吸走动画，每一帧检测角色位置朝角色位移，直到与角色位置小于5px，销毁
         let absorbing: boolean = this.node.OO_param2;
         if (!absorbing) {
@@ -91,7 +94,7 @@ export class ExpBlockCtrl extends OO_Component {
         let iconLoc: Vec3 = DropItemManager.instance.expIconWorldPos;
         let nodeLoc: Vec3 = this.node.position;
         let dis: number = getDistance(nodeLoc, iconLoc);
-        if (dis <= 2) {
+        if (dis <= 5) {
             // console.log('TODO: 经验被回收!');
             CurrencyManager.instance.addStorage(this.node.OO_param1.expCnt);
             this.node.destroy();

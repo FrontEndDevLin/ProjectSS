@@ -1,6 +1,7 @@
 import { _decorator, Component, Node } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
-import { CEVENT_CHARACTER } from '../CEvent';
+import { CEVENT_CHARACTER, CEVENT_GAME } from '../CEvent';
+import { EventBus } from '../../OO/Manager/OO_MsgManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -10,6 +11,7 @@ const { ccclass, property } = _decorator;
 export class LevelManager extends OO_UIManager {
     static instance: LevelManager = null;
 
+    private _oldLevel: number = 0;
     // 当前角色等级
     public level: number = 0;
     // 升1级所需经验
@@ -24,10 +26,16 @@ export class LevelManager extends OO_UIManager {
             this.destroy();
             return;
         }
+
+        EventBus.on(CEVENT_GAME.START, this._saveLevel, this);
     }
 
     start() {
 
+    }
+
+    private _saveLevel() {
+        this._oldLevel = this.level;
     }
 
     private _calcExpTotal() {
@@ -59,6 +67,14 @@ export class LevelManager extends OO_UIManager {
         }
 
         this.runEventFn(CEVENT_CHARACTER.EXP_CHANGE, { expCurrent: this.expCurrent, expTotal: this.expTotal });
+    }
+
+    public getUpdLelCnt() {
+        return this.level - this._oldLevel;
+    }
+
+    protected onDestroy(): void {
+        EventBus.off(CEVENT_GAME.START, this._saveLevel, this);
     }
 
     update(deltaTime: number) {

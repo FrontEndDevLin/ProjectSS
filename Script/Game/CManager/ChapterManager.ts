@@ -126,6 +126,7 @@ export class ChapterManager extends OO_UIManager {
         /**
          * 关卡结束通知（回收材料、升级界面、商店界面）
          */
+        EventBus.emit(CEVENT_GAME.PASS);
         this.onPlaying = false;
         // this.removeUI("Compass");
         // this.removeUI("GamePlayUI");
@@ -135,6 +136,7 @@ export class ChapterManager extends OO_UIManager {
         DropItemManager.instance.resRecovery();
 
         this.scheduleOnce(() => {
+            CharacterManager.instance.removeCharacter();
             // TODO: 判断是否捡到宝箱，有则弹出开箱界面
     
             // TODO: 判断是否有升级，有则弹出升级界面 LevelManager
@@ -142,10 +144,15 @@ export class ChapterManager extends OO_UIManager {
              * 进入商店界面
              *  可看到自己的武器，道具，面板，商店界面
              */
-            CharacterManager.instance.removeCharacter();
+            let updLevCnt: number = LevelManager.instance.getUpdLelCnt();
+            if (updLevCnt > 0) {
+                let levelUpUINode: Node = OO_UIManager.instance.loadUINode("LevelUp");
+                levelUpUINode.OO_param1 = updLevCnt;
+                OO_UIManager.instance.appendUINode(levelUpUINode);
+            }
     
-            OO_UIManager.instance.showUI("Prepare");
-            this._preplayChapter();
+            // OO_UIManager.instance.showUI("Prepare");
+            // this._preplayChapter();
         }, 3);
     }
 
