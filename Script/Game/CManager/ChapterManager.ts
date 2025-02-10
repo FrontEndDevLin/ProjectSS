@@ -147,7 +147,7 @@ export class ChapterManager extends OO_UIManager {
             let updLevCnt: number = LevelManager.instance.getUpdLelCnt();
             if (updLevCnt > 0) {
                 let levelUpUINode: Node = OO_UIManager.instance.loadUINode("LevelUp");
-                levelUpUINode.OO_param1 = updLevCnt;
+                levelUpUINode.OO_param1 = { updLevCnt };
                 OO_UIManager.instance.appendUINode(levelUpUINode);
             }
     

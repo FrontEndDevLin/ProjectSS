@@ -4,6 +4,9 @@ import { EventBus } from '../../OO/Manager/OO_MsgManager';
 import { CEVENT_GAME } from '../CEvent';
 const { ccclass, property } = _decorator;
 
+/**
+ * OO_param1.updLevCnt 升级次数
+ */
 @ccclass('LevelUpCtrl')
 export class LevelUpCtrl extends OO_Component {
     protected onLoad(): void {
@@ -34,6 +37,8 @@ export class LevelUpCtrl extends OO_Component {
 
     private _levelUp() {
         // console.log(35)
+        // TODO: 点击后，给角色某个属性升级
+        // 判断updLevCnt次数，决定是否销毁当前节点还是继续升级流程
     }
 
     update(deltaTime: number) {
