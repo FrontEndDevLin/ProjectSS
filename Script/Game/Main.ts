@@ -32,7 +32,12 @@ export default class Main extends Component {
 
         EventBus.on("startGame", () => {
             this.startGame();
-        })
+        });
+
+        /**
+         * TODO:
+         * LevelUpCtrl点击事件处理
+         */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
     }
@@ -74,6 +79,7 @@ export default class Main extends Component {
             "Prefabs/common/PanelWrap",
             "Prefabs/common/CHTCard",
             "Prefabs/common/CHTMinCard",
+            "Prefabs/common/LevCard",
             "Prefabs/Prepare",
             "Prefabs/StartMenu",
             "Prefabs/GamePlayUI",

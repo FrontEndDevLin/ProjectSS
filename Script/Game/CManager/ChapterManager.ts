@@ -150,7 +150,7 @@ export class ChapterManager extends OO_UIManager {
                 levelUpUINode.OO_param1 = { updLevCnt };
                 OO_UIManager.instance.appendUINode(levelUpUINode);
             }
-    
+
             // OO_UIManager.instance.showUI("Prepare");
             // this._preplayChapter();
         }, 3);

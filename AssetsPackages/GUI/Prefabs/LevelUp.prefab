@@ -749,7 +749,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -475,
+      "y": -381,
       "z": 0
     },
     "_lrot": {
@@ -796,7 +796,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": -162.5,
-      "y": 185,
+      "y": 123,
       "z": 0
     },
     "_lrot": {
@@ -837,7 +837,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 315,
-      "height": 360
+      "height": 236
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -884,7 +884,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 162.5,
-      "y": 185,
+      "y": 123,
       "z": 0
     },
     "_lrot": {
@@ -925,7 +925,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 315,
-      "height": 360
+      "height": 236
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -972,7 +972,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": -162.5,
-      "y": -185,
+      "y": -123,
       "z": 0
     },
     "_lrot": {
@@ -1013,7 +1013,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 315,
-      "height": 360
+      "height": 236
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1060,7 +1060,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 162.5,
-      "y": -185,
+      "y": -123,
       "z": 0
     },
     "_lrot": {
@@ -1101,7 +1101,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 315,
-      "height": 360
+      "height": 236
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1142,7 +1142,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 640,
-      "height": 730
+      "height": 542
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1177,8 +1177,8 @@
     "_startAxis": 0,
     "_paddingLeft": 0,
     "_paddingRight": 0,
-    "_paddingTop": 0,
-    "_paddingBottom": 0,
+    "_paddingTop": 30,
+    "_paddingBottom": 30,
     "_spacingX": 10,
     "_spacingY": 10,
     "_verticalDirection": 1,
@@ -1231,7 +1231,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -890,
+      "y": -702,
       "z": 0
     },
     "_lrot": {

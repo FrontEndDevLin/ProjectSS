@@ -14,11 +14,17 @@ const { ccclass, property } = _decorator;
 export class StoreManager extends OO_UIManager {
     static instance: StoreManager = null;
 
-    // 刷新次数
-    private _refTime: number = 0;
-    // 刷新价格
-    public refCost: number = 0;
+    // 商店刷新次数
+    private _storeRefTime: number = 0;
+    // 商店刷新价格
+    public storeRefCost: number = 0;
     public currentStore: any[] = [];
+
+    // 升级属性刷新次数
+    private _levUpdRefTime: number = 0;
+    // 升级属性刷新价格
+    public _levUpdRefCost: number = 0;
+    public currentLevUpd: any[] = [];
 
     protected onLoad(): void {
         if (!StoreManager.instance) {
@@ -52,9 +58,9 @@ export class StoreManager extends OO_UIManager {
     // 在每回合初次进入商店时调用
     public initStore() {
         this._refreshStore();
-        this._refTime = 0;
+        this._storeRefTime = 0;
         // TODO: 刷新价格根据当前关卡决定
-        this.refCost = 0;
+        this.storeRefCost = 0;
     }
 
     public buyItem(idx) {
@@ -77,9 +83,29 @@ export class StoreManager extends OO_UIManager {
 
     public refreshStore() {
         this._refreshStore();
-        this._refTime++;
+        this._storeRefTime++;
         // TODO: 刷新价格根据当前关卡决定
-        this.refCost = this._refTime * 0;
+        this.storeRefCost = this._storeRefTime * 0;
+    }
+
+    // 每回合初次进入升级界面时调用
+    public initLevUpd() {
+        this._refreshLevUpd();
+        this._levUpdRefTime = 0;
+        this._levUpdRefCost = 0;
+    }
+    // 刷新升级属性
+    public refreshLevUpd(free?: boolean) {
+        if (free) {
+            this._refreshLevUpd();
+        } else {
+            this._levUpdRefTime++;
+            this._levUpdRefCost = 0;
+            this._refreshLevUpd();
+        }
+    }
+    private _refreshLevUpd() {
+        this.currentLevUpd = [{ hp: 3 }, { armor: 1 }, { range: 20 }, { speed: 5 }];
     }
 
     update(deltaTime: number) {
