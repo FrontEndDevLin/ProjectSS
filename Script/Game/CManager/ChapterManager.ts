@@ -149,11 +149,18 @@ export class ChapterManager extends OO_UIManager {
                 let levelUpUINode: Node = OO_UIManager.instance.loadUINode("LevelUp");
                 levelUpUINode.OO_param1 = { updLevCnt };
                 OO_UIManager.instance.appendUINode(levelUpUINode);
+            } else {
+                OO_UIManager.instance.showUI("Prepare");
             }
 
-            // OO_UIManager.instance.showUI("Prepare");
             // this._preplayChapter();
         }, 3);
+    }
+
+    // 由LevelUpCtrl调用
+    public closeLevelUpUI() {
+        OO_UIManager.instance.removeUI("LevelUp");
+        OO_UIManager.instance.showUI("Prepare");
     }
 
     protected onDestroy(): void {

@@ -3,6 +3,8 @@ import { OO_Component } from '../../OO/OO';
 import { EventBus } from '../../OO/Manager/OO_MsgManager';
 import { CEVENT_GAME } from '../CEvent';
 import { StoreManager } from '../CManager/StoreManager';
+import OO_UIManager from '../../OO/Manager/OO_UIManager';
+import { ChapterManager } from '../CManager/ChapterManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -41,7 +43,6 @@ export class LevelUpCtrl extends OO_Component {
     private _updateView() {
         this.views["Wrap/ItemList"].children.forEach((slotNode: Node, i) => {
             slotNode.removeAllChildren();
-            // TODO: 临时，CHTCard是给角色选择用的
             /**
              * 属性刷新归StoreManager管理，这里需要从StoreManager拿数据
              */
@@ -56,7 +57,7 @@ export class LevelUpCtrl extends OO_Component {
 
     private _levelUp(idx: number) {
         // TODO: 点击后，给角色某个属性升级
-        // 判断updLevCnt次数，决定是否销毁当前节点还是继续升级流程
+        // 判断updLevCnt次数，决定是销毁当前节点还是继续升级流程
         console.log(StoreManager.instance.currentLevUpd[idx])
 
         if (this._currentTime < this.node.OO_param1.updLevCnt) {
@@ -65,6 +66,7 @@ export class LevelUpCtrl extends OO_Component {
             this.updateView();
         } else {
             console.log('关闭升级界面，进入商店');
+            ChapterManager.instance.closeLevelUpUI();
         }
     }
 
