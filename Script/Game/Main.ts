@@ -36,6 +36,7 @@ export default class Main extends Component {
         });
 
         /**
+         * Daylight
          * TODO:
          *  角色血量放入UI中
          *  角色面板界面
