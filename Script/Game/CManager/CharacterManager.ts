@@ -1,13 +1,14 @@
 import { _decorator, Component, find, Node, Prefab, UIOpacity, Vec2, Vec3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
-import { Callback, CharacterAttribute, WeaponAttribute, WeaponData } from '../Interface';
+import { Callback, WeaponAttribute, WeaponData } from '../Interface';
 import WeaponManager from './WeaponManager';
 import { DBManager } from './DBManager';
 import { BulletManager } from './BulletManager';
 import { LevelManager } from './LevelManager';
 import { OO_AddManager } from '../../OO/OO_Manager';
 import { CurrencyManager } from './CurrencyManager';
+import { CharacterPropManager } from './CharacterPropManager';
 const { ccclass, property } = _decorator;
 
 let CharacterDB: any = null;
@@ -19,9 +20,6 @@ export default class CharacterManager extends OO_UIManager {
     public abName: string = "GP";
 
     public characterId: string = "";
-
-    public attribute: any = null;
-    public defPanel: any = null;
 
     private _characterLoc: Vec3 = null;
     private _shellNode: Node = null;
@@ -52,10 +50,8 @@ export default class CharacterManager extends OO_UIManager {
     public initCharacter(characterId: string, callback?: Callback) {
         this.characterId = characterId;
 
-        this.attribute = CharacterDB[characterId];
-        console.log(`角色初始面板`);
-        console.log(this.attribute)
-        this.defPanel = CharacterDB["def_panel"];
+        CharacterPropManager.instance.initProp(characterId);
+        console.log(CharacterPropManager.instance);
 
         WeaponManager.instance.initWeapon(['test']);
         BulletManager.instance.updateBulletList();
@@ -109,9 +105,8 @@ export default class CharacterManager extends OO_UIManager {
     }
 
     // 获取角色面板
-    public getCharacterPanel() {
-        return this.attribute.panel;
-    }
+    // public getCharacterProp() {
+    // }
 
     start() {
 

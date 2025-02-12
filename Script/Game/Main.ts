@@ -18,6 +18,7 @@ import { DamageManager } from './CManager/DamageManager';
 import { ChapterManager } from './CManager/ChapterManager';
 import { CountdownManager } from './CManager/CountdownManager';
 import { StoreManager } from './CManager/StoreManager';
+import { CharacterPropManager } from './CManager/CharacterPropManager';
 
 export default class Main extends Component {
     static instance: Main = null;
@@ -36,7 +37,8 @@ export default class Main extends Component {
 
         /**
          * TODO:
-         * LevelUpCtrl点击事件处理
+         *  角色血量放入UI中
+         *  角色面板界面
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
@@ -65,6 +67,7 @@ export default class Main extends Component {
             OO_AddManager(BulletManager);
             OO_AddManager(DamageManager);
             OO_AddManager(StoreManager);
+            OO_AddManager(CharacterPropManager);
         })
     }
 

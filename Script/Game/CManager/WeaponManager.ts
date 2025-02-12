@@ -173,7 +173,7 @@ export default class WeaponManager extends OO_UIManager {
     }
     // 更新武器数据，根据角色面板、道具
     public updateWeaponPanel() {
-        let panel = CharacterManager.instance.getCharacterPanel();
+        // let panel = CharacterManager.instance.getCharacterProp();
         for (let weaponId in WeaponDB) {
             let weaponAttr = WeaponDB[weaponId];
             let originPanel = weaponAttr.panel;

@@ -3,9 +3,6 @@ import { SpriteFrame, Vec3 } from "cc"
 export interface Callback {
     (error: any, data?: any): void
 }
-export interface CharacterAttribute {
-    spd: number
-}
 export interface WeaponAttribute {
     range: number,
     damage: number
@@ -38,4 +35,31 @@ export interface BulletAttr {
 export interface BulletInitParams {
     attr: BulletAttr,
     vector: Vec3
+}
+
+// 属性标签，用于角色、敌人属性使用
+export interface BProp {
+    key: string,
+    label?: string,
+    group?: number,
+    value?: any
+}
+
+// 角色基础数值支撑属性
+export interface CHTBaseProp {
+    range: number,
+    dmg: number,
+    range_dmg: number,
+    melee_dmg: number,
+    spd: number,
+    pick_range: number
+}
+
+// 角色通用属性
+export interface CHTCommonProp extends CHTBaseProp {
+    hp: number,
+    atk_spd: number,
+    def: number,
+    avd: number,
+    pick_range: number
 }

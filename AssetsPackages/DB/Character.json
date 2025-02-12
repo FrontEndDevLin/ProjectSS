@@ -1,13 +1,33 @@
 {
-  "def_panel": {
-    "desc": "通用面板",
-    "spd": 5
+  "base_prop": {
+    "desc1": "一些需要有数值支撑的基础属性, 面板显示为0, 但本身还有值。",
+    "desc2": "例如速度为0时, 自身有基础移速5, 所以角色还能移动",
+    "desc3": "这个对象中的数据不对外开放",
+    "range": 3,
+    "dmg": 1,
+    "range_dmg": 1,
+    "melee_dmg": 1,
+    "spd": 5,
+    "pick_range": 4
+  },
+  "common_prop": {
+    "desc": "通用基础属性",
+    "hp": 8,
+    "range": 0,
+    "atk_spd": 0,
+    "dmg": 0,
+    "range_dmg": 0,
+    "melee_dmg": 0,
+    "def": 0,
+    "spd": 0,
+    "avd": 0,
+    "pick_range": 0
   },
   "CR001": {
     "id": "CR001",
     "cn": "角色1",
-    "panel": {
-      "desc": "用于显示的数据",
+    "prop": {
+      "desc": "角色各项属性",
       "hp": 6,
       "range": 0,
       "atk_spd": 0,
