@@ -1,7 +1,8 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, Prefab } from 'cc';
 import { BProp, CHTBaseProp, CHTCommonProp } from '../Interface';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { DBManager } from './DBManager';
+import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterPropManager')
@@ -45,7 +46,16 @@ export class CharacterPropManager extends OO_UIManager {
     }
 
     start() {
+        // OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
 
+        // ] }], (total, current) => {
+
+        // }, (err, data: any) => {
+        //     if (err) {
+        //         console.log(err);
+        //         return;
+        //     }
+        // })
     }
 
     public initProp(characterId: string) {

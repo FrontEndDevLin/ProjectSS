@@ -52,6 +52,8 @@ export default class Main extends Component {
             if (err) {
                 return;
             }
+            OO_UIManager.instance.showUI("CHTPropUI");
+            return;
             ChapterManager.instance.showCharacterSelect();
         });
     }
@@ -89,7 +91,10 @@ export default class Main extends Component {
             "Prefabs/GamePlayUI",
             "Prefabs/Countdown",
             "Prefabs/Compass",
-            "Prefabs/LevelUp"
+            "Prefabs/LevelUp",
+            "Prefabs/CHTPropUI",
+            "Prefabs/prepare/CHTPropCard",
+            "Prefabs/common/CHTPropItem"
         ];
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: pLoadPrefabs }], (total, current) => {
             // console.log(total, current)
