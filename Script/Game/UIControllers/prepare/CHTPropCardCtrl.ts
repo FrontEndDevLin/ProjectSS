@@ -1,10 +1,12 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Color, Component, EventTouch, Label, Node, Sprite, UITransform } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import OO_UIManager from '../../../OO/Manager/OO_UIManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHTPropCardCtrl')
 export class CHTPropCardCtrl extends OO_Component {
+    private _activeTab: number = 1;
+
     protected onLoad(): void {
         super.onLoad();
 
@@ -16,14 +18,71 @@ export class CHTPropCardCtrl extends OO_Component {
             { key: "spd", label: "速度", value: 5 }
         ];
 
+        let arr2 = [
+            { key: "exp_eff", label: "经验加成", value: 25 },
+            { key: "pick_range", label: "拾取范围", value: 0 }
+        ]
+
         for (let item of arr) {
             let node: Node = OO_UIManager.instance.loadUINode("common/CHTPropItem", "NONE");
             this.views["Board/Board1"].addChild(node);
         }
+
+        for (let item of arr2) {
+            let node: Node = OO_UIManager.instance.loadUINode("common/CHTPropItem", "NONE");
+            this.views["Board/Board2"].addChild(node);
+        }
+
+        for (let tabNode of this.views["Tabs"].children) {
+            tabNode.on(Node.EventType.TOUCH_END, this._touchTab, this);
+        }
+
+        // this.views["Tabs/Tab1"].on(Node.EventType.TOUCH_END, () => {
+        //     if (this._activeTab === 1) {
+        //         return;
+        //     }
+        //     this.views["Tabs/Tab2/BG"].getComponent(Sprite).color = new Color(245, 245, 245, 0);
+        //     this.views["Tabs/Tab2/Label"].getComponent(Label).color = new Color(245, 245, 245);
+        //     this.views["Tabs/Tab1/BG"].getComponent(Sprite).color = new Color(245, 245, 245);
+        //     this.views["Tabs/Tab1/Label"].getComponent(Label).color = new Color(51, 51, 51);
+        //     this._activeTab = 1;
+        // });
+
+        // this.views["Tabs/Tab2"].on(Node.EventType.TOUCH_END, () => {
+        //     if (this._activeTab === 2) {
+        //         return;
+        //     }
+        //     this.views["Tabs/Tab1/BG"].getComponent(Sprite).color = new Color(245, 245, 245, 0);
+        //     this.views["Tabs/Tab1/Label"].getComponent(Label).color = new Color(245, 245, 245);
+        //     this.views["Tabs/Tab2/BG"].getComponent(Sprite).color = new Color(245, 245, 245);
+        //     this.views["Tabs/Tab2/Label"].getComponent(Label).color = new Color(51, 51, 51);
+        //     this._activeTab = 2;
+        // });
     }
 
     start() {
 
+    }
+
+    private _touchTab(e: EventTouch) {
+        let targetTabNode: Node = e.target;
+        let targetTabName: string = targetTabNode.name;
+        let tabKey: number = Number(targetTabName.replace("Tab", ""));
+        if (tabKey === this._activeTab) {
+            return;
+        }
+        for (let tabNode of this.views["Tabs"].children) {
+            let bgColor: Color = new Color(245, 245, 245, 0);
+            let labColor: Color = new Color(245, 245, 245);
+            let tabName: string = tabNode.name;
+            if (tabName === targetTabName) {
+                bgColor = new Color(245, 245, 245);
+                labColor = new Color(51, 51, 51);
+            }
+            this.views[`Tabs/${tabName}/BG`].getComponent(Sprite).color = bgColor;
+            this.views[`Tabs/${tabName}/Label`].getComponent(Label).color = labColor;
+        }
+        this._activeTab = tabKey;
     }
 
     update(deltaTime: number) {
