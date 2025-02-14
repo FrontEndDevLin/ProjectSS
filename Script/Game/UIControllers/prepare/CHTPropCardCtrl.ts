@@ -36,28 +36,6 @@ export class CHTPropCardCtrl extends OO_Component {
         for (let tabNode of this.views["Tabs"].children) {
             tabNode.on(Node.EventType.TOUCH_END, this._touchTab, this);
         }
-
-        // this.views["Tabs/Tab1"].on(Node.EventType.TOUCH_END, () => {
-        //     if (this._activeTab === 1) {
-        //         return;
-        //     }
-        //     this.views["Tabs/Tab2/BG"].getComponent(Sprite).color = new Color(245, 245, 245, 0);
-        //     this.views["Tabs/Tab2/Label"].getComponent(Label).color = new Color(245, 245, 245);
-        //     this.views["Tabs/Tab1/BG"].getComponent(Sprite).color = new Color(245, 245, 245);
-        //     this.views["Tabs/Tab1/Label"].getComponent(Label).color = new Color(51, 51, 51);
-        //     this._activeTab = 1;
-        // });
-
-        // this.views["Tabs/Tab2"].on(Node.EventType.TOUCH_END, () => {
-        //     if (this._activeTab === 2) {
-        //         return;
-        //     }
-        //     this.views["Tabs/Tab1/BG"].getComponent(Sprite).color = new Color(245, 245, 245, 0);
-        //     this.views["Tabs/Tab1/Label"].getComponent(Label).color = new Color(245, 245, 245);
-        //     this.views["Tabs/Tab2/BG"].getComponent(Sprite).color = new Color(245, 245, 245);
-        //     this.views["Tabs/Tab2/Label"].getComponent(Label).color = new Color(51, 51, 51);
-        //     this._activeTab = 2;
-        // });
     }
 
     start() {
@@ -67,22 +45,26 @@ export class CHTPropCardCtrl extends OO_Component {
     private _touchTab(e: EventTouch) {
         let targetTabNode: Node = e.target;
         let targetTabName: string = targetTabNode.name;
-        let tabKey: number = Number(targetTabName.replace("Tab", ""));
-        if (tabKey === this._activeTab) {
+        let targetTabKey: number = Number(targetTabName.replace("Tab", ""));
+        if (targetTabKey === this._activeTab) {
             return;
         }
         for (let tabNode of this.views["Tabs"].children) {
             let bgColor: Color = new Color(245, 245, 245, 0);
             let labColor: Color = new Color(245, 245, 245);
             let tabName: string = tabNode.name;
+            let tabKey: string = tabName.replace("Tab", "");
             if (tabName === targetTabName) {
                 bgColor = new Color(245, 245, 245);
                 labColor = new Color(51, 51, 51);
+                this.views[`Board/Board${tabKey}`].active = true;
+            } else {
+                this.views[`Board/Board${tabKey}`].active = false;
             }
             this.views[`Tabs/${tabName}/BG`].getComponent(Sprite).color = bgColor;
             this.views[`Tabs/${tabName}/Label`].getComponent(Label).color = labColor;
         }
-        this._activeTab = tabKey;
+        this._activeTab = targetTabKey;
     }
 
     update(deltaTime: number) {

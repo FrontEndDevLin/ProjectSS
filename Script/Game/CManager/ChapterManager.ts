@@ -11,6 +11,7 @@ import { COUNTDOWN_EVENT, CountdownManager } from './CountdownManager';
 import WeaponManager from './WeaponManager';
 import { DropItemManager } from './DropItemManager';
 import { LevelManager } from './LevelManager';
+import { CharacterPropManager } from './CharacterPropManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -27,6 +28,7 @@ export class ChapterManager extends OO_UIManager {
     public onPlaying: boolean = false;
 
     private _chapter: number = 1;
+    private _prepareUINode: Node = null;
 
     protected onLoad(): void {
         if (!ChapterManager.instance) {
@@ -93,6 +95,13 @@ export class ChapterManager extends OO_UIManager {
         this._chapter++;
         this._enterChapter();
     }
+    public showPrepareUI() {
+        this._prepareUINode.setPosition(0, 0);
+    }
+    public hidePrepareUI() {
+        this._prepareUINode.setPosition(1000, 0);
+    }
+
     // 预载下一关的数据，在游戏开始前的选角、游戏中途的商店界面触发
     // 地图、角色、状态ui等在选角时就挂载，关卡结束时不卸载，用其他界面覆盖即可
     private _preplayChapter(chapter?: number) {
@@ -111,7 +120,7 @@ export class ChapterManager extends OO_UIManager {
     // 进入当前关卡
     private _enterChapter() {
         EventBus.emit(CEVENT_GAME.START);
-        OO_UIManager.instance.removeUI("Prepare");
+        this._exitPrepare();
         // 显示角色
         CharacterManager.instance.addCharacter();
         CharacterManager.instance.setCharacterLoc(v3(0, 0, 0));
@@ -144,23 +153,32 @@ export class ChapterManager extends OO_UIManager {
              * 进入商店界面
              *  可看到自己的武器，道具，面板，商店界面
              */
-            let updLevCnt: number = LevelManager.instance.getUpdLelCnt();
-            if (updLevCnt > 0) {
-                let levelUpUINode: Node = OO_UIManager.instance.loadUINode("LevelUp");
-                levelUpUINode.OO_param1 = { updLevCnt };
-                OO_UIManager.instance.appendUINode(levelUpUINode);
-            } else {
-                OO_UIManager.instance.showUI("Prepare");
-            }
+            // let updLevCnt: number = LevelManager.instance.getUpdLelCnt();
+            // if (updLevCnt > 0) {
+            //     let levelUpUINode: Node = OO_UIManager.instance.loadUINode("LevelUp");
+            //     levelUpUINode.OO_param1 = { updLevCnt };
+            //     OO_UIManager.instance.appendUINode(levelUpUINode);
+            // } else {
+                this._intoPrepare();
+            // }
 
             // this._preplayChapter();
-        }, 3);
+        }, 1);
+    }
+    private _intoPrepare() {
+        this._prepareUINode = OO_UIManager.instance.showUI("Prepare");
+        CharacterPropManager.instance.loadCHTPropUI();
+    }
+    private _exitPrepare() {
+        OO_UIManager.instance.removeUI("Prepare");
+        this._prepareUINode = null;
+        CharacterPropManager.instance.removeCHTPropUI();
     }
 
     // 由LevelUpCtrl调用
     public closeLevelUpUI() {
         OO_UIManager.instance.removeUI("LevelUp");
-        OO_UIManager.instance.showUI("Prepare");
+        this._intoPrepare();
     }
 
     protected onDestroy(): void {

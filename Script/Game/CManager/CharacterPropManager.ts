@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Prefab } from 'cc';
+import { _decorator, Component, Node, Prefab, UITransform, v3 } from 'cc';
 import { BProp, CHTBaseProp, CHTCommonProp } from '../Interface';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { DBManager } from './DBManager';
@@ -7,6 +7,8 @@ const { ccclass, property } = _decorator;
 
 @ccclass('CharacterPropManager')
 export class CharacterPropManager extends OO_UIManager {
+    private _CHTPropUINode: Node = null;
+
     static instance: CharacterPropManager;
 
     public baseProp: CHTBaseProp = null;
@@ -46,18 +48,33 @@ export class CharacterPropManager extends OO_UIManager {
     }
 
     start() {
-        // OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
-
-        // ] }], (total, current) => {
-
-        // }, (err, data: any) => {
-        //     if (err) {
-        //         console.log(err);
-        //         return;
-        //     }
-        // })
+        OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
+            "Prefabs/CHTPropUI",
+            "Prefabs/prepare/CHTPropCard",
+            "Prefabs/common/CHTPropItem"
+        ] }], (total, current) => {
+        }, (err, data: any) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+        });
     }
 
+    // 商店界面，角色属性UI
+    public loadCHTPropUI() {
+        this._CHTPropUINode = OO_UIManager.instance.showUI("CHTPropUI");
+    }
+    public showCHTPropUI() {
+        this._CHTPropUINode.setPosition(0, 0);
+    }
+    public hideCHTPropUI() {
+        this._CHTPropUINode.setPosition(1000, 0);
+    }
+    public removeCHTPropUI() {
+        OO_UIManager.instance.removeUI("CHTPropUI");
+        this._CHTPropUINode = null;
+    }
     public initProp(characterId: string) {
         this._initCommonProp();
         this._buffProp(characterId);

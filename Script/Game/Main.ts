@@ -37,9 +37,12 @@ export default class Main extends Component {
 
         /**
          * Daylight
+         * Heart Linked
          * TODO:
-         *  角色血量放入UI中
-         *  角色面板界面
+         *  属性item组件动态参数
+         *  获取属性列表接口
+         *  渲染属性列表
+         *  属性更新通知接口
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
@@ -52,8 +55,6 @@ export default class Main extends Component {
             if (err) {
                 return;
             }
-            OO_UIManager.instance.showUI("CHTPropUI");
-            return;
             ChapterManager.instance.showCharacterSelect();
         });
     }
@@ -91,10 +92,7 @@ export default class Main extends Component {
             "Prefabs/GamePlayUI",
             "Prefabs/Countdown",
             "Prefabs/Compass",
-            "Prefabs/LevelUp",
-            "Prefabs/CHTPropUI",
-            "Prefabs/prepare/CHTPropCard",
-            "Prefabs/common/CHTPropItem"
+            "Prefabs/LevelUp"
         ];
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: pLoadPrefabs }], (total, current) => {
             // console.log(total, current)
