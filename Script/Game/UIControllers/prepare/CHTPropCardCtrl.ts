@@ -1,6 +1,7 @@
 import { _decorator, Color, Component, EventTouch, Label, Node, Sprite, UITransform } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import OO_UIManager from '../../../OO/Manager/OO_UIManager';
+import { BProp } from '../../Interface';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHTPropCardCtrl')
@@ -24,8 +25,7 @@ export class CHTPropCardCtrl extends OO_Component {
         ]
 
         for (let item of arr) {
-            let node: Node = OO_UIManager.instance.loadUINode("common/CHTPropItem", "NONE");
-            this.views["Board/Board1"].addChild(node);
+            this._renderPropItem(this.views["Board/Board1"], item);
         }
 
         for (let item of arr2) {
@@ -40,6 +40,11 @@ export class CHTPropCardCtrl extends OO_Component {
 
     start() {
 
+    }
+
+    private _renderPropItem(parentNode: Node, prop: BProp) {
+        let node: Node = OO_UIManager.instance.loadUINode("common/CHTPropItem", "NONE");
+        parentNode.addChild(node);
     }
 
     private _touchTab(e: EventTouch) {

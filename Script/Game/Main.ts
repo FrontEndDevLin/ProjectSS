@@ -38,11 +38,16 @@ export default class Main extends Component {
         /**
          * Daylight
          * Heart Linked
+         * Wild
          * TODO:
          *  属性item组件动态参数
          *  获取属性列表接口
          *  渲染属性列表
          *  属性更新通知接口
+         * 
+         * 
+         *  CHTPropItem 数据如何动态更新
+         *  无CHTPropItemCtrl时，CHTPropCardCtrl自身控制更新，每个节点依次绑定点击事件
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
