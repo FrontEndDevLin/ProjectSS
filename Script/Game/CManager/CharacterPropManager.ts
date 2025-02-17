@@ -14,7 +14,6 @@ export class CharacterPropManager extends OO_UIManager {
     public baseProp: CHTBaseProp = null;
 
     public hp: BProp = createBProp({ key: "hp", label: "最大生命" });
-    // 这个hp_cur放在CharacterManager里面？
     public hp_cur: BProp = createBProp({ key: "hp_cur", label: "当前生命" });
     public hp_floor: BProp = createBProp({ key: "hp_floor", label: "生命下限" });
     public spd: BProp = createBProp({ key: "spd", label: "速度" });
@@ -96,6 +95,9 @@ export class CharacterPropManager extends OO_UIManager {
     public initProp(characterId: string) {
         this._initCommonProp();
         this._buffProp(characterId);
+    }
+    public recoverHP() {
+        this.hp_cur.value = this.hp.value;
     }
     private _initCommonProp() {
         let commonProp: CHTCommonProp = DBManager.instance.getDbData("Character").common_prop;

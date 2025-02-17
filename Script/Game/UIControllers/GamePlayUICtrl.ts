@@ -8,6 +8,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH, transportWorldPosition } from '../Common';
 import CharacterManager from '../CManager/CharacterManager';
 import { DropItemManager } from '../CManager/DropItemManager';
 import { CurrencyManager } from '../CManager/CurrencyManager';
+import { CharacterPropManager } from '../CManager/CharacterPropManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('GamePlayUICtrl')
@@ -35,7 +36,7 @@ export class GamePlayUICtrl extends OO_Component {
     }
 
     start() {
-        EventBus.on(CEVENT_GAME.START, this._updateWave, this);
+        EventBus.on(CEVENT_GAME.START, this._onGameStart, this);
 
         setTimeout(() => {
             // 将Exp图标坐标转化为世界坐标，存储在DropItemManager里
@@ -43,9 +44,18 @@ export class GamePlayUICtrl extends OO_Component {
         })
     }
 
+    private _onGameStart() {
+        this._updateHP();
+        this._updateWave();
+    }
+
     private _updateWave() {
         let wave = ChapterManager.instance.getCurrentChapter();
         this.views["WaveUI"].getChildByName("Wave").getComponent(Label).string = `${wave}`;
+    }
+    private _updateHP() {
+        // TODO: 血量ui，8/8
+        console.log(CharacterPropManager.instance);
     }
 
     private _initHPUIWidth() {

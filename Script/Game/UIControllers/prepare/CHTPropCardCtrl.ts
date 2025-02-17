@@ -17,7 +17,6 @@ export class CHTPropCardCtrl extends OO_Component {
         // TODO: 请求CharacterPropManager接口，获取主要属性和次要属性列表，渲染出来
         let majorPropList: BProp[] = CharacterPropManager.instance.getPropList("major");
         let minorPropList: BProp[] = CharacterPropManager.instance.getPropList("minor");
-        console.log(minorPropList)
 
         for (let item of majorPropList) {
             this._renderPropItem(this.views["Board/Board1"], item);
@@ -43,18 +42,20 @@ export class CHTPropCardCtrl extends OO_Component {
         node.OO_param1 = prop;
         // 根据prop的buffPos的值判断，当前的值为正数/负数时，label的颜色改变(绿/红)
         let color = "";
+        let buffColor = "#67C23A";
+        let debuffColor = "#F56C6C";
         if (prop.value !== 0) {
             if (prop.buffPos) {
                 if (prop.value > 0) {
-                    color = "#67C23A";
+                    color = buffColor;
                 } else {
-                    color = "#F56C6C";
+                    color = debuffColor;
                 }
             } else {
                 if (prop.value > 0) {
-                    color = "#F56C6C";
+                    color = debuffColor;
                 } else {
-                    color = "#67C23A";
+                    color = buffColor;
                 }
             }
         }

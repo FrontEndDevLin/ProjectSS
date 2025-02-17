@@ -119,6 +119,7 @@ export class ChapterManager extends OO_UIManager {
     }
     // 进入当前关卡
     private _enterChapter() {
+        CharacterPropManager.instance.recoverHP();
         EventBus.emit(CEVENT_GAME.START);
         this._exitPrepare();
         // 显示角色
