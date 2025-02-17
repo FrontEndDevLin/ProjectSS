@@ -2,6 +2,8 @@ import { _decorator, Color, Component, EventTouch, Label, Node, Sprite, UITransf
 import { OO_Component } from '../../../OO/OO';
 import OO_UIManager from '../../../OO/Manager/OO_UIManager';
 import { BProp } from '../../Interface';
+import { CharacterPropManager } from '../../CManager/CharacterPropManager';
+import { CEVENT_CHARACTER } from '../../CEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('CHTPropCardCtrl')
@@ -13,29 +15,23 @@ export class CHTPropCardCtrl extends OO_Component {
 
         // console.log(this.views)
         // TODO: 请求CharacterPropManager接口，获取主要属性和次要属性列表，渲染出来
-        let arr = [
-            { key: "level", label: "等级", value: 10 },
-            { key: "hp", label: "生命值", value: 24 },
-            { key: "spd", label: "速度", value: 5 }
-        ];
+        let majorPropList: BProp[] = CharacterPropManager.instance.getPropList("major");
+        let minorPropList: BProp[] = CharacterPropManager.instance.getPropList("minor");
+        console.log(minorPropList)
 
-        let arr2 = [
-            { key: "exp_eff", label: "经验加成", value: 25 },
-            { key: "pick_range", label: "拾取范围", value: 0 }
-        ]
-
-        for (let item of arr) {
+        for (let item of majorPropList) {
             this._renderPropItem(this.views["Board/Board1"], item);
         }
-
-        for (let item of arr2) {
-            let node: Node = OO_UIManager.instance.loadUINode("common/CHTPropItem", "NONE");
-            this.views["Board/Board2"].addChild(node);
+        
+        for (let item of minorPropList) {
+            this._renderPropItem(this.views["Board/Board2"], item);
         }
 
         for (let tabNode of this.views["Tabs"].children) {
             tabNode.on(Node.EventType.TOUCH_END, this._touchTab, this);
         }
+
+        CharacterPropManager.instance.on(CEVENT_CHARACTER.PROP_CHANGE, this._updatePropItem, this);
     }
 
     start() {
@@ -44,7 +40,43 @@ export class CHTPropCardCtrl extends OO_Component {
 
     private _renderPropItem(parentNode: Node, prop: BProp) {
         let node: Node = OO_UIManager.instance.loadUINode("common/CHTPropItem", "NONE");
+        node.OO_param1 = prop;
+        // 根据prop的buffPos的值判断，当前的值为正数/负数时，label的颜色改变(绿/红)
+        let color = "";
+        if (prop.value !== 0) {
+            if (prop.buffPos) {
+                if (prop.value > 0) {
+                    color = "#67C23A";
+                } else {
+                    color = "#F56C6C";
+                }
+            } else {
+                if (prop.value > 0) {
+                    color = "#F56C6C";
+                } else {
+                    color = "#67C23A";
+                }
+            }
+        }
+
+        node.getChildByName("Label").children[1].getComponent(Label).string = prop.label;
+        node.getChildByName("Value").getComponent(Label).string = `${prop.value}`;
+        if (color) {
+            node.getChildByName("Value").getComponent(Label).color = new Color(color);
+        }
         parentNode.addChild(node);
+
+        node.on(Node.EventType.TOUCH_END, this._touchPropItem, this);
+    }
+
+    private _touchPropItem(e: EventTouch) {
+        let targetNode: Node = e.target;
+        // TODO: 点击后，弹出属性说明
+        console.log(targetNode.OO_param1);
+    }
+
+    private _updatePropItem(keys: string[]) {
+
     }
 
     private _touchTab(e: EventTouch) {
@@ -74,6 +106,10 @@ export class CHTPropCardCtrl extends OO_Component {
 
     update(deltaTime: number) {
         
+    }
+
+    protected onDestroy(): void {
+        CharacterPropManager.instance.off(CEVENT_CHARACTER.PROP_CHANGE, this._updatePropItem, this);
     }
 }
 

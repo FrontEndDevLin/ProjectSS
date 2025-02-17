@@ -8,6 +8,7 @@
     "range_dmg": 1,
     "melee_dmg": 1,
     "spd": 5,
+    "exp_eff": 1,
     "pick_range": 4
   },
   "common_prop": {
@@ -21,6 +22,7 @@
     "def": 0,
     "spd": 0,
     "avd": 0,
+    "exp_eff": 0,
     "pick_range": 0
   },
   "CR001": {

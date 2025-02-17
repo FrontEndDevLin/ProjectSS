@@ -42,7 +42,9 @@ export interface BProp {
     key: string,
     label?: string,
     group?: number,
-    value?: any
+    value?: number,
+    // true -> 当value值为正数时，为正向buff；false -> value值为负数时，为正向buff
+    buffPos?: boolean
 }
 
 // 角色基础数值支撑属性

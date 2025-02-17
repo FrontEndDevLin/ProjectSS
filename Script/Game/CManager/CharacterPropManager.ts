@@ -13,28 +13,30 @@ export class CharacterPropManager extends OO_UIManager {
 
     public baseProp: CHTBaseProp = null;
 
-    public hp: BProp = { key: "hp", label: "生命" };
+    public hp: BProp = createBProp({ key: "hp", label: "最大生命" });
     // 这个hp_cur放在CharacterManager里面？
-    public hp_cur: BProp = { key: "hp_cur", label: "当前生命" };
-    public spd: BProp = { key: "spd", label: "速度" };
-    public range: BProp = { key: "range", label: "范围" };
-    public atk_spd: BProp = { key: "atk_spd", label: "攻击速度" };
-    public dmg: BProp = { key: "dmg", label: "伤害" };
-    public range_dmg: BProp = { key: "range_dmg", label: "远程伤害" };
-    public melee_dmg: BProp = { key: "melee_dmg", label: "近战伤害" };
-    public def: BProp = { key: "def", label: "防御" };
-    public avd: BProp = { key: "avd", label: "闪避" };
-    public avd_ceil: BProp = { key: "avd_ceil", label: "闪避上限" };
+    public hp_cur: BProp = createBProp({ key: "hp_cur", label: "当前生命" });
+    public hp_floor: BProp = createBProp({ key: "hp_floor", label: "生命下限" });
+    public spd: BProp = createBProp({ key: "spd", label: "速度" });
+    public range: BProp = createBProp({ key: "range", label: "范围" });
+    public atk_spd: BProp = createBProp({ key: "atk_spd", label: "攻击速度" });
+    public dmg: BProp = createBProp({ key: "dmg", label: "伤害" });
+    public range_dmg: BProp = createBProp({ key: "range_dmg", label: "远程伤害" });
+    public melee_dmg: BProp = createBProp({ key: "melee_dmg", label: "近战伤害" });
+    public def: BProp = createBProp({ key: "def", label: "防御" });
+    public avd: BProp = createBProp({ key: "avd", label: "闪避" });
+    public avd_ceil: BProp = createBProp({ key: "avd_ceil", label: "闪避上限" });
 
-    public pick_range: BProp = { key: "pick_range", label: "拾取范围" };
-    public exp_eff: BProp = { key: "exp_eff", label: "经验加成" };
+    public pick_range: BProp = createBProp({ key: "pick_range", label: "拾取范围" });
+    public exp_eff: BProp = createBProp({ key: "exp_eff", label: "经验加成" });
 
     public propKeys: string[] = [
-        "hp", "hp_cur", "spd", "range", "atk_spd", "dmg",
+        "hp", "spd", "range", "atk_spd", "dmg",
         "range_dmg", "melee_dmg", "def", "avd",
         "avd_ceil", "pick_range", "exp_eff"
     ];
-    public majorKeys: string[] = [];
+    public majorKeys: string[] = ["hp", "spd", "range", "atk_spd", "dmg", "range_dmg", "melee_dmg", "def", "avd"];
+    public minorKeys: string[] = ["pick_range", "exp_eff"];
 
     protected onLoad(): void {
         if (!CharacterPropManager.instance) {
@@ -59,6 +61,22 @@ export class CharacterPropManager extends OO_UIManager {
                 return;
             }
         });
+    }
+
+    public getPropList(group?: string): BProp[] {
+        let tar = "propKeys";
+        if (group === "major") {
+            tar = "majorKeys";
+        } else if (group === "minor") {
+            tar = "minorKeys";
+        }
+        let keys: string[] = this[tar];
+        let list: BProp[] = [];
+        for (let key of keys) {
+            let propItem: BProp = this[key];
+            list.push(propItem);
+        }
+        return list;
     }
 
     // 商店界面，角色属性UI
@@ -104,4 +122,8 @@ export const getCharacterPropValue = function(key: string, percent: boolean = tr
     }
     let prop: BProp = CharacterPropManager.instance[key];
     return percent ? prop.value / 100 : prop.value;
+}
+
+export const createBProp = function ({ key, label, value, group, buffPos = true }: BProp): BProp {
+    return { key, label, group, value, buffPos }
 }

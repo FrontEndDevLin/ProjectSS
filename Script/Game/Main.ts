@@ -40,9 +40,8 @@ export default class Main extends Component {
          * Heart Linked
          * Wild
          * TODO:
-         *  属性item组件动态参数
-         *  获取属性列表接口
-         *  渲染属性列表
+         *  生命值显示
+         * 
          *  属性更新通知接口
          * 
          * 
