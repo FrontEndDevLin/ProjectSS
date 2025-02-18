@@ -79,8 +79,10 @@ export class CharacterPropManager extends OO_UIManager {
     }
 
     // 商店界面，角色属性UI
-    public loadCHTPropUI() {
-        this._CHTPropUINode = OO_UIManager.instance.showUI("CHTPropUI");
+    public loadCHTPropUI(page: string = "store") {
+        this._CHTPropUINode = OO_UIManager.instance.loadUINode("CHTPropUI");
+        this._CHTPropUINode.OO_param1 = { page }
+        OO_UIManager.instance.appendUINode(this._CHTPropUINode);
     }
     public showCHTPropUI() {
         this._CHTPropUINode.setPosition(0, 0);

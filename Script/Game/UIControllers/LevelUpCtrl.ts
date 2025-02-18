@@ -23,6 +23,11 @@ export class LevelUpCtrl extends OO_Component {
 
         console.log("LevelUpCtrl loaded");
 
+        this.views["Bottom/Attr"].on(Node.EventType.TOUCH_END, () => {
+            ChapterManager.instance.hideLevelUpUI();
+            CharacterPropManager.instance.showCHTPropUI();
+        }, this);
+
         let updLevCnt: number = this.node.OO_param1.updLevCnt;
         if (updLevCnt > 0) {
             this._currentTime = 1;

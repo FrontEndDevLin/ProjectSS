@@ -29,6 +29,7 @@ export class ChapterManager extends OO_UIManager {
 
     private _chapter: number = 1;
     private _prepareUINode: Node = null;
+    private _levelUpUINode: Node = null;
 
     protected onLoad(): void {
         if (!ChapterManager.instance) {
@@ -101,6 +102,12 @@ export class ChapterManager extends OO_UIManager {
     public hidePrepareUI() {
         this._prepareUINode.setPosition(1000, 0);
     }
+    public showLevelUpUI() {
+        this._levelUpUINode.setPosition(0, 0);
+    }
+    public hideLevelUpUI() {
+        this._levelUpUINode.setPosition(1000, 0);
+    }
 
     // 预载下一关的数据，在游戏开始前的选角、游戏中途的商店界面触发
     // 地图、角色、状态ui等在选角时就挂载，关卡结束时不卸载，用其他界面覆盖即可
@@ -156,9 +163,10 @@ export class ChapterManager extends OO_UIManager {
              */
             let updLevCnt: number = LevelManager.instance.getUpdLelCnt();
             if (updLevCnt > 0) {
-                let levelUpUINode: Node = OO_UIManager.instance.loadUINode("LevelUp");
-                levelUpUINode.OO_param1 = { updLevCnt };
-                OO_UIManager.instance.appendUINode(levelUpUINode);
+                this._levelUpUINode = OO_UIManager.instance.loadUINode("LevelUp");
+                this._levelUpUINode.OO_param1 = { updLevCnt };
+                OO_UIManager.instance.appendUINode(this._levelUpUINode);
+                CharacterPropManager.instance.loadCHTPropUI("levelUp");
             } else {
                 this._intoPrepare();
             }
@@ -168,7 +176,7 @@ export class ChapterManager extends OO_UIManager {
     }
     private _intoPrepare() {
         this._prepareUINode = OO_UIManager.instance.showUI("Prepare");
-        CharacterPropManager.instance.loadCHTPropUI();
+        CharacterPropManager.instance.loadCHTPropUI("store");
     }
     private _exitPrepare() {
         OO_UIManager.instance.removeUI("Prepare");
@@ -179,6 +187,8 @@ export class ChapterManager extends OO_UIManager {
     // 由LevelUpCtrl调用
     public closeLevelUpUI() {
         OO_UIManager.instance.removeUI("LevelUp");
+        CharacterPropManager.instance.removeCHTPropUI();
+        this._levelUpUINode = null;
         this._intoPrepare();
     }
 

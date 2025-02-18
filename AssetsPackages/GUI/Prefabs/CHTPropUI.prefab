@@ -528,7 +528,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 144,
+      "width": 83.98828125,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -564,7 +564,7 @@
       "b": 51,
       "a": 255
     },
-    "_string": "返回商店",
+    "_string": "返回-",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 36,
