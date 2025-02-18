@@ -99,6 +99,11 @@ export class CharacterPropManager extends OO_UIManager {
     public recoverHP() {
         this.hp_cur.value = this.hp.value;
     }
+    // 升级提升属性接口
+    public levelUpProp(upProp: BProp) {
+        let prop: BProp = this[upProp.key];
+        prop.value += upProp.value;
+    }
     private _initCommonProp() {
         let commonProp: CHTCommonProp = DBManager.instance.getDbData("Character").common_prop;
         for (let key in commonProp) {

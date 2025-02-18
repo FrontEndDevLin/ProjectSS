@@ -154,17 +154,17 @@ export class ChapterManager extends OO_UIManager {
              * 进入商店界面
              *  可看到自己的武器，道具，面板，商店界面
              */
-            // let updLevCnt: number = LevelManager.instance.getUpdLelCnt();
-            // if (updLevCnt > 0) {
-            //     let levelUpUINode: Node = OO_UIManager.instance.loadUINode("LevelUp");
-            //     levelUpUINode.OO_param1 = { updLevCnt };
-            //     OO_UIManager.instance.appendUINode(levelUpUINode);
-            // } else {
+            let updLevCnt: number = LevelManager.instance.getUpdLelCnt();
+            if (updLevCnt > 0) {
+                let levelUpUINode: Node = OO_UIManager.instance.loadUINode("LevelUp");
+                levelUpUINode.OO_param1 = { updLevCnt };
+                OO_UIManager.instance.appendUINode(levelUpUINode);
+            } else {
                 this._intoPrepare();
-            // }
+            }
 
-            // this._preplayChapter();
-        }, 1);
+            this._preplayChapter();
+        }, 3);
     }
     private _intoPrepare() {
         this._prepareUINode = OO_UIManager.instance.showUI("Prepare");

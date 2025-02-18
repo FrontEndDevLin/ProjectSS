@@ -54,8 +54,13 @@ export class GamePlayUICtrl extends OO_Component {
         this.views["WaveUI"].getChildByName("Wave").getComponent(Label).string = `${wave}`;
     }
     private _updateHP() {
-        // TODO: 血量ui，8/8
-        console.log(CharacterPropManager.instance);
+        let hp: number = CharacterPropManager.instance.hp.value;
+        let hp_cur: number = CharacterPropManager.instance.hp_cur.value;
+        let hpNumStr: string = `${hp_cur}/${hp}`;
+        this.views["HPUI/HPWrap/HPNum"].getComponent(Label).string = hpNumStr;
+
+        let hpBarWidth: number = Math.floor(this._HPWidth * hp_cur / hp);
+        this.views["HPUI/HPWrap/HPProg"].getComponent(UITransform).width = hpBarWidth;
     }
 
     private _initHPUIWidth() {
