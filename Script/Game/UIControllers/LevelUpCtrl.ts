@@ -8,6 +8,7 @@ import { ChapterManager } from '../CManager/ChapterManager';
 import { BProp } from '../Interface';
 import { CharacterPropManager } from '../CManager/CharacterPropManager';
 import { LevCardCtrl } from './prepare/LevCardCtrl';
+import { LevelManager } from '../CManager/LevelManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -15,9 +16,6 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('LevelUpCtrl')
 export class LevelUpCtrl extends OO_Component {
-    // 当前升级次数
-    private _currentTime: number = 0;
-
     protected onLoad(): void {
         super.onLoad();
 
@@ -28,10 +26,8 @@ export class LevelUpCtrl extends OO_Component {
             CharacterPropManager.instance.showCHTPropUI();
         }, this);
 
-        let updLevCnt: number = this.node.OO_param1.updLevCnt;
-        if (updLevCnt > 0) {
-            this._currentTime = 1;
-
+        let levUpCnt: number = LevelManager.instance.getLevelUpCnt();
+        if (levUpCnt > 0) {
             this.views["Wrap/ItemList"].children.forEach((slotNode: Node, i) => {
                 const uiNode: Node = this.loadUINode("common/LevCard", "LevCardCtrl");
                 slotNode.addChild(uiNode);
@@ -71,9 +67,9 @@ export class LevelUpCtrl extends OO_Component {
         // TODO: 点击后，给角色某个属性升级
         // 判断updLevCnt次数，决定是销毁当前节点还是继续升级流程
         CharacterPropManager.instance.levelUpProp(StoreManager.instance.currentLevUpd[idx]);
+        LevelManager.instance.finishOnceTimeLevelUp();
 
-        if (this._currentTime < this.node.OO_param1.updLevCnt) {
-            this._currentTime++;
+        if (LevelManager.instance.getLevelUpCnt() > 0) {
             StoreManager.instance.refreshLevUpd(true);
             this.updateView();
         } else {

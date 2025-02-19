@@ -76,8 +76,10 @@ export class CHTPropCardCtrl extends OO_Component {
         console.log(targetNode.OO_param1);
     }
 
-    private _updatePropItem(keys: string[]) {
-
+    private _updatePropItem(err, keys: string[]) {
+        // ["hp", "spd"]
+        // TODO: 根据key更新CHTPropItem item
+        console.log(keys)
     }
 
     private _touchTab(e: EventTouch) {

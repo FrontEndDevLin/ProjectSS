@@ -3,6 +3,7 @@ import { BProp, CHTBaseProp, CHTCommonProp } from '../Interface';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { DBManager } from './DBManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
+import { CEVENT_CHARACTER } from '../CEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterPropManager')
@@ -105,6 +106,7 @@ export class CharacterPropManager extends OO_UIManager {
     public levelUpProp(upProp: BProp) {
         let prop: BProp = this[upProp.key];
         prop.value += upProp.value;
+        this.runEventFn(CEVENT_CHARACTER.PROP_CHANGE, [upProp.key]);
     }
     private _initCommonProp() {
         let commonProp: CHTCommonProp = DBManager.instance.getDbData("Character").common_prop;

@@ -129,6 +129,7 @@ export class ChapterManager extends OO_UIManager {
         CharacterPropManager.instance.recoverHP();
         EventBus.emit(CEVENT_GAME.START);
         this._exitPrepare();
+        LevelManager.instance.showLevelUpIconUI();
         // 显示角色
         CharacterManager.instance.addCharacter();
         CharacterManager.instance.setCharacterLoc(v3(0, 0, 0));
@@ -154,6 +155,7 @@ export class ChapterManager extends OO_UIManager {
 
         this.scheduleOnce(() => {
             CharacterManager.instance.removeCharacter();
+            LevelManager.instance.removeLevelUpIconUI();
             // TODO: 判断是否捡到宝箱，有则弹出开箱界面
     
             // TODO: 判断是否有升级，有则弹出升级界面 LevelManager
@@ -161,10 +163,9 @@ export class ChapterManager extends OO_UIManager {
              * 进入商店界面
              *  可看到自己的武器，道具，面板，商店界面
              */
-            let updLevCnt: number = LevelManager.instance.getUpdLelCnt();
-            if (updLevCnt > 0) {
+            let levelUpCnt: number = LevelManager.instance.getLevelUpCnt();
+            if (levelUpCnt > 0) {
                 this._levelUpUINode = OO_UIManager.instance.loadUINode("LevelUp");
-                this._levelUpUINode.OO_param1 = { updLevCnt };
                 OO_UIManager.instance.appendUINode(this._levelUpUINode);
                 LevelManager.instance.showLevelUpIconUI();
                 CharacterPropManager.instance.loadCHTPropUI("levelUp");

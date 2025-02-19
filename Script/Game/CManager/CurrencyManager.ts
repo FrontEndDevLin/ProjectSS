@@ -14,7 +14,7 @@ export class CurrencyManager extends OO_UIManager {
     // 金币量
     private _currency: number = 10;
     // 库存量
-    private _storage: number = 5;
+    private _storage: number = 20;
 
     protected onLoad(): void {
         if (!CurrencyManager.instance) {

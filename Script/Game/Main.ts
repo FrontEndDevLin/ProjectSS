@@ -40,10 +40,13 @@ export default class Main extends Component {
          * Heart Linked
          * Wild
          * TODO:
-         *  升级次数接口重构
-         *  升级时图标数量动态减少
-         *  升级时右上角UI升级图标
-         *  属性更新通知接口
+         *  升级图标
+         *  属性更新通知接口(升两级时可复现)
+         *  道具系统
+         *      道具页面（点击某个道具会有说明）
+         *      开箱界面
+         *      道具实现（4-6个）
+         *      箱子掉落（开箱时随机某个道具）
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
