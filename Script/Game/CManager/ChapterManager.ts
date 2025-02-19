@@ -166,6 +166,7 @@ export class ChapterManager extends OO_UIManager {
                 this._levelUpUINode = OO_UIManager.instance.loadUINode("LevelUp");
                 this._levelUpUINode.OO_param1 = { updLevCnt };
                 OO_UIManager.instance.appendUINode(this._levelUpUINode);
+                LevelManager.instance.showLevelUpIconUI();
                 CharacterPropManager.instance.loadCHTPropUI("levelUp");
             } else {
                 this._intoPrepare();
@@ -187,6 +188,7 @@ export class ChapterManager extends OO_UIManager {
     // 由LevelUpCtrl调用
     public closeLevelUpUI() {
         OO_UIManager.instance.removeUI("LevelUp");
+        LevelManager.instance.removeLevelUpIconUI();
         CharacterPropManager.instance.removeCHTPropUI();
         this._levelUpUINode = null;
         this._intoPrepare();

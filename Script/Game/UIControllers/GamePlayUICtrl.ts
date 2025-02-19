@@ -30,6 +30,8 @@ export class GamePlayUICtrl extends OO_Component {
         CurrencyManager.instance.on(CEVENT_CURRENCY.CRY_CHANGE, this._updateCurrency, this);
         CurrencyManager.instance.on(CEVENT_CURRENCY.STO_CHANGE, this._updateStorage, this);
 
+        LevelManager.instance.showLevelUpIconUI();
+
         // 初始化显示金币、库存量
         this._updateCurrency();
         this._updateStorage();
@@ -64,7 +66,7 @@ export class GamePlayUICtrl extends OO_Component {
     }
 
     private _initHPUIWidth() {
-        this._HPWidth = this.views["HPUI/HPWrap"].getComponent(UITransform).width;
+        this._HPWidth = this.views["HPUI/HPWrap/BG"].getComponent(UITransform).width;
     }
 
     private _updateExpBar(err, data: any) {
@@ -91,6 +93,7 @@ export class GamePlayUICtrl extends OO_Component {
     protected onDestroy(): void {
         LevelManager.instance.off(CEVENT_CHARACTER.EXP_CHANGE, this._updateExpBar, this);
         LevelManager.instance.off(CEVENT_CHARACTER.LEVEL_UP, this._updateLevel, this);
+        LevelManager.instance.removeLevelUpIconUI();
     }
 
     update(deltaTime: number) {

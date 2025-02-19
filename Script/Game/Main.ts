@@ -40,7 +40,8 @@ export default class Main extends Component {
          * Heart Linked
          * Wild
          * TODO:
-         *  升级界面可查看角色属性 done
+         *  升级次数接口重构
+         *  升级时图标数量动态减少
          *  升级时右上角UI升级图标
          *  属性更新通知接口
          */
