@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "4e7bfa8b-2cf4-4dc8-9fba-d19e6190257a",
+  "uuid": "1cba198a-5075-49ef-b7a0-eb1611fbea2f",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "LevelUpIconWrap"
+    "syncNodeName": "ItemsUI"
   }
 }

@@ -40,8 +40,7 @@ export default class Main extends Component {
          * Heart Linked
          * Wild
          * TODO:
-         *  升级图标
-         *  属性更新通知接口(升两级时可复现)
+         *  属性更新通知接口(升两级时可复现) done
          *  道具系统
          *      道具页面（点击某个道具会有说明）
          *      开箱界面
@@ -59,7 +58,8 @@ export default class Main extends Component {
             if (err) {
                 return;
             }
-            ChapterManager.instance.showCharacterSelect();
+            OO_UIManager.instance.showUI("ItemsUI");
+            // ChapterManager.instance.showCharacterSelect();
         });
     }
 
@@ -96,7 +96,8 @@ export default class Main extends Component {
             "Prefabs/GamePlayUI",
             "Prefabs/Countdown",
             "Prefabs/Compass",
-            "Prefabs/LevelUp"
+            "Prefabs/LevelUp",
+            "Prefabs/ItemsUI"
         ];
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: pLoadPrefabs }], (total, current) => {
             // console.log(total, current)

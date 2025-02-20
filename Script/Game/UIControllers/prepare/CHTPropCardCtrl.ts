@@ -40,7 +40,17 @@ export class CHTPropCardCtrl extends OO_Component {
     private _renderPropItem(parentNode: Node, prop: BProp) {
         let node: Node = OO_UIManager.instance.loadUINode("common/CHTPropItem", "NONE");
         node.OO_param1 = prop;
-        // 根据prop的buffPos的值判断，当前的值为正数/负数时，label的颜色改变(绿/红)
+
+        node.getChildByName("Label").children[1].getComponent(Label).string = prop.label;
+
+        this._renderPropItemValue(node, prop);
+        parentNode.addChild(node);
+        node.on(Node.EventType.TOUCH_END, this._touchPropItem, this);
+    }
+    
+    // 更新属性的值，和值的颜色
+    private _renderPropItemValue(itemNode: Node, prop: BProp) {
+        // 根据prop的buffPos的值判断，当前的值为正数/负数时，value的颜色改变(绿/红)
         let color = "";
         let buffColor = "#67C23A";
         let debuffColor = "#F56C6C";
@@ -60,14 +70,10 @@ export class CHTPropCardCtrl extends OO_Component {
             }
         }
 
-        node.getChildByName("Label").children[1].getComponent(Label).string = prop.label;
-        node.getChildByName("Value").getComponent(Label).string = `${prop.value}`;
+        itemNode.getChildByName("Value").getComponent(Label).string = `${prop.value}`;
         if (color) {
-            node.getChildByName("Value").getComponent(Label).color = new Color(color);
+            itemNode.getChildByName("Value").getComponent(Label).color = new Color(color);
         }
-        parentNode.addChild(node);
-
-        node.on(Node.EventType.TOUCH_END, this._touchPropItem, this);
     }
 
     private _touchPropItem(e: EventTouch) {
@@ -78,8 +84,24 @@ export class CHTPropCardCtrl extends OO_Component {
 
     private _updatePropItem(err, keys: string[]) {
         // ["hp", "spd"]
-        // TODO: 根据key更新CHTPropItem item
-        console.log(keys)
+        // 根据key更新CHTPropItem item
+        keys.forEach((key: string, idx) => {
+            let wrapPath: string = "";
+            if (CharacterPropManager.instance.majorKeys.indexOf(key) !== -1) {
+                wrapPath = "Board/Board1";
+            } else if (CharacterPropManager.instance.minorKeys.indexOf(key) !== -1) {
+                wrapPath = "Board/Board2";
+            }
+            if (wrapPath) {
+                this.views[wrapPath].children.forEach((majorItemNode: Node, i) => {
+                    let propKey: string = majorItemNode.OO_param1.key;
+                    if (propKey === key) {
+                        let prop: BProp = CharacterPropManager.instance[key];
+                        this._renderPropItemValue(majorItemNode, prop);
+                    }
+                })
+            }
+        })
     }
 
     private _touchTab(e: EventTouch) {
