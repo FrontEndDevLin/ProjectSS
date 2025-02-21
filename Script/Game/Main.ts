@@ -46,6 +46,9 @@ export default class Main extends Component {
          *      开箱界面
          *      道具实现（4-6个）
          *      箱子掉落（开箱时随机某个道具）
+         *      道具分类
+         *          角色属性
+         *          
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
