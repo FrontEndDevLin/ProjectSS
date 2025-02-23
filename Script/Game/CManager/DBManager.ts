@@ -27,7 +27,8 @@ export class DBManager extends OO_Manager {
             "Character", 
             "Enemy",
             "Weapon", 
-            "Bullet"
+            "Bullet",
+            "Items"
         ]}], () => {}, err => {
             console.log("所有数据加载完毕")
             if (err) {

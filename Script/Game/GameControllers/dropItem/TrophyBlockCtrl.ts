@@ -14,6 +14,7 @@ const { ccclass, property } = _decorator;
 export class TrophyBlockCtrl extends OO_Component {
     // 掉落中，动画过程不可被拾取
     private _droping: boolean = true;
+    private _quality: number;
 
     protected onLoad(): void {
         super.onLoad();
@@ -22,16 +23,16 @@ export class TrophyBlockCtrl extends OO_Component {
     start() {
         const prop1 = this.node.OO_param1;
         const targetVec: Vec3 = prop1.targetVec;
-        const quality: number = prop1.quality;
+        this._quality = prop1.quality;
 
-        switch (quality) {
+        switch (this._quality) {
             case TROPHY_TYPE.NORMAL: {
 
             } break;
-            case TROPHY_TYPE.CHESS: {
+            case TROPHY_TYPE.CHEST: {
 
             } break;
-            case TROPHY_TYPE.GREAT_CHESS: {
+            case TROPHY_TYPE.GREAT_CHEST: {
 
             } break;
         }
@@ -62,6 +63,15 @@ export class TrophyBlockCtrl extends OO_Component {
         let dis: number = getDistance(nodeLoc, crtLoc);
         if (dis <= 3) {
             console.log('TODO: 战利品被捡起!');
+            switch (this._quality) {
+                case TROPHY_TYPE.CHEST: {
+                    // TODO: 去道具管理类随机拿取一个道具
+                    console.log('TODO: 捡到宝箱');
+                } break;
+            
+                default:
+                    break;
+            }
             this.node.destroy();
             return;
         }

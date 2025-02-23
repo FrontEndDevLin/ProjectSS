@@ -158,6 +158,8 @@ export class ChapterManager extends OO_UIManager {
             LevelManager.instance.removeLevelUpIconUI();
             // TODO: 判断是否捡到宝箱，有则弹出开箱界面
     
+            // OO_UIManager.instance.showUI("ChestCheckoutUI");
+            // return;
             // TODO: 判断是否有升级，有则弹出升级界面 LevelManager
             /**
              * 进入商店界面

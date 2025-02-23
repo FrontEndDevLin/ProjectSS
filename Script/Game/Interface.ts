@@ -43,6 +43,8 @@ export interface BProp {
     label?: string,
     group?: number,
     value?: number,
+    // 是否使用百分比计算
+    percent?: boolean,
     // true -> 当value值为正数时，为正向buff；false -> value值为负数时，为正向buff
     buffPos?: boolean
 }

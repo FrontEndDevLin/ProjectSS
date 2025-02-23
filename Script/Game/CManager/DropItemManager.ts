@@ -19,8 +19,8 @@ const { ccclass, property } = _decorator;
 export enum TROPHY_TYPE {
     NONE = 0,
     NORMAL = 1,
-    CHESS,
-    GREAT_CHESS
+    CHEST,
+    GREAT_CHEST
 }
 
 @ccclass('DropItemManager')
@@ -52,7 +52,8 @@ export class DropItemManager extends OO_UIManager {
             assetType: Prefab,
             urls: [
                 `Prefabs/dropItem/ExpBlock`,
-                `Prefabs/dropItem/TrophyBlock`
+                `Prefabs/dropItem/TrophyBlock`,
+                `Prefabs/dropItem/ChestBlock`
             ]}],
             () => {},
             err => {
@@ -130,10 +131,10 @@ export class DropItemManager extends OO_UIManager {
                 case TROPHY_TYPE.NORMAL: {
                     trophyNode = this.loadUINode("dropItem/TrophyBlock", "TrophyBlockCtrl");
                 } break;
-                case TROPHY_TYPE.CHESS: {
-
+                case TROPHY_TYPE.CHEST: {
+                    trophyNode = this.loadUINode("dropItem/ChestBlock", "TrophyBlockCtrl");
                 } break;
-                case TROPHY_TYPE.GREAT_CHESS: {
+                case TROPHY_TYPE.GREAT_CHEST: {
 
                 } break;
             }
@@ -157,7 +158,7 @@ export class DropItemManager extends OO_UIManager {
             if (dropNode.name === "ExpBlock") {
                 let expBlockCtx: ExpBlockCtrl = dropNode.getComponent("ExpBlockCtrl") as ExpBlockCtrl;
                 expBlockCtx.recovery();
-            } else if (dropNode.name === "TrophyBlock") {
+            } else if (dropNode.name === "TrophyBlock" || dropNode.name === "ChestBlock") {
                 let trophyBlockCtx: TrophyBlockCtrl = dropNode.getComponent("TrophyBlockCtrl") as TrophyBlockCtrl;
                 trophyBlockCtx.recovery();
             }
@@ -221,9 +222,23 @@ export class DropItemManager extends OO_UIManager {
         let rate: number = trophyDropRate * trophyDropAmend;
         // 0->无, 1->普通战利品, 2->普通箱子, 3->极品箱子
         if (rate >= 1) {
-            return 1;
+            return this._beenChest();
         } else {
-            return Math.random() <= rate ? 1 : 0;
+            if (Math.random() <= rate) {
+                return this._beenChest();
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    private _beenChest() {
+        // TODO: 战利品掉落有几率变成箱子，和角色幸运值挂钩。目前临时处理
+        let num = getRandomNumber(1, 100);
+        if (num < 50) {
+            return TROPHY_TYPE.CHEST;
+        } else {
+            return TROPHY_TYPE.NORMAL;
         }
     }
 

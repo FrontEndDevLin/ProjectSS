@@ -19,6 +19,7 @@ import { ChapterManager } from './CManager/ChapterManager';
 import { CountdownManager } from './CManager/CountdownManager';
 import { StoreManager } from './CManager/StoreManager';
 import { CharacterPropManager } from './CManager/CharacterPropManager';
+import { ItemsManager } from './CManager/ItemsManager';
 
 export default class Main extends Component {
     static instance: Main = null;
@@ -40,15 +41,16 @@ export default class Main extends Component {
          * Heart Linked
          * Wild
          * TODO:
-         *  属性更新通知接口(升两级时可复现) done
          *  道具系统
+         *      开箱界面 done
+         *      战利品掉落概率变成宝箱（与角色的幸运值挂钩）
          *      道具页面（点击某个道具会有说明）
-         *      开箱界面
          *      道具实现（4-6个）
          *      箱子掉落（开箱时随机某个道具）
          *      道具分类
-         *          角色属性
-         *          
+         *          角色属性（树木、免费刷新、+敌人，+敌人速度，道具价格，捡材料概率回血，燃烧速度）
+         *          生成（炮塔、生成花园、地雷、小型机器人）
+         *          脚本（结束时提高%收获，结束时+%伤害，抵消第一次攻击，站立不动+属性，拥有%速度提升%伤害，每5秒+%伤害）
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
@@ -61,8 +63,8 @@ export default class Main extends Component {
             if (err) {
                 return;
             }
-            OO_UIManager.instance.showUI("ItemsUI");
-            // ChapterManager.instance.showCharacterSelect();
+            // OO_UIManager.instance.showUI("ItemsUI");
+            ChapterManager.instance.showCharacterSelect();
         });
     }
 
@@ -79,6 +81,7 @@ export default class Main extends Component {
             OO_AddManager(DamageManager);
             OO_AddManager(StoreManager);
             OO_AddManager(CharacterPropManager);
+            OO_AddManager(ItemsManager);
         })
     }
 
@@ -100,7 +103,8 @@ export default class Main extends Component {
             "Prefabs/Countdown",
             "Prefabs/Compass",
             "Prefabs/LevelUp",
-            "Prefabs/ItemsUI"
+            "Prefabs/ItemsUI",
+            "Prefabs/ChestCheckoutUI"
         ];
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: pLoadPrefabs }], (total, current) => {
             // console.log(total, current)

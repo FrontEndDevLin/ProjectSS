@@ -14,10 +14,12 @@ export class CharacterPropManager extends OO_UIManager {
 
     public baseProp: CHTBaseProp = null;
 
+    // TODO: 还有一堆隐藏的属性，例如（远程伤害的加成提升50%）等
+
     public hp: BProp = createBProp({ key: "hp", label: "最大生命" });
     public hp_cur: BProp = createBProp({ key: "hp_cur", label: "当前生命" });
     public hp_floor: BProp = createBProp({ key: "hp_floor", label: "生命下限" });
-    public spd: BProp = createBProp({ key: "spd", label: "速度" });
+    public spd: BProp = createBProp({ key: "spd", label: "速度", percent: true });
     public range: BProp = createBProp({ key: "range", label: "范围" });
     public atk_spd: BProp = createBProp({ key: "atk_spd", label: "攻击速度" });
     public dmg: BProp = createBProp({ key: "dmg", label: "伤害" });
@@ -28,7 +30,7 @@ export class CharacterPropManager extends OO_UIManager {
     public avd_ceil: BProp = createBProp({ key: "avd_ceil", label: "闪避上限" });
 
     public pick_range: BProp = createBProp({ key: "pick_range", label: "拾取范围" });
-    public exp_eff: BProp = createBProp({ key: "exp_eff", label: "经验加成" });
+    public exp_eff: BProp = createBProp({ key: "exp_eff", label: "经验获取", percent: true });
 
     public propKeys: string[] = [
         "hp", "spd", "range", "atk_spd", "dmg",
@@ -61,6 +63,8 @@ export class CharacterPropManager extends OO_UIManager {
                 return;
             }
         });
+
+        console.log(this)
     }
 
     public getPropList(group?: string): BProp[] {
@@ -135,6 +139,6 @@ export const getCharacterPropValue = function(key: string, percent: boolean = tr
     return percent ? prop.value / 100 : prop.value;
 }
 
-export const createBProp = function ({ key, label, value, group, buffPos = true }: BProp): BProp {
-    return { key, label, group, value, buffPos }
+export const createBProp = function ({ key, label, value, group, buffPos = true, percent = false }: BProp): BProp {
+    return { key, label, group, value, buffPos, percent }
 }

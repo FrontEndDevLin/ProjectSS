@@ -41,7 +41,11 @@ export class CHTPropCardCtrl extends OO_Component {
         let node: Node = OO_UIManager.instance.loadUINode("common/CHTPropItem", "NONE");
         node.OO_param1 = prop;
 
-        node.getChildByName("Label").children[1].getComponent(Label).string = prop.label;
+        let label: string = prop.label;
+        if (prop.percent) {
+            label = `%${label}`;
+        }
+        node.getChildByName("Label").children[1].getComponent(Label).string = label;
 
         this._renderPropItemValue(node, prop);
         parentNode.addChild(node);

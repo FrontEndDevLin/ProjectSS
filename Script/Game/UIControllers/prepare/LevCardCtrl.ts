@@ -24,7 +24,11 @@ export class LevCardCtrl extends OO_Component {
         let updProp: BProp = StoreManager.instance.currentLevUpd[idx];
         let prop: BProp = CharacterPropManager.instance[updProp.key];
         this.views["Card/ImgTxt/WName/Name"].getComponent(Label).string = prop.label;
-        this.views["Card/Content"].getComponent(RichText).string = `<color=#67C23A>+${updProp.value}</color>${prop.label}`;
+        let value: string = `${updProp.value}`;
+        if (prop.percent) {
+            value = `${value}%`;
+        }
+        this.views["Card/Content"].getComponent(RichText).string = `<color=#67C23A>+${value}</color>${prop.label}`;
     }
 
     update(deltaTime: number) {
