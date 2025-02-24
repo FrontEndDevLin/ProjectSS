@@ -34,7 +34,7 @@ export class CharacterSelectCtrl extends OO_Component {
             if (!this._chtData) {
                 return console.log("角色未选择");
             } else {
-                ChapterManager.instance.chtSelectComplete(this._chtData.id);
+                ChapterManager.instance.chtSelectComplete(this._chtData.key);
             }
         }, this);
     }
@@ -46,7 +46,7 @@ export class CharacterSelectCtrl extends OO_Component {
     }
     private _updateCHTCard() {
         if (this._chtData) {
-            this.views["CHTWrap/CHTCard/Card/ImgTxt/WName/Name"].getComponent(Label).string = this._chtData.cn;
+            this.views["CHTWrap/CHTCard/Card/ImgTxt/WName/Name"].getComponent(Label).string = this._chtData.label;
         }
     }
 

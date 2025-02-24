@@ -6,13 +6,14 @@ import { getRandomNumber } from '../Common';
 const { ccclass, property } = _decorator;
 
 interface Buff {
+    // 类型为prop时，使用prop和value
+    type: string,
     prop: string,
     value: number
+    // 类型为script时，单独处理
 }
 interface BItem {
     key: string,
-    // 类型，类型为prop时，使用buff内的增益
-    type: string,
     // 道具等级 (白-蓝-紫-红)
     level: number,
     // 道具名
@@ -36,6 +37,8 @@ export class ItemsManager extends OO_UIManager {
 
     // TODO: 将所有道具放在json文件里
     public itemsMap: ItemsMap = {};
+
+    public itemsList: { key: string, cnt: number }[] = [];
     
     protected onLoad(): void {
         if (!ItemsManager.instance) {

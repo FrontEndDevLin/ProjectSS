@@ -3,6 +3,7 @@
     "desc1": "一些需要有数值支撑的基础属性, 面板显示为0, 但本身还有值。",
     "desc2": "例如速度为0时, 自身有基础移速5, 所以角色还能移动",
     "desc3": "这个对象中的数据不对外开放",
+    "desc4": "角色卡片本质是一个道具(唯一), 在角色选择完成后, 放入道具栏并设置buff",
     "range": 3,
     "dmg": 1,
     "range_dmg": 1,
@@ -26,24 +27,26 @@
     "pick_range": 0
   },
   "CR001": {
-    "id": "CR001",
-    "cn": "角色1",
-    "prop": {
-      "desc": "角色各项属性",
-      "hp": 6,
-      "range": 0,
-      "atk_spd": 0,
-      "dmg": 0,
-      "range_dmg": 0,
-      "melee_dmg": 0,
-      "def": 0,
-      "spd": 5,
-      "avd": 0,
-      "avd_ceil": 60,
-      "avd_desc": "闪避",
-      "pick_range": 4,
-      "pick_range_desc": "拾取范围，不含战利品"
-    },
-    "buff": {}
+    "key": "CR001",
+    "label": "全能者",
+    "groupLabel": "角色",
+    "groupKey": "character",
+    "buff": [
+      {
+        "type": "prop",
+        "prop": "hp",
+        "value": 5
+      },
+      {
+        "type": "prop",
+        "prop": "atk_spd",
+        "value": 10
+      },
+      {
+        "type": "prop",
+        "prop": "dmg",
+        "value": 8
+      }
+    ]
   }
 }

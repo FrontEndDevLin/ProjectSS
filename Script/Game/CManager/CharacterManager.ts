@@ -51,7 +51,6 @@ export default class CharacterManager extends OO_UIManager {
         this.characterId = characterId;
 
         CharacterPropManager.instance.initProp(characterId);
-        console.log(CharacterPropManager.instance);
 
         WeaponManager.instance.initWeapon(['test']);
         BulletManager.instance.updateBulletList();
@@ -73,8 +72,8 @@ export default class CharacterManager extends OO_UIManager {
             if (cId.includes("CR")) {
                 let item = CharacterDB[cId];
                 list.push({
-                    id: item.id,
-                    cn: item.cn,
+                    key: item.key,
+                    label: item.label,
                     pic: item.pic,
                     buff: item.buff
                 })
