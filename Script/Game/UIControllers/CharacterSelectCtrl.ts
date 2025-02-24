@@ -47,6 +47,7 @@ export class CharacterSelectCtrl extends OO_Component {
     private _updateCHTCard() {
         if (this._chtData) {
             this.views["CHTWrap/CHTCard/Card/ImgTxt/WName/Name"].getComponent(Label).string = this._chtData.label;
+            this.views["CHTWrap/CHTCard/Card/ImgTxt/WName/Types"].getComponent(Label).string = "角色";
         }
     }
 

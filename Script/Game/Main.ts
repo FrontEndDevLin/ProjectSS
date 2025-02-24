@@ -42,7 +42,9 @@ export default class Main extends Component {
          * Wild
          * TODO:
          *  道具系统
-         *      选角色后，卡片的buff提示，卡片的角色详细信息
+         *      实现抛出buff后，显示成文字的功能(CharacterPropManager类里)
+         *      升级卡片使用新的文字生成API
+         *      选角色后，卡片的buff提示，卡片的角色详细信息(buff)
          *      道具列表功能实现
          *      选角色后，平衡角色属性 CharacterPropManager._buffProp
          *      道具实现（4-6个）

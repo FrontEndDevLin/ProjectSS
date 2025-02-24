@@ -20,6 +20,8 @@ interface BItem {
     label: string,
     // 道具分组名
     groupLabel: string,
+    // 价格(基础价格，需要跟随关卡浮动)
+    price: number,
     // 道具分组key
     groupKey: string,
     buff: Buff[]
@@ -35,10 +37,11 @@ interface ItemsMap {
 export class ItemsManager extends OO_UIManager {
     static instance: ItemsManager;
 
-    // TODO: 将所有道具放在json文件里
+    // 所有道具放在json文件里
     public itemsMap: ItemsMap = {};
 
     public itemsList: { key: string, cnt: number }[] = [];
+    public itemsListIdx: any = {};
     
     protected onLoad(): void {
         if (!ItemsManager.instance) {
@@ -53,6 +56,26 @@ export class ItemsManager extends OO_UIManager {
 
     start() {
 
+    }
+
+    // 增加道具
+    public addItem(key: string) {
+        // 如果是角色
+        if (key.includes("CR")) {
+
+        }
+        let item: BItem = this.itemsMap[key];
+        if (!item) {
+            return;
+        }
+        let idx: number = this.itemsListIdx[key];
+        if (idx && typeof idx === "number") {
+            this.itemsList[idx].cnt++;
+        } else {
+            idx = this.itemsList.push({ key: item.key, cnt: 1 }) - 1;
+            this.itemsListIdx[key] = idx;
+        }
+        // TODO: 增加完道具后，需要更新角色属性
     }
 
     private _loadItemsMap() {
