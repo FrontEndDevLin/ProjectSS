@@ -49,6 +49,12 @@ export interface BProp {
     buffPos?: boolean
 }
 
+export interface Buff {
+    type?: string,
+    prop: string,
+    value: number
+}
+
 // 角色基础数值支撑属性
 export interface CHTBaseProp {
     range: number,

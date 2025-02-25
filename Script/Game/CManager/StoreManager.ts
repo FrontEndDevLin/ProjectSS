@@ -4,7 +4,7 @@ import WeaponManager from './WeaponManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { EventBus } from '../../OO/Manager/OO_MsgManager';
 import { CEVENT_PREPARE } from '../CEvent';
-import { BProp } from '../Interface';
+import { BProp, Buff } from '../Interface';
 const { ccclass, property } = _decorator;
 
 /**
@@ -25,7 +25,7 @@ export class StoreManager extends OO_UIManager {
     private _levUpdRefTime: number = 0;
     // 升级属性刷新价格
     public _levUpdRefCost: number = 0;
-    public currentLevUpd: BProp[] = [];
+    public currentLevUpd: Buff[] = [];
 
     protected onLoad(): void {
         if (!StoreManager.instance) {
@@ -107,10 +107,10 @@ export class StoreManager extends OO_UIManager {
     }
     private _refreshLevUpd() {
         this.currentLevUpd = [
-            { key: "hp", value: 3 },
-            { key: "def", value: 1 },
-            { key: "range", value: 20 },
-            { key: "spd", value: 5 }
+            { prop: "hp", value: 3 },
+            { prop: "def", value: 1 },
+            { prop: "range", value: 20 },
+            { prop: "spd", value: 5 }
         ]
     }
 

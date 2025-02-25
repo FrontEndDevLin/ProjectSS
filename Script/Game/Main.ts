@@ -42,11 +42,9 @@ export default class Main extends Component {
          * Wild
          * TODO:
          *  道具系统
-         *      实现抛出buff后，显示成文字的功能(CharacterPropManager类里)
-         *      升级卡片使用新的文字生成API
-         *      选角色后，卡片的buff提示，卡片的角色详细信息(buff)
+         *      捡起箱子更新UI
+         *      关卡结束判断进入开箱界面
          *      道具列表功能实现
-         *      选角色后，平衡角色属性 CharacterPropManager._buffProp
          *      道具实现（4-6个）
          *      道具页面（点击某个道具会有说明）
          *      箱子掉落（开箱时随机某个道具）
@@ -54,6 +52,7 @@ export default class Main extends Component {
          *          角色属性（树木、免费刷新、+敌人，+敌人速度，道具价格，捡材料概率回血，燃烧速度）
          *          生成（炮塔、生成花园、地雷、小型机器人）
          *          脚本（结束时提高%收获，结束时+%伤害，抵消第一次攻击，站立不动+属性，拥有%速度提升%伤害，每5秒+%伤害）
+         *      选角色后，平衡角色属性 CharacterPropManager._buffProp
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape

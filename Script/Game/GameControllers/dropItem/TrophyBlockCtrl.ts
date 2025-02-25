@@ -65,7 +65,7 @@ export class TrophyBlockCtrl extends OO_Component {
             console.log('TODO: 战利品被捡起!');
             switch (this._quality) {
                 case TROPHY_TYPE.CHEST: {
-                    // TODO: 去道具管理类随机拿取一个道具
+                    // TODO: 去道具管理类生成一个宝箱
                     console.log('TODO: 捡到宝箱');
                 } break;
             

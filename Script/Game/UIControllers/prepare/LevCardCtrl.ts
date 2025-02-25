@@ -1,6 +1,6 @@
 import { _decorator, Component, Label, Node, RichText } from 'cc';
 import { OO_Component } from '../../../OO/OO';
-import { BProp } from '../../Interface';
+import { BProp, Buff } from '../../Interface';
 import { StoreManager } from '../../CManager/StoreManager';
 import { CharacterPropManager } from '../../CManager/CharacterPropManager';
 const { ccclass, property } = _decorator;
@@ -21,14 +21,11 @@ export class LevCardCtrl extends OO_Component {
 
     public updateCard() {
         let idx: number = this.node.OO_param1.idx;
-        let updProp: BProp = StoreManager.instance.currentLevUpd[idx];
-        let prop: BProp = CharacterPropManager.instance[updProp.key];
+        let updBuff: Buff = StoreManager.instance.currentLevUpd[idx];
+        let prop: BProp = CharacterPropManager.instance[updBuff.prop];
         this.views["Card/ImgTxt/WName/Name"].getComponent(Label).string = prop.label;
-        let value: string = `${updProp.value}`;
-        if (prop.percent) {
-            value = `${value}%`;
-        }
-        this.views["Card/Content"].getComponent(RichText).string = `<color=#67C23A>+${value}</color>${prop.label}`;
+        let label: string = CharacterPropManager.instance.getBuffTxt(updBuff);
+        this.views["Card/Content"].getComponent(RichText).string = label;
     }
 
     update(deltaTime: number) {

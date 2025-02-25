@@ -1,8 +1,10 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Component, Label, Node, RichText } from 'cc';
 import { OO_Component } from '../../OO/OO';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import CharacterManager from '../CManager/CharacterManager';
 import { ChapterManager } from '../CManager/ChapterManager';
+import { Buff } from '../Interface';
+import { CharacterPropManager } from '../CManager/CharacterPropManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterSelectCtrl')
@@ -48,6 +50,16 @@ export class CharacterSelectCtrl extends OO_Component {
         if (this._chtData) {
             this.views["CHTWrap/CHTCard/Card/ImgTxt/WName/Name"].getComponent(Label).string = this._chtData.label;
             this.views["CHTWrap/CHTCard/Card/ImgTxt/WName/Types"].getComponent(Label).string = "角色";
+
+            let buffList: Buff[] = this._chtData.buff;
+            let buffTxt: string = "";
+            buffList.forEach((buff, i) => {
+                buffTxt += CharacterPropManager.instance.getBuffTxt(buff);
+                if (i !== buffList.length - 1) {
+                    buffTxt += "<br/>";
+                }
+            });
+            this.views["CHTWrap/CHTCard/Card/Content"].getComponent(RichText).string = buffTxt;
         }
     }
 

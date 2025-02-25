@@ -42,6 +42,9 @@ export class ItemsManager extends OO_UIManager {
 
     public itemsList: { key: string, cnt: number }[] = [];
     public itemsListIdx: any = {};
+
+    // 当前波次拿取的宝箱 [品质1, 品质2]
+    public chestList: number[] = [];
     
     protected onLoad(): void {
         if (!ItemsManager.instance) {
@@ -56,6 +59,12 @@ export class ItemsManager extends OO_UIManager {
 
     start() {
 
+    }
+
+    public pickChest(n: number) {
+        if (n === TROPHY_TYPE.CHEST || n === TROPHY_TYPE.GREAT_CHEST) {
+            this.chestList.push(n);
+        }
     }
 
     // 增加道具

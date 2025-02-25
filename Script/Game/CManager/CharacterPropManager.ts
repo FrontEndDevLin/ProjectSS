@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, Prefab, UITransform, v3 } from 'cc';
-import { BProp, CHTBaseProp, CHTCommonProp } from '../Interface';
+import { BProp, Buff, CHTBaseProp, CHTCommonProp } from '../Interface';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { DBManager } from './DBManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
@@ -107,11 +107,22 @@ export class CharacterPropManager extends OO_UIManager {
         this.hp_cur.value = this.hp.value;
     }
     // 升级提升属性接口
-    public levelUpProp(upProp: BProp) {
-        let prop: BProp = this[upProp.key];
+    public levelUpProp(upProp: Buff) {
+        let prop: BProp = this[upProp.prop];
         prop.value += upProp.value;
-        this.runEventFn(CEVENT_CHARACTER.PROP_CHANGE, [upProp.key]);
+        this.runEventFn(CEVENT_CHARACTER.PROP_CHANGE, [upProp.prop]);
     }
+    // 获取buff文本，如+5生命
+    public getBuffTxt(buff: Buff) {
+        let prop: BProp = this[buff.prop];
+        let value: string = `${buff.value}`;
+        if (prop.percent) {
+            value = `${value}%`;
+        }
+        // TODO: 目前只处理增益类颜色的buff
+        return `<color=#67C23A>+${value}</color>${prop.label}`;
+    }
+
     private _initCommonProp() {
         let commonProp: CHTCommonProp = DBManager.instance.getDbData("Character").common_prop;
         for (let key in commonProp) {
