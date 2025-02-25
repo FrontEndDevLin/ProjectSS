@@ -42,8 +42,8 @@ export default class Main extends Component {
          * Wild
          * TODO:
          *  道具系统
-         *      捡起箱子更新UI
-         *      关卡结束判断进入开箱界面
+         *      捡起箱子更新UI done
+         *      关卡结束判断进入开箱流程
          *      道具列表功能实现
          *      道具实现（4-6个）
          *      道具页面（点击某个道具会有说明）

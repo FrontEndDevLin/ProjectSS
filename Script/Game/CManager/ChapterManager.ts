@@ -12,6 +12,7 @@ import WeaponManager from './WeaponManager';
 import { DropItemManager } from './DropItemManager';
 import { LevelManager } from './LevelManager';
 import { CharacterPropManager } from './CharacterPropManager';
+import { ItemsManager } from './ItemsManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -130,6 +131,7 @@ export class ChapterManager extends OO_UIManager {
         EventBus.emit(CEVENT_GAME.START);
         this._exitPrepare();
         LevelManager.instance.showLevelUpIconUI();
+        ItemsManager.instance.showChestIconUI();
         // 显示角色
         CharacterManager.instance.addCharacter();
         CharacterManager.instance.setCharacterLoc(v3(0, 0, 0));
@@ -156,29 +158,34 @@ export class ChapterManager extends OO_UIManager {
         this.scheduleOnce(() => {
             CharacterManager.instance.removeCharacter();
             LevelManager.instance.removeLevelUpIconUI();
+            ItemsManager.instance.removeChestIconUI();
             // TODO: 判断是否捡到宝箱，有则弹出开箱界面
-    
-            // OO_UIManager.instance.showUI("ChestCheckoutUI");
-            // return;
-            // TODO: 判断是否有升级，有则弹出升级界面 LevelManager
-            /**
-             * 进入商店界面
-             *  可看到自己的武器，道具，面板，商店界面
-             */
-            let levelUpCnt: number = LevelManager.instance.getLevelUpCnt();
-            if (levelUpCnt > 0) {
-                this._levelUpUINode = OO_UIManager.instance.loadUINode("LevelUp");
-                OO_UIManager.instance.appendUINode(this._levelUpUINode);
-                LevelManager.instance.showLevelUpIconUI();
-                CharacterPropManager.instance.loadCHTPropUI("levelUp");
+            if (ItemsManager.instance.hasChest()) {
+                console.log('TODO: 有捡到宝箱，需进入开箱流程');
+                OO_UIManager.instance.showUI("ChestCheckoutUI");
             } else {
-                this._intoPrepare();
+                // 判断是否有升级，有则进入升级流程
+                let levelUpCnt: number = LevelManager.instance.getLevelUpCnt();
+                if (levelUpCnt > 0) {
+                    this._intoLevelUpProc();
+                } else {
+                    this._intoPrepare();
+                }
             }
-
             this._preplayChapter();
         }, 3);
     }
+    private _intoLevelUpProc() {
+        this._levelUpUINode = OO_UIManager.instance.loadUINode("LevelUp");
+        OO_UIManager.instance.appendUINode(this._levelUpUINode);
+        LevelManager.instance.showLevelUpIconUI();
+        CharacterPropManager.instance.loadCHTPropUI("levelUp");
+    }
     private _intoPrepare() {
+        /**
+         * 进入商店界面
+         *  可看到自己的武器，道具，面板，商店界面
+         */
         this._prepareUINode = OO_UIManager.instance.showUI("Prepare");
         CharacterPropManager.instance.loadCHTPropUI("store");
     }

@@ -3,6 +3,7 @@ import { OO_Component } from '../../../OO/OO';
 import { TROPHY_TYPE } from '../../CManager/DropItemManager';
 import CharacterManager from '../../CManager/CharacterManager';
 import { getDistance, GP_UNIT } from '../../Common';
+import { ItemsManager } from '../../CManager/ItemsManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -66,7 +67,7 @@ export class TrophyBlockCtrl extends OO_Component {
             switch (this._quality) {
                 case TROPHY_TYPE.CHEST: {
                     // TODO: 去道具管理类生成一个宝箱
-                    console.log('TODO: 捡到宝箱');
+                    ItemsManager.instance.pickChest(TROPHY_TYPE.CHEST);
                 } break;
             
                 default:

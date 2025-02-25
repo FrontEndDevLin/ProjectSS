@@ -1,8 +1,10 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, find, Node, Prefab, Widget } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { DBManager } from './DBManager';
 import { TROPHY_TYPE } from './DropItemManager';
 import { getRandomNumber } from '../Common';
+import { CEVENT_CHEST } from '../CEvent';
+import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
 interface Buff {
@@ -44,7 +46,9 @@ export class ItemsManager extends OO_UIManager {
     public itemsListIdx: any = {};
 
     // 当前波次拿取的宝箱 [品质1, 品质2]
-    public chestList: number[] = [];
+    private _chestList: number[] = [];
+
+    private _chestIconUINode: Node = null;
     
     protected onLoad(): void {
         if (!ItemsManager.instance) {
@@ -55,15 +59,46 @@ export class ItemsManager extends OO_UIManager {
         }
 
         this._loadItemsMap();
+
+        OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
+            "Prefabs/common/ChestIconWrap",
+            "Prefabs/common/ChestIcon"
+        ] }], (total, current) => {
+        }, (err, data: any) => {
+        });
     }
 
     start() {
 
     }
 
+    // 右上角宝箱列表
+    public showChestIconUI() {
+        this._chestIconUINode = this.showUI("common/ChestIconWrap", this.rootNode, "NONE");
+        this._chestIconUINode.getComponent(Widget).target = find("Canvas");
+        this._loadChestIcon();
+    }
+    public removeChestIconUI() {
+        this.removeUI("ChestIconWrap");
+        this._chestIconUINode = null;
+    }
+    private _loadChestIcon() {
+        this._chestIconUINode.removeAllChildren();
+        for (let quality of this._chestList) {
+            let uiName = "";
+            switch (quality) {
+                case TROPHY_TYPE.CHEST: {
+                    uiName = "common/ChestIcon";
+                } break;
+            }
+            this.showUI(uiName, this._chestIconUINode, "NONE");
+        }
+    }
+
     public pickChest(n: number) {
         if (n === TROPHY_TYPE.CHEST || n === TROPHY_TYPE.GREAT_CHEST) {
-            this.chestList.push(n);
+            this._chestList.push(n);
+            this._loadChestIcon();
         }
     }
 
@@ -85,6 +120,10 @@ export class ItemsManager extends OO_UIManager {
             this.itemsListIdx[key] = idx;
         }
         // TODO: 增加完道具后，需要更新角色属性
+    }
+
+    public hasChest(): boolean {
+        return this._chestList.length > 0;
     }
 
     private _loadItemsMap() {
