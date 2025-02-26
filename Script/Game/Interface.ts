@@ -49,12 +49,6 @@ export interface BProp {
     buffPos?: boolean
 }
 
-export interface Buff {
-    type?: string,
-    prop: string,
-    value: number
-}
-
 // 角色基础数值支撑属性
 export interface CHTBaseProp {
     range: number,
@@ -72,4 +66,29 @@ export interface CHTCommonProp extends CHTBaseProp {
     def: number,
     avd: number,
     pick_range: number
+}
+
+export interface Buff {
+    // 类型为prop时，使用prop和value
+    type?: string,
+    prop: string,
+    value: number
+    // 类型为script时，单独处理
+}
+export interface BItem {
+    key: string,
+    // 道具等级 (白-蓝-紫-红)
+    level: number,
+    // 道具名
+    label: string,
+    // 道具分组名
+    groupLabel: string,
+    // 价格(基础价格，需要跟随关卡浮动)
+    price: number,
+    // 道具分组key
+    groupKey: string,
+    buff: Buff[]
+}
+export interface ItemsMap {
+    [key: string]: BItem
 }

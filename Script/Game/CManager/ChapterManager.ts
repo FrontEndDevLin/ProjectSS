@@ -31,6 +31,7 @@ export class ChapterManager extends OO_UIManager {
     private _chapter: number = 1;
     private _prepareUINode: Node = null;
     private _levelUpUINode: Node = null;
+    private _chestCheckoutUINode: Node = null;
 
     protected onLoad(): void {
         if (!ChapterManager.instance) {
@@ -162,7 +163,8 @@ export class ChapterManager extends OO_UIManager {
             // TODO: 判断是否捡到宝箱，有则弹出开箱界面
             if (ItemsManager.instance.hasChest()) {
                 console.log('TODO: 有捡到宝箱，需进入开箱流程');
-                OO_UIManager.instance.showUI("ChestCheckoutUI");
+                this._chestCheckoutUINode = OO_UIManager.instance.showUI("ChestCheckoutUI");
+                ItemsManager.instance.showChestIconUI();
             } else {
                 // 判断是否有升级，有则进入升级流程
                 let levelUpCnt: number = LevelManager.instance.getLevelUpCnt();

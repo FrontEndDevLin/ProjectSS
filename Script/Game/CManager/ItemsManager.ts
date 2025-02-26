@@ -5,32 +5,8 @@ import { TROPHY_TYPE } from './DropItemManager';
 import { getRandomNumber } from '../Common';
 import { CEVENT_CHEST } from '../CEvent';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
+import { BItem, ItemsMap } from '../Interface';
 const { ccclass, property } = _decorator;
-
-interface Buff {
-    // 类型为prop时，使用prop和value
-    type: string,
-    prop: string,
-    value: number
-    // 类型为script时，单独处理
-}
-interface BItem {
-    key: string,
-    // 道具等级 (白-蓝-紫-红)
-    level: number,
-    // 道具名
-    label: string,
-    // 道具分组名
-    groupLabel: string,
-    // 价格(基础价格，需要跟随关卡浮动)
-    price: number,
-    // 道具分组key
-    groupKey: string,
-    buff: Buff[]
-}
-interface ItemsMap {
-    [key: string]: BItem
-}
 
 /**
  * 道具管理类，管理所有道具
@@ -124,6 +100,9 @@ export class ItemsManager extends OO_UIManager {
 
     public hasChest(): boolean {
         return this._chestList.length > 0;
+    }
+    public popChest(): number {
+        return this._chestList.pop();
     }
 
     private _loadItemsMap() {

@@ -277,7 +277,7 @@
     "propertyPath": [
       "_string"
     ],
-    "value": "道具"
+    "value": "-"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -295,7 +295,7 @@
     ],
     "value": {
       "__type__": "cc.Size",
-      "width": 52,
+      "width": 8.658203125,
       "height": 35.28
     }
   },
