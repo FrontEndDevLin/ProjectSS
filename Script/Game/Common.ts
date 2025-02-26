@@ -34,3 +34,9 @@ export const getFloatNumber = function (number: number, n: number = 2): number {
 export const transportWorldPosition = function (postion: Vec3): Vec3 {
   return v3(postion.x - SCREEN_WIDTH / 2, postion.y - SCREEN_HEIGHT / 2, 0);
 }
+
+export const COLOR = {
+  NORMAL: "#F5F5F5",
+  SUCCESS: "#67C23A",
+  DANGER: "#F56C6C"
+}

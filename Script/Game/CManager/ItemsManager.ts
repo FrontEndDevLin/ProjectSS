@@ -5,7 +5,8 @@ import { TROPHY_TYPE } from './DropItemManager';
 import { getRandomNumber } from '../Common';
 import { CEVENT_CHEST } from '../CEvent';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
-import { BItem, ItemsMap } from '../Interface';
+import { BItem, Buff, ItemsMap } from '../Interface';
+import { CharacterPropManager } from './CharacterPropManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -25,6 +26,9 @@ export class ItemsManager extends OO_UIManager {
     private _chestList: number[] = [];
 
     private _chestIconUINode: Node = null;
+
+    // 当前宝箱开出的道具
+    private _chestItem: BItem = null;
     
     protected onLoad(): void {
         if (!ItemsManager.instance) {
@@ -71,6 +75,7 @@ export class ItemsManager extends OO_UIManager {
         }
     }
 
+    // 捡起宝箱
     public pickChest(n: number) {
         if (n === TROPHY_TYPE.CHEST || n === TROPHY_TYPE.GREAT_CHEST) {
             this._chestList.push(n);
@@ -96,13 +101,15 @@ export class ItemsManager extends OO_UIManager {
             this.itemsListIdx[key] = idx;
         }
         // TODO: 增加完道具后，需要更新角色属性
+
     }
 
     public hasChest(): boolean {
         return this._chestList.length > 0;
     }
-    public popChest(): number {
-        return this._chestList.pop();
+    private _popChestList() {
+        this._chestList.pop();
+        this._loadChestIcon();
     }
 
     private _loadItemsMap() {
@@ -114,6 +121,43 @@ export class ItemsManager extends OO_UIManager {
             let bItem: BItem = dbData[key];
             this.itemsMap[bItem.key] = bItem;
         }
+    }
+
+    // 开箱接口
+    public openChest(): BItem {
+        let chestQuality: number = this._chestList[this._chestList.length - 1];
+        let item: BItem = null;
+        switch (chestQuality) {
+            case TROPHY_TYPE.CHEST: {
+                item = this.getRandomItem(chestQuality);
+                this._chestItem = item;
+            } break;
+            case TROPHY_TYPE.GREAT_CHEST: {
+
+            } break;
+        }
+        return item;
+    }
+    // 拿取宝箱内道具
+    public getChestItem() {
+        if (!this._chestItem) {
+            return;
+        }
+        let key: string = this._chestItem.key;
+        let buffList: Buff[] = this._chestItem.buff;
+        this.addItem(key);
+        CharacterPropManager.instance.updateProp(buffList);
+        this._chestItem = null;
+        this._popChestList();
+    }
+    // 回收宝箱内道具
+    public recycleChestItem() {
+        if (!this._chestItem) {
+            return;
+        }
+        // TODO: 需要算钱
+        this._chestItem = null;
+        this._popChestList();
     }
 
     public getRandomItem(quality: number = TROPHY_TYPE.CHEST): BItem {

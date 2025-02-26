@@ -4,6 +4,7 @@ import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { DBManager } from './DBManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { CEVENT_CHARACTER } from '../CEvent';
+import { COLOR } from '../Common';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterPropManager')
@@ -19,7 +20,7 @@ export class CharacterPropManager extends OO_UIManager {
     public hp: BProp = createBProp({ key: "hp", label: "最大生命" });
     public hp_cur: BProp = createBProp({ key: "hp_cur", label: "当前生命" });
     public hp_floor: BProp = createBProp({ key: "hp_floor", label: "生命下限" });
-    public spd: BProp = createBProp({ key: "spd", label: "速度", percent: true });
+    public spd: BProp = createBProp({ key: "spd", label: "速度" });
     public range: BProp = createBProp({ key: "range", label: "范围" });
     public atk_spd: BProp = createBProp({ key: "atk_spd", label: "攻击速度" });
     public dmg: BProp = createBProp({ key: "dmg", label: "伤害" });
@@ -115,12 +116,49 @@ export class CharacterPropManager extends OO_UIManager {
     // 获取buff文本，如+5生命
     public getBuffTxt(buff: Buff) {
         let prop: BProp = this[buff.prop];
-        let value: string = `${buff.value}`;
+        let oValue: number = buff.value;
+        let value: string = `${oValue}`;
+        if (oValue > 0) {
+            value = `+${oValue}`;
+        }
+
         if (prop.percent) {
             value = `${value}%`;
         }
-        // TODO: 目前只处理增益类颜色的buff
-        return `<color=#67C23A>+${value}</color>${prop.label}`;
+        
+        let color: string = this.getBuffTxtColor(buff);
+        return `<color=${color}>${value}</color>${prop.label}`;
+    }
+    public getBuffTxtColor(buff: Buff): string {
+        let prop: BProp = this[buff.prop];
+        let value = buff.value;
+        let buffPos: boolean = prop.buffPos;
+        let color: string = "";
+        if (value === 0) {
+            color = COLOR.NORMAL;
+        } else if (value > 0) {
+            if (buffPos) {
+                color = COLOR.SUCCESS;
+            } else {
+                color = COLOR.DANGER;
+            }
+        } else {
+            if (buffPos) {
+                color = COLOR.DANGER;
+            } else {
+                color = COLOR.SUCCESS;
+            }
+        }
+        return color;
+    }
+    public updateProp(buffList: Buff[]) {
+        let propList = [];
+        for (let buff of buffList) {
+            let prop: BProp = this[buff.prop];
+            prop.value += buff.value;
+            propList.push(buff.prop);
+        }
+        this.runEventFn(CEVENT_CHARACTER.PROP_CHANGE, propList);
     }
 
     private _initCommonProp() {

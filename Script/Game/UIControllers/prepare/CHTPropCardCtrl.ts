@@ -1,7 +1,7 @@
 import { _decorator, Color, Component, EventTouch, Label, Node, Sprite, UITransform } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import OO_UIManager from '../../../OO/Manager/OO_UIManager';
-import { BProp } from '../../Interface';
+import { BProp, Buff } from '../../Interface';
 import { CharacterPropManager } from '../../CManager/CharacterPropManager';
 import { CEVENT_CHARACTER } from '../../CEvent';
 const { ccclass, property } = _decorator;
@@ -54,30 +54,16 @@ export class CHTPropCardCtrl extends OO_Component {
     
     // 更新属性的值，和值的颜色
     private _renderPropItemValue(itemNode: Node, prop: BProp) {
-        // 根据prop的buffPos的值判断，当前的值为正数/负数时，value的颜色改变(绿/红)
-        let color = "";
-        let buffColor = "#67C23A";
-        let debuffColor = "#F56C6C";
-        if (prop.value !== 0) {
-            if (prop.buffPos) {
-                if (prop.value > 0) {
-                    color = buffColor;
-                } else {
-                    color = debuffColor;
-                }
-            } else {
-                if (prop.value > 0) {
-                    color = debuffColor;
-                } else {
-                    color = buffColor;
-                }
-            }
+        let buff: Buff = {
+            prop: prop.key,
+            value: prop.value
         }
 
+        // 根据prop的buffPos的值判断，当前的值为正数/负数时，value的颜色改变(绿/红)
+        let color: string = CharacterPropManager.instance.getBuffTxtColor(buff);
+
         itemNode.getChildByName("Value").getComponent(Label).string = `${prop.value}`;
-        if (color) {
-            itemNode.getChildByName("Value").getComponent(Label).color = new Color(color);
-        }
+        itemNode.getChildByName("Value").getComponent(Label).color = new Color(color);
     }
 
     private _touchPropItem(e: EventTouch) {

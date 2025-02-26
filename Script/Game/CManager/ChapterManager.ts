@@ -162,20 +162,23 @@ export class ChapterManager extends OO_UIManager {
             ItemsManager.instance.removeChestIconUI();
             // TODO: 判断是否捡到宝箱，有则弹出开箱界面
             if (ItemsManager.instance.hasChest()) {
-                console.log('TODO: 有捡到宝箱，需进入开箱流程');
+                console.log('有捡到宝箱，进入开箱流程');
                 this._chestCheckoutUINode = OO_UIManager.instance.showUI("ChestCheckoutUI");
                 ItemsManager.instance.showChestIconUI();
             } else {
-                // 判断是否有升级，有则进入升级流程
-                let levelUpCnt: number = LevelManager.instance.getLevelUpCnt();
-                if (levelUpCnt > 0) {
-                    this._intoLevelUpProc();
-                } else {
-                    this._intoPrepare();
-                }
+                this._intoLevelUpProcOrPrepare();
             }
             this._preplayChapter();
         }, 3);
+    }
+    private _intoLevelUpProcOrPrepare() {
+        // 判断是否有升级，有则进入升级流程
+        let levelUpCnt: number = LevelManager.instance.getLevelUpCnt();
+        if (levelUpCnt > 0) {
+            this._intoLevelUpProc();
+        } else {
+            this._intoPrepare();
+        }
     }
     private _intoLevelUpProc() {
         this._levelUpUINode = OO_UIManager.instance.loadUINode("LevelUp");
@@ -204,6 +207,13 @@ export class ChapterManager extends OO_UIManager {
         CharacterPropManager.instance.removeCHTPropUI();
         this._levelUpUINode = null;
         this._intoPrepare();
+    }
+    // 由ChestCheckoutUICtrl调用
+    public closeChestCheckoutUI() {
+        OO_UIManager.instance.removeUI("ChestCheckoutUI");
+        this._chestCheckoutUINode = null;
+        ItemsManager.instance.removeChestIconUI();
+        this._intoLevelUpProcOrPrepare();
     }
 
     protected onDestroy(): void {
