@@ -1,14 +1,14 @@
 import { _decorator, Component, Label, Node } from 'cc';
-import { OO_Component } from '../../OO/OO';
-import { EventBus } from '../../OO/Manager/OO_MsgManager';
-import { CEVENT_GAME } from '../CEvent';
-import { StoreManager } from '../CManager/StoreManager';
-import OO_UIManager from '../../OO/Manager/OO_UIManager';
-import { ChapterManager } from '../CManager/ChapterManager';
-import { BProp } from '../Interface';
-import { CharacterPropManager } from '../CManager/CharacterPropManager';
-import { LevCardCtrl } from './prepare/LevCardCtrl';
-import { LevelManager } from '../CManager/LevelManager';
+import { OO_Component } from '../../../OO/OO';
+import { EventBus } from '../../../OO/Manager/OO_MsgManager';
+import { CEVENT_GAME } from '../../CEvent';
+import { StoreManager } from '../../CManager/StoreManager';
+import OO_UIManager from '../../../OO/Manager/OO_UIManager';
+import { ChapterManager } from '../../CManager/ChapterManager';
+import { BProp } from '../../Interface';
+import { CharacterPropManager } from '../../CManager/CharacterPropManager';
+import { LevCardCtrl } from '../prepare/LevCardCtrl';
+import { LevelManager } from '../../CManager/LevelManager';
 const { ccclass, property } = _decorator;
 
 /**

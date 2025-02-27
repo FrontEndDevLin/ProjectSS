@@ -42,6 +42,8 @@ export default class Main extends Component {
          * Wild
          * TODO:
          *  道具系统
+         *      新增一个AfterWaveUI预制，只包含Bottom，原来的LevelUp和ChestCheckoutUI去掉Bottom
+         *      升级与开箱界面整合
          *      道具页面（点击某个道具会有说明）
          *      升级时可查看道具页面
          *      道具列表功能实现

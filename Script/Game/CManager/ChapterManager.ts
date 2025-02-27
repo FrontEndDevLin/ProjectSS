@@ -160,15 +160,18 @@ export class ChapterManager extends OO_UIManager {
             CharacterManager.instance.removeCharacter();
             LevelManager.instance.removeLevelUpIconUI();
             ItemsManager.instance.removeChestIconUI();
+
+            // TODO NEW: 判断是否有宝箱或者有升级，动用AfterWaveUICtrl
+
             // TODO: 判断是否捡到宝箱，有则弹出开箱界面
-            if (ItemsManager.instance.hasChest()) {
-                console.log('有捡到宝箱，进入开箱流程');
-                this._chestCheckoutUINode = OO_UIManager.instance.showUI("ChestCheckoutUI");
-                ItemsManager.instance.showChestIconUI();
-            } else {
-                this._intoLevelUpProcOrPrepare();
-            }
-            this._preplayChapter();
+            // if (ItemsManager.instance.hasChest()) {
+            //     console.log('有捡到宝箱，进入开箱流程');
+            //     this._chestCheckoutUINode = OO_UIManager.instance.showUI("ChestCheckoutUI");
+            //     ItemsManager.instance.showChestIconUI();
+            // } else {
+            //     this._intoLevelUpProcOrPrepare();
+            // }
+            // this._preplayChapter();
         }, 3);
     }
     private _intoLevelUpProcOrPrepare() {

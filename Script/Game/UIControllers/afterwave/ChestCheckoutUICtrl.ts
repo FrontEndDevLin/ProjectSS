@@ -1,10 +1,10 @@
 import { _decorator, Component, Label, Node, RichText } from 'cc';
-import { OO_Component } from '../../OO/OO';
-import { ItemsManager } from '../CManager/ItemsManager';
-import { TROPHY_TYPE } from '../CManager/DropItemManager';
-import { BItem, Buff } from '../Interface';
-import { CharacterPropManager } from '../CManager/CharacterPropManager';
-import { ChapterManager } from '../CManager/ChapterManager';
+import { OO_Component } from '../../../OO/OO';
+import { ItemsManager } from '../../CManager/ItemsManager';
+import { TROPHY_TYPE } from '../../CManager/DropItemManager';
+import { BItem, Buff } from '../../Interface';
+import { CharacterPropManager } from '../../CManager/CharacterPropManager';
+import { ChapterManager } from '../../CManager/ChapterManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChestCheckoutUICtrl')
