@@ -98,14 +98,16 @@ export default class Main extends Component {
             "Prefabs/common/CHTCard",
             "Prefabs/common/CHTMinCard",
             "Prefabs/common/LevCard",
-            "Prefabs/Prepare",
             "Prefabs/StartMenu",
             "Prefabs/GamePlayUI",
             "Prefabs/Countdown",
             "Prefabs/Compass",
-            "Prefabs/LevelUp",
+            "Prefabs/Prepare",
             "Prefabs/ItemsUI",
-            "Prefabs/ChestCheckoutUI"
+            "Prefabs/AfterWaveUI",
+            "Prefabs/afterWave/ChestCheckoutUI",
+            "Prefabs/afterWave/LevelUp"
+            // "Prefabs/ChestCheckoutUI"
         ];
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: pLoadPrefabs }], (total, current) => {
             // console.log(total, current)

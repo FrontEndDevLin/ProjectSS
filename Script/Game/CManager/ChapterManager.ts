@@ -162,7 +162,9 @@ export class ChapterManager extends OO_UIManager {
             ItemsManager.instance.removeChestIconUI();
 
             // TODO NEW: 判断是否有宝箱或者有升级，动用AfterWaveUICtrl
-
+            if (this._needIntoAfterWave()) {
+                OO_UIManager.instance.showUI("AfterWaveUI");
+            }
             // TODO: 判断是否捡到宝箱，有则弹出开箱界面
             // if (ItemsManager.instance.hasChest()) {
             //     console.log('有捡到宝箱，进入开箱流程');
@@ -173,6 +175,10 @@ export class ChapterManager extends OO_UIManager {
             // }
             // this._preplayChapter();
         }, 3);
+    }
+    // 是否需要进入收获流程（开箱、升级）
+    private _needIntoAfterWave(): boolean {
+        return ItemsManager.instance.hasChest() || LevelManager.instance.getLevelUpCnt() > 0;
     }
     private _intoLevelUpProcOrPrepare() {
         // 判断是否有升级，有则进入升级流程
