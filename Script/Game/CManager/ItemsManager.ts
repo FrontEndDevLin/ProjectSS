@@ -3,7 +3,6 @@ import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { DBManager } from './DBManager';
 import { TROPHY_TYPE } from './DropItemManager';
 import { getRandomNumber } from '../Common';
-import { CEVENT_CHEST } from '../CEvent';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { BItem, Buff, ItemsMap } from '../Interface';
 import { CharacterPropManager } from './CharacterPropManager';
@@ -41,6 +40,7 @@ export class ItemsManager extends OO_UIManager {
         this._loadItemsMap();
 
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
+            "Prefabs/chtProp/ItemsWrapCard",
             "Prefabs/common/ChestIconWrap",
             "Prefabs/common/ChestIcon"
         ] }], (total, current) => {
@@ -74,7 +74,6 @@ export class ItemsManager extends OO_UIManager {
             this.showUI(uiName, this._chestIconUINode, "NONE");
         }
     }
-
     // 捡起宝箱
     public pickChest(n: number) {
         if (n === TROPHY_TYPE.CHEST || n === TROPHY_TYPE.GREAT_CHEST) {
@@ -82,28 +81,6 @@ export class ItemsManager extends OO_UIManager {
             this._loadChestIcon();
         }
     }
-
-    // 增加道具
-    public addItem(key: string) {
-        // 如果是角色
-        if (key.includes("CR")) {
-
-        }
-        let item: BItem = this.itemsMap[key];
-        if (!item) {
-            return;
-        }
-        let idx: number = this.itemsListIdx[key];
-        if (idx && typeof idx === "number") {
-            this.itemsList[idx].cnt++;
-        } else {
-            idx = this.itemsList.push({ key: item.key, cnt: 1 }) - 1;
-            this.itemsListIdx[key] = idx;
-        }
-        // TODO: 增加完道具后，需要更新角色属性
-
-    }
-
     public hasChest(): boolean {
         return this._chestList.length > 0;
     }
@@ -111,18 +88,6 @@ export class ItemsManager extends OO_UIManager {
         this._chestList.pop();
         this._loadChestIcon();
     }
-
-    private _loadItemsMap() {
-        let dbData: ItemsMap = DBManager.instance.getDbData("Items");
-        for (let key in dbData) {
-            if (key.includes("desc")) {
-                continue;
-            }
-            let bItem: BItem = dbData[key];
-            this.itemsMap[bItem.key] = bItem;
-        }
-    }
-
     // 开箱接口
     public openChest(): BItem {
         let chestQuality: number = this._chestList[this._chestList.length - 1];
@@ -150,16 +115,6 @@ export class ItemsManager extends OO_UIManager {
         this._chestItem = null;
         this._popChestList();
     }
-    // 回收宝箱内道具
-    public recycleChestItem() {
-        if (!this._chestItem) {
-            return;
-        }
-        // TODO: 需要算钱
-        this._chestItem = null;
-        this._popChestList();
-    }
-
     public getRandomItem(quality: number = TROPHY_TYPE.CHEST): BItem {
         let item: BItem = null;
         switch (quality) {
@@ -177,6 +132,48 @@ export class ItemsManager extends OO_UIManager {
         }
         return item;
     }
+    // 回收宝箱内道具
+    public recycleChestItem() {
+        if (!this._chestItem) {
+            return;
+        }
+        // TODO: 需要算钱
+        this._chestItem = null;
+        this._popChestList();
+    }
+
+    // 增加道具
+    public addItem(key: string) {
+        // 如果是角色
+        if (key.includes("CR")) {
+
+        }
+        let item: BItem = this.itemsMap[key];
+        if (!item) {
+            return;
+        }
+        let idx: number = this.itemsListIdx[key];
+        if (idx && typeof idx === "number") {
+            this.itemsList[idx].cnt++;
+        } else {
+            idx = this.itemsList.push({ key: item.key, cnt: 1 }) - 1;
+            this.itemsListIdx[key] = idx;
+        }
+        // TODO: 增加完道具后，需要更新角色属性
+
+    }
+
+    private _loadItemsMap() {
+        let dbData: ItemsMap = DBManager.instance.getDbData("Items");
+        for (let key in dbData) {
+            if (key.includes("desc")) {
+                continue;
+            }
+            let bItem: BItem = dbData[key];
+            this.itemsMap[bItem.key] = bItem;
+        }
+    }
+    
     private _getItemsPool(): string[] {
         // TODO: 从itemsMap中获取道具池给用户选择，需要先排除掉角色已拥有的独特道具，和已达到限制的道具
         let pool: string[] = [];
@@ -184,6 +181,10 @@ export class ItemsManager extends OO_UIManager {
             pool.push(key)
         }
         return pool;
+    }
+
+    public getItemsList() {
+        // { key: str, cnt: num, icon: ?, level: num }
     }
 
     update(deltaTime: number) {

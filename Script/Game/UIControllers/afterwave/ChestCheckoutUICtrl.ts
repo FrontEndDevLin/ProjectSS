@@ -5,6 +5,7 @@ import { TROPHY_TYPE } from '../../CManager/DropItemManager';
 import { BItem, Buff } from '../../Interface';
 import { CharacterPropManager } from '../../CManager/CharacterPropManager';
 import { ChapterManager } from '../../CManager/ChapterManager';
+import { AfterWaveUICtrl } from '../AfterWaveUICtrl';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChestCheckoutUICtrl')
@@ -46,7 +47,8 @@ export class ChestCheckoutUICtrl extends OO_Component {
             });
             this.views["Wrap/ChestCard/Card/Content"].getComponent(RichText).string = buffTxt;
         } else {
-            ChapterManager.instance.closeChestCheckoutUI();
+            let afterWaveUICtrl: AfterWaveUICtrl = this.node.parent.getComponent("AfterWaveUICtrl") as AfterWaveUICtrl;
+            afterWaveUICtrl.closeChestCheckoutUI();
         }
     }
 

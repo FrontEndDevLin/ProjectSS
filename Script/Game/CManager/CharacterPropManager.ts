@@ -55,7 +55,7 @@ export class CharacterPropManager extends OO_UIManager {
     start() {
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
             "Prefabs/CHTPropUI",
-            "Prefabs/prepare/CHTPropCard",
+            "Prefabs/chtProp/CHTPropCard",
             "Prefabs/common/CHTPropItem"
         ] }], (total, current) => {
         }, (err, data: any) => {

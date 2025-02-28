@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, UITransform, v3, Widget } from 'cc';
+import { _decorator, Component, Label, Node, Prefab, UITransform, v3, Widget } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { CountdownCtrl } from '../UIControllers/CountdownCtrl';
 import { DBManager } from './DBManager';
@@ -13,6 +13,7 @@ import { DropItemManager } from './DropItemManager';
 import { LevelManager } from './LevelManager';
 import { CharacterPropManager } from './CharacterPropManager';
 import { ItemsManager } from './ItemsManager';
+import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -30,8 +31,7 @@ export class ChapterManager extends OO_UIManager {
 
     private _chapter: number = 1;
     private _prepareUINode: Node = null;
-    private _levelUpUINode: Node = null;
-    private _chestCheckoutUINode: Node = null;
+    private _afterWaveUINode: Node = null;
 
     protected onLoad(): void {
         if (!ChapterManager.instance) {
@@ -43,6 +43,19 @@ export class ChapterManager extends OO_UIManager {
         console.log('Chapter Manager loaded');
 
         ChapterDB = DBManager.instance.getDbData("Chapter");
+
+        OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
+            "Prefabs/AfterWaveUI",
+            "Prefabs/afterWave/ChestCheckoutUI",
+            "Prefabs/afterWave/LevelUp",
+            "Prefabs/Prepare",
+        ] }], (total, current) => {
+            // console.log(total, current)
+        }, (err, data: any) => {
+            if (err) {
+                return;
+            }
+        })
     }
 
     // TODO: 名字乱起的
@@ -104,11 +117,11 @@ export class ChapterManager extends OO_UIManager {
     public hidePrepareUI() {
         this._prepareUINode.setPosition(1000, 0);
     }
-    public showLevelUpUI() {
-        this._levelUpUINode.setPosition(0, 0);
+    public showAfterWaveUI() {
+        this._afterWaveUINode.setPosition(0, 0);
     }
-    public hideLevelUpUI() {
-        this._levelUpUINode.setPosition(1000, 0);
+    public hideAfterWaveUI() {
+        this._afterWaveUINode.setPosition(1000, 0);
     }
 
     // 预载下一关的数据，在游戏开始前的选角、游戏中途的商店界面触发
@@ -161,45 +174,37 @@ export class ChapterManager extends OO_UIManager {
             LevelManager.instance.removeLevelUpIconUI();
             ItemsManager.instance.removeChestIconUI();
 
-            // TODO NEW: 判断是否有宝箱或者有升级，动用AfterWaveUICtrl
+            // 判断是否有宝箱或者有升级
             if (this._needIntoAfterWave()) {
-                OO_UIManager.instance.showUI("AfterWaveUI");
+                this._intoAfterWaveProc();
+            } else {
+                this._intoPrepare();
             }
-            // TODO: 判断是否捡到宝箱，有则弹出开箱界面
-            // if (ItemsManager.instance.hasChest()) {
-            //     console.log('有捡到宝箱，进入开箱流程');
-            //     this._chestCheckoutUINode = OO_UIManager.instance.showUI("ChestCheckoutUI");
-            //     ItemsManager.instance.showChestIconUI();
-            // } else {
-            //     this._intoLevelUpProcOrPrepare();
-            // }
-            // this._preplayChapter();
+            this._preplayChapter();
         }, 3);
     }
     // 是否需要进入收获流程（开箱、升级）
     private _needIntoAfterWave(): boolean {
         return ItemsManager.instance.hasChest() || LevelManager.instance.getLevelUpCnt() > 0;
     }
-    private _intoLevelUpProcOrPrepare() {
-        // 判断是否有升级，有则进入升级流程
-        let levelUpCnt: number = LevelManager.instance.getLevelUpCnt();
-        if (levelUpCnt > 0) {
-            this._intoLevelUpProc();
-        } else {
-            this._intoPrepare();
-        }
-    }
-    private _intoLevelUpProc() {
-        this._levelUpUINode = OO_UIManager.instance.loadUINode("LevelUp");
-        OO_UIManager.instance.appendUINode(this._levelUpUINode);
+    // 进入开箱或升级流程
+    private _intoAfterWaveProc() {
+        this._afterWaveUINode = OO_UIManager.instance.showUI("AfterWaveUI");
         LevelManager.instance.showLevelUpIconUI();
-        CharacterPropManager.instance.loadCHTPropUI("levelUp");
+        ItemsManager.instance.showChestIconUI();
+        CharacterPropManager.instance.loadCHTPropUI("afterWave");
     }
+    public exitAfterWaveProc() {
+        OO_UIManager.instance.removeUI("AfterWaveUI");
+        LevelManager.instance.removeLevelUpIconUI();
+        ItemsManager.instance.removeChestIconUI();
+        this._intoPrepare();
+    }
+    /**
+     * 进入商店界面
+     *  可看到自己的武器，道具，面板，商店界面
+     */
     private _intoPrepare() {
-        /**
-         * 进入商店界面
-         *  可看到自己的武器，道具，面板，商店界面
-         */
         this._prepareUINode = OO_UIManager.instance.showUI("Prepare");
         CharacterPropManager.instance.loadCHTPropUI("store");
     }
@@ -207,22 +212,6 @@ export class ChapterManager extends OO_UIManager {
         OO_UIManager.instance.removeUI("Prepare");
         this._prepareUINode = null;
         CharacterPropManager.instance.removeCHTPropUI();
-    }
-
-    // 由LevelUpCtrl调用
-    public closeLevelUpUI() {
-        OO_UIManager.instance.removeUI("LevelUp");
-        LevelManager.instance.removeLevelUpIconUI();
-        CharacterPropManager.instance.removeCHTPropUI();
-        this._levelUpUINode = null;
-        this._intoPrepare();
-    }
-    // 由ChestCheckoutUICtrl调用
-    public closeChestCheckoutUI() {
-        OO_UIManager.instance.removeUI("ChestCheckoutUI");
-        this._chestCheckoutUINode = null;
-        ItemsManager.instance.removeChestIconUI();
-        this._intoLevelUpProcOrPrepare();
     }
 
     protected onDestroy(): void {

@@ -6,22 +6,24 @@ import { CharacterPropManager } from '../CManager/CharacterPropManager';
 const { ccclass, property } = _decorator;
 
 /**
- * OO_param1.page 当前界面位置(store->商店，levelUp->升级界面)
+ * OO_param1.page 当前界面位置(store->商店，afterWave->收获流程界面)
  */
 @ccclass('CHTPropUICtrl')
 export class CHTPropUICtrl extends OO_Component {
     protected onLoad(): void {
         super.onLoad();
 
-        let CHTPropCardNode: Node = OO_UIManager.instance.loadUINode("prepare/CHTPropCard", "CHTPropCardCtrl");
-        this.node.addChild(CHTPropCardNode);
+        let CHTPropCardNode: Node = OO_UIManager.instance.loadUINode("chtProp/CHTPropCard", "CHTPropCardCtrl");
+        this.views["Page/PropWrap"].addChild(CHTPropCardNode);
+        let ItemsWrapCardNode: Node = OO_UIManager.instance.loadUINode("chtProp/ItemsWrapCard", "NONE");
+        this.views["Page/ItemsWrap"].addChild(ItemsWrapCardNode);
 
         let page: string = this.node.OO_param1.page;
         let backBtnTxt = "";
         if (page === "store") {
             backBtnTxt = "返回商店";
-        } else if (page === "levelUp") {
-            backBtnTxt = "返回升级";
+        } else if (page === "afterWave") {
+            backBtnTxt = "返回";
         }
         if (backBtnTxt) {
             this.views["Bottom/Back/Txt"].getComponent(Label).string = backBtnTxt;
@@ -31,8 +33,8 @@ export class CHTPropUICtrl extends OO_Component {
             if (page === "store") {
                 ChapterManager.instance.showPrepareUI();
                 CharacterPropManager.instance.hideCHTPropUI();
-            } else if (page === "levelUp") {
-                ChapterManager.instance.showLevelUpUI();
+            } else if (page === "afterWave") {
+                ChapterManager.instance.showAfterWaveUI();
                 CharacterPropManager.instance.hideCHTPropUI();
             }
         }, this);

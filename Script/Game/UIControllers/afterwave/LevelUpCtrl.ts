@@ -21,11 +21,6 @@ export class LevelUpCtrl extends OO_Component {
 
         console.log("LevelUpCtrl loaded");
 
-        this.views["Bottom/Attr"].on(Node.EventType.TOUCH_END, () => {
-            ChapterManager.instance.hideLevelUpUI();
-            CharacterPropManager.instance.showCHTPropUI();
-        }, this);
-
         let levUpCnt: number = LevelManager.instance.getLevelUpCnt();
         if (levUpCnt > 0) {
             this.views["Wrap/ItemList"].children.forEach((slotNode: Node, i) => {
@@ -64,7 +59,6 @@ export class LevelUpCtrl extends OO_Component {
     }
 
     private _levelUp(idx: number) {
-        // TODO: 点击后，给角色某个属性升级
         // 判断updLevCnt次数，决定是销毁当前节点还是继续升级流程
         CharacterPropManager.instance.levelUpProp(StoreManager.instance.currentLevUpd[idx]);
         LevelManager.instance.finishOnceTimeLevelUp();
@@ -73,8 +67,8 @@ export class LevelUpCtrl extends OO_Component {
             StoreManager.instance.refreshLevUpd(true);
             this.updateView();
         } else {
-            console.log('关闭升级界面，进入商店');
-            ChapterManager.instance.closeLevelUpUI();
+            // console.log('关闭升级界面，进入商店');
+            ChapterManager.instance.exitAfterWaveProc();
         }
     }
 

@@ -25,8 +25,3 @@ export enum CEVENT_CURRENCY {
     CRY_CHANGE = 100,
     STO_CHANGE
 }
-
-export enum CEVENT_CHEST {
-    // 更新右上角箱子列表
-    UPDATE_CHEST_ICONS = 120
-}
