@@ -35,8 +35,8 @@ export class ChestCheckoutUICtrl extends OO_Component {
     private _loadChest() {
         if (ItemsManager.instance.hasChest()) {
             let item: BItem = ItemsManager.instance.openChest();
-            this.views["Wrap/ChestCard/Card/ImgTxt/WName/Name"].getComponent(Label).string = item.label;
-            this.views["Wrap/ChestCard/Card/ImgTxt/WName/Types"].getComponent(Label).string = item.groupLabel;
+            this.views["Wrap/ItemsCard/Card/ImgTxt/WName/Name"].getComponent(Label).string = item.label;
+            this.views["Wrap/ItemsCard/Card/ImgTxt/WName/Types"].getComponent(Label).string = item.groupLabel;
             let buffList: Buff[] = item.buff;
             let buffTxt: string = "";
             buffList.forEach((buff, i) => {
@@ -45,7 +45,7 @@ export class ChestCheckoutUICtrl extends OO_Component {
                     buffTxt += "<br/>";
                 }
             });
-            this.views["Wrap/ChestCard/Card/Content"].getComponent(RichText).string = buffTxt;
+            this.views["Wrap/ItemsCard/Card/Content"].getComponent(RichText).string = buffTxt;
         } else {
             let afterWaveUICtrl: AfterWaveUICtrl = this.node.parent.getComponent("AfterWaveUICtrl") as AfterWaveUICtrl;
             afterWaveUICtrl.closeChestCheckoutUI();

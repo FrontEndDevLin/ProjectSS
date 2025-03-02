@@ -18,7 +18,9 @@ export enum CEVENT_CHARACTER {
     EXP_CHANGE = 90,
     LEVEL_UP,
     // 属性变化
-    PROP_CHANGE
+    PROP_CHANGE,
+    // 道具变化
+    ITEMS_CHANGE
 }
 
 export enum CEVENT_CURRENCY {

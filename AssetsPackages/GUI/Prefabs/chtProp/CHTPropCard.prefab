@@ -1303,8 +1303,8 @@
     "__prefab": {
       "__id__": 53
     },
-    "_resizeMode": 1,
-    "_layoutType": 2,
+    "_resizeMode": 0,
+    "_layoutType": 3,
     "_cellSize": {
       "__type__": "cc.Size",
       "width": 40,
@@ -1315,7 +1315,7 @@
     "_paddingRight": 0,
     "_paddingTop": 20,
     "_paddingBottom": 0,
-    "_spacingX": 0,
+    "_spacingX": 40,
     "_spacingY": 0,
     "_verticalDirection": 1,
     "_horizontalDirection": 0,

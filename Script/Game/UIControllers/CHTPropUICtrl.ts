@@ -15,7 +15,7 @@ export class CHTPropUICtrl extends OO_Component {
 
         let CHTPropCardNode: Node = OO_UIManager.instance.loadUINode("chtProp/CHTPropCard", "CHTPropCardCtrl");
         this.views["Page/PropWrap"].addChild(CHTPropCardNode);
-        let ItemsWrapCardNode: Node = OO_UIManager.instance.loadUINode("chtProp/ItemsWrapCard", "NONE");
+        let ItemsWrapCardNode: Node = OO_UIManager.instance.loadUINode("chtProp/ItemsWrapCard", "ItemsWrapCardCtrl");
         this.views["Page/ItemsWrap"].addChild(ItemsWrapCardNode);
 
         let page: string = this.node.OO_param1.page;

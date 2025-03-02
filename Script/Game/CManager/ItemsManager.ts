@@ -6,8 +6,17 @@ import { getRandomNumber } from '../Common';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { BItem, Buff, ItemsMap } from '../Interface';
 import { CharacterPropManager } from './CharacterPropManager';
+import { CEVENT_CHARACTER } from '../CEvent';
 const { ccclass, property } = _decorator;
 
+export interface SimpleItem {
+    key: string,
+    cnt: number
+}
+export interface DetailItem extends SimpleItem {
+    icon?: any,
+    level: number
+}
 /**
  * 道具管理类，管理所有道具
  */
@@ -18,8 +27,8 @@ export class ItemsManager extends OO_UIManager {
     // 所有道具放在json文件里
     public itemsMap: ItemsMap = {};
 
-    public itemsList: { key: string, cnt: number }[] = [];
-    public itemsListIdx: any = {};
+    public itemsList: SimpleItem[] = [];
+    public itemsListIdx: { [key: string]: number } = {};
 
     // 当前波次拿取的宝箱 [品质1, 品质2]
     private _chestList: number[] = [];
@@ -40,9 +49,11 @@ export class ItemsManager extends OO_UIManager {
         this._loadItemsMap();
 
         OO_ResourceManager.instance.preloadResPkg([{ abName: "GUI", assetType: Prefab, urls: [
+            "Prefabs/chtProp/PreviewItems",
             "Prefabs/chtProp/ItemsWrapCard",
             "Prefabs/common/ChestIconWrap",
-            "Prefabs/common/ChestIcon"
+            "Prefabs/common/ChestIcon",
+            "Prefabs/chtProp/ItemsIcon"
         ] }], (total, current) => {
         }, (err, data: any) => {
         });
@@ -153,14 +164,14 @@ export class ItemsManager extends OO_UIManager {
             return;
         }
         let idx: number = this.itemsListIdx[key];
-        if (idx && typeof idx === "number") {
+        if (typeof idx === "number") {
             this.itemsList[idx].cnt++;
         } else {
             idx = this.itemsList.push({ key: item.key, cnt: 1 }) - 1;
             this.itemsListIdx[key] = idx;
         }
-        // TODO: 增加完道具后，需要更新角色属性
 
+        this.runEventFn(CEVENT_CHARACTER.ITEMS_CHANGE);
     }
 
     private _loadItemsMap() {
@@ -183,8 +194,20 @@ export class ItemsManager extends OO_UIManager {
         return pool;
     }
 
-    public getItemsList() {
-        // { key: str, cnt: num, icon: ?, level: num }
+    // 属性界面获取道具列表
+    public getChtItemsList(): DetailItem[] {
+        let list: DetailItem[] = [];
+        this.itemsList.forEach((sItem: SimpleItem, i) => {
+            let { key, cnt } = sItem;
+            let item: BItem = this.itemsMap[key];
+            list.push({
+                key,
+                cnt,
+                icon: "",
+                level: item.level
+            })
+        });
+        return list;
     }
 
     update(deltaTime: number) {
