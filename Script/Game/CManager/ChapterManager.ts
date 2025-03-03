@@ -85,10 +85,11 @@ export class ChapterManager extends OO_UIManager {
             if (err) {
                 return;
             }
+            ItemsManager.instance.addItem(chrId);
+
             LevelManager.instance.on(CEVENT_CHARACTER.EXP_CHANGE, (err, data: any) => {
                 let expCurrent: number = data.expCurrent;
                 let expTotal: number = data.expTotal;
-                
             });
             // 进入地图，
             // 加载控制器

@@ -42,14 +42,12 @@ export default class Main extends Component {
          * Wild
          * TODO:
          *  道具系统
-         *      道具右下角角标（道具个数，1个时不显示）done
-         *      道具列表功能实现 done
-         *      道具页面（点击某个道具会有说明）
+         *      角色选完加入道具栏 done
+         *      脚本类道具
          *      道具分类
          *          角色属性（树木、免费刷新、+敌人，+敌人速度，道具价格，捡材料概率回血，燃烧速度）
          *          生成（炮塔、生成花园、地雷、小型机器人）
          *          脚本（结束时提高%收获，结束时+%伤害，抵消第一次攻击，站立不动+属性，拥有%速度提升%伤害，每5秒+%伤害）
-         *      选角色后，平衡角色属性 CharacterPropManager._buffProp
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape

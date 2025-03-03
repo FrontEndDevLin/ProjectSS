@@ -120,9 +120,7 @@ export class ItemsManager extends OO_UIManager {
             return;
         }
         let key: string = this._chestItem.key;
-        let buffList: Buff[] = this._chestItem.buff;
         this.addItem(key);
-        CharacterPropManager.instance.updateProp(buffList);
         this._chestItem = null;
         this._popChestList();
     }
@@ -156,9 +154,6 @@ export class ItemsManager extends OO_UIManager {
     // 增加道具
     public addItem(key: string) {
         // 如果是角色
-        if (key.includes("CR")) {
-
-        }
         let item: BItem = this.itemsMap[key];
         if (!item) {
             return;
@@ -172,15 +167,27 @@ export class ItemsManager extends OO_UIManager {
         }
 
         this.runEventFn(CEVENT_CHARACTER.ITEMS_CHANGE);
+
+        let buffList: Buff[] = item.buff;
+        CharacterPropManager.instance.updateProp(buffList);
     }
 
     private _loadItemsMap() {
-        let dbData: ItemsMap = DBManager.instance.getDbData("Items");
-        for (let key in dbData) {
+        let itemsDbData: ItemsMap = DBManager.instance.getDbData("Items");
+        let characterDbData: ItemsMap = DBManager.instance.getDbData("Character");
+        for (let key in itemsDbData) {
             if (key.includes("desc")) {
                 continue;
             }
-            let bItem: BItem = dbData[key];
+            let bItem: BItem = itemsDbData[key];
+            this.itemsMap[bItem.key] = bItem;
+        }
+        for (let key in characterDbData) {
+            if (!key.includes("CR")) {
+                continue;
+            }
+            let bItem: BItem = characterDbData[key];
+            bItem.level = 1;
             this.itemsMap[bItem.key] = bItem;
         }
     }
@@ -189,6 +196,9 @@ export class ItemsManager extends OO_UIManager {
         // TODO: 从itemsMap中获取道具池给用户选择，需要先排除掉角色已拥有的独特道具，和已达到限制的道具
         let pool: string[] = [];
         for (let key in this.itemsMap) {
+            if (key.includes("CR")) {
+                continue;
+            }
             pool.push(key)
         }
         return pool;
