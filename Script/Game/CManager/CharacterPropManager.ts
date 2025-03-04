@@ -5,6 +5,7 @@ import { DBManager } from './DBManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { CEVENT_CHARACTER } from '../CEvent';
 import { COLOR } from '../Common';
+import { getScriptTypeItems } from '../ScriptTypeItems';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterPropManager')
@@ -115,19 +116,27 @@ export class CharacterPropManager extends OO_UIManager {
     }
     // 获取buff文本，如+5生命
     public getBuffTxt(buff: Buff) {
-        let prop: BProp = this[buff.prop];
-        let oValue: number = buff.value;
-        let value: string = `${oValue}`;
-        if (oValue > 0) {
-            value = `+${oValue}`;
+        let txt: string = "";
+        let buffType: string = buff.type || "prop";
+        if (buffType === "prop") {
+            let prop: BProp = this[buff.prop];
+            let oValue: number = buff.value;
+            let value: string = `${oValue}`;
+            if (oValue > 0) {
+                value = `+${oValue}`;
+            }
+    
+            if (prop.percent) {
+                value = `${value}%`;
+            }
+            
+            let color: string = this.getBuffTxtColor(buff);
+            txt = `<color=${color}>${value}</color>${prop.label}`;
+        } else if (buffType === "event") {
+            let scriptName: string = buff.script;
+            txt = getScriptTypeItems(scriptName).getBuffTxt();
         }
-
-        if (prop.percent) {
-            value = `${value}%`;
-        }
-        
-        let color: string = this.getBuffTxtColor(buff);
-        return `<color=${color}>${value}</color>${prop.label}`;
+        return txt;
     }
     public getBuffTxtColor(buff: Buff): string {
         let prop: BProp = this[buff.prop];
@@ -154,9 +163,12 @@ export class CharacterPropManager extends OO_UIManager {
     public updateProp(buffList: Buff[]) {
         let propList = [];
         for (let buff of buffList) {
-            let prop: BProp = this[buff.prop];
-            prop.value += buff.value;
-            propList.push(buff.prop);
+            let type = buff.type || "prop";
+            if (type === "prop") {
+                let prop: BProp = this[buff.prop];
+                prop.value += buff.value;
+                propList.push(buff.prop);
+            }
         }
         this.runEventFn(CEVENT_CHARACTER.PROP_CHANGE, propList);
     }

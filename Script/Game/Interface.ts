@@ -72,8 +72,9 @@ export interface Buff {
     // 类型为prop时，使用prop和value
     type?: string,
     prop: string,
-    value: number
+    value: number,
     // 类型为script时，单独处理
+    script?: string
 }
 export interface BItem {
     key: string,

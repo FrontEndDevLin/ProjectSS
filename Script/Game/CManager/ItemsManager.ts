@@ -7,6 +7,7 @@ import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { BItem, Buff, ItemsMap } from '../Interface';
 import { CharacterPropManager } from './CharacterPropManager';
 import { CEVENT_CHARACTER } from '../CEvent';
+import { getScriptTypeItems } from '../ScriptTypeItems';
 const { ccclass, property } = _decorator;
 
 export interface SimpleItem {
@@ -169,6 +170,14 @@ export class ItemsManager extends OO_UIManager {
         this.runEventFn(CEVENT_CHARACTER.ITEMS_CHANGE);
 
         let buffList: Buff[] = item.buff;
+
+        for (let buff of buffList) {
+            if (buff.type === "event") {
+                let itemName: string = buff.script;
+                getScriptTypeItems(itemName).addListener();
+            }
+        }
+
         CharacterPropManager.instance.updateProp(buffList);
     }
 

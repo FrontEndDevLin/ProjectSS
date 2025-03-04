@@ -81,11 +81,13 @@
     "groupKey": "normal",
     "buff": [
       {
-        "type": "script"
+        "type": "event",
+        "script": "item5"
       },
       {
         "type": "prop",
-        "prop": ""
+        "prop": "melee_dmg",
+        "value": -1
       }
     ]
   }
