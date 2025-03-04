@@ -1,5 +1,6 @@
-export const ItemsScript = {
-  item5: () => {
-    
-  }
+
+class ItemsScript {
+  public getBuffTxt() {}
+
+  public addListener() {}
 }
