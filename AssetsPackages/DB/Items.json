@@ -72,5 +72,21 @@
         "value": -4
       }
     ]
+  },
+  "item5": {
+    "key": "item5",
+    "level": 1,
+    "label": "脚本道具5",
+    "groupLabel": "道具",
+    "groupKey": "normal",
+    "buff": [
+      {
+        "type": "script"
+      },
+      {
+        "type": "prop",
+        "prop": ""
+      }
+    ]
   }
 }
