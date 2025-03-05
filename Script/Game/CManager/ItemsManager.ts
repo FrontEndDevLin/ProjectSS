@@ -181,6 +181,15 @@ export class ItemsManager extends OO_UIManager {
         CharacterPropManager.instance.updateProp(buffList);
     }
 
+    // 获取指定道具的数量
+    public getItemsCnt(key: string): number {
+        let itemsIdx: any = this.itemsListIdx[key];
+        if (typeof itemsIdx !== "number") {
+            return 0;
+        }
+        return this.itemsList[itemsIdx].cnt;
+    }
+
     private _loadItemsMap() {
         let itemsDbData: ItemsMap = DBManager.instance.getDbData("Items");
         let characterDbData: ItemsMap = DBManager.instance.getDbData("Character");

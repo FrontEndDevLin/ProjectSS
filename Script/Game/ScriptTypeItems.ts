@@ -26,8 +26,7 @@ class Item5 extends EventTypeBuff {
   }
 
   public addListener(): void {
-    let itemsIdx: any = ItemsManager.instance.itemsListIdx["item5"];
-    let itemsCnt: number = ItemsManager.instance.itemsList[itemsIdx].cnt;
+    let itemsCnt: number = ItemsManager.instance.getItemsCnt("item5");
     this._itemsCnt = itemsCnt;
     if (itemsCnt === 1) {
       EventBus.on(this.EVENT, this._addDmg, this);
