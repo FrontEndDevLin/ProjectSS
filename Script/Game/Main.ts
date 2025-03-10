@@ -66,6 +66,11 @@ export default class Main extends Component {
          * 
          *      先做一把武器（匕首），实现图标撑满(80x80)，gameplay图（50x50）（待机、攻击）
          *      帧动画如何结合范围？攻速？
+         *      攻击帧动画：
+         *          获取攻速，将攻速转化为一次攻击的总时间，平摊到每一帧
+         *          攻击前摇不做操作，
+         *          前摇过后，获取攻击时判定帧的帧数，播放帧动画的同时，将武器均速位移到攻击范围处，
+         *          后摇时将武器匀速回到角色手上
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
