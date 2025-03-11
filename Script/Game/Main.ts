@@ -88,7 +88,7 @@ export default class Main extends Component {
                 return;
             }
             // OO_UIManager.instance.showUI("ItemsUI");
-            ChapterManager.instance.showCharacterSelect();
+            // ChapterManager.instance.showCharacterSelect();
         });
     }
 
