@@ -81,6 +81,7 @@ export default class Main extends Component {
     }
 
     public runGame(): void {
+        return
         this.addCustomManager();
 
         this.preload((err) => {
