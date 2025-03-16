@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Animation, AnimationClip, animation } from 'cc';
+import { _decorator, Component, Node, Animation, AnimationClip, animation, BoxCollider, Vec3, UITransform, Size, BoxCollider2D } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 const { ccclass, property } = _decorator;
 
@@ -33,6 +33,7 @@ let atk_ani_spd = Number((1 / atk_ani_time).toFixed(3));
 export class WeaponMelee extends OO_Component {
     // private animateCtx: Animation = null;
     // private animateClip: AnimationClip = null;
+    private colliderNode: Node = null;
 
     /**
      * 武器攻击时，只是武器的图片部分做动画，武器的实际位置不变
@@ -46,11 +47,21 @@ export class WeaponMelee extends OO_Component {
      * 为了更好的流畅度，近战武器只采用一张图片，使用动画引擎完成攻击动画
      * 将攻击类型分类：刺、砸...
      * 采用程序化编辑动画剪辑，https://blog.csdn.net/Hai_ou1011/article/details/144429985
-     * 使用更多的帧率（20+）
-     * 
      */
 
     protected onLoad(): void {
+        // 创建碰撞盒
+        this.colliderNode = new Node('ColliderNode')
+        this.node.addChild(this.colliderNode);
+        let uiTransform = this.colliderNode.addComponent(UITransform);
+        const collider = this.colliderNode.addComponent(BoxCollider2D);
+        let nodeSize: Size = this.node.getComponent(UITransform).contentSize;
+        uiTransform.contentSize = nodeSize;
+        uiTransform.anchorX = 0.5;
+        uiTransform.anchorY = 0.5;
+        collider.size = nodeSize;
+        this.colliderNode.active = false;
+
         let animationComp: Animation = this.node.addComponent(Animation);
 
         let animationClip: AnimationClip = new AnimationClip();
@@ -63,13 +74,26 @@ export class WeaponMelee extends OO_Component {
         let [x, y] = track.channels();
         x.curve.assignSorted([ // 为 x 通道的曲线添加关键帧
             [0, ({ value: 0 })],
-            [1, ({ value: 70 })]
+            [0.1, ({ value: -10 })],
+            [0.2, ({ value: -12 })],
+            [0.3, ({ value: -14 })],
+            [0.4, ({ value: 40 })],
+            [0.5, ({ value: 55 })],
+            [0.6, ({ value: 65 })],
+            [0.7, ({ value: 70 })],
+            [1, ({ value: 0 })]
         ]);
 
         animationClip.addTrack(track);
 
         animationClip.name = "test1";
-        animationClip.wrapMode = AnimationClip.WrapMode.Loop;
+        animationClip.wrapMode = AnimationClip.WrapMode.Normal;
+
+        // 自定义事件
+        animationClip.events = [
+            { frame: 0.3, func: "intoAtkFrame", params: [] },
+            { frame: 0.7, func: "endAtkFrame", params: [] }
+        ]
 
         animationComp.addClip(animationClip);
 
@@ -87,11 +111,15 @@ export class WeaponMelee extends OO_Component {
     }
 
     public intoAtkFrame() {
-        // console.log('进入攻击判定帧')
+        console.log('进入攻击判定帧')
+        this.colliderNode.active = true;
+    }
+    public endAtkFrame() {
+        console.log('离开攻击判定帧')
+        this.colliderNode.active = false;
     }
 
     update(deltaTime: number) {
-        
     }
 }
 

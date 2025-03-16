@@ -77,7 +77,7 @@ export default class Main extends Component {
          *          后摇阶段：除了后摇动画外，武器匀速位移回角色周边
          */
 
-        // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
+        PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
     }
 
     public runGame(): void {
