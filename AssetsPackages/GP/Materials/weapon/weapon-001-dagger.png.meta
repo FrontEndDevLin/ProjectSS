@@ -11,7 +11,7 @@
     "6c48a": {
       "importer": "texture",
       "uuid": "ba2c84ef-19de-46b5-800b-7877fcd30419@6c48a",
-      "displayName": "weapon-001-dagger-idle",
+      "displayName": "weapon-001-dagger",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -35,7 +35,7 @@
     "f9941": {
       "importer": "sprite-frame",
       "uuid": "ba2c84ef-19de-46b5-800b-7877fcd30419@f9941",
-      "displayName": "weapon-001-dagger-idle",
+      "displayName": "weapon-001-dagger",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {

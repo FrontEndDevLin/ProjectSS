@@ -14,5 +14,18 @@
       "dmg": 0,
       "dmg_desc": "当有bullet时，dmg由bullet提供"
     }
+  },
+  "Weapon001-dagger-temp": {
+    "id": "Weapon001-dagger-temp",
+    "name": "测试匕首",
+    "icon": "",
+    "type": "melee",
+    "panel": {
+      "range": 120,
+      "atk_spd": 1.04,
+      "dmg": 10
+    },
+    "atk_type": "stab",
+    "atk_type_desc": "stab -> 刺"
   }
 }

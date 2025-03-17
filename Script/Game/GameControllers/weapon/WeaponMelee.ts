@@ -1,30 +1,45 @@
 import { _decorator, Component, Node, Animation, AnimationClip, animation, BoxCollider, Vec3, UITransform, Size, BoxCollider2D } from 'cc';
 import { OO_Component } from '../../../OO/OO';
+import { DBManager } from '../../CManager/DBManager';
 const { ccclass, property } = _decorator;
 
-// 近战一次攻击为10帧，耗时1秒（标准），速度为1
-
-// 近战攻击动画
-// 获取当前攻速的 一半/三分之二 ，作为一次攻击的总时长（前摇、攻击时、后摇）
-// 假设武器的攻击帧动画有8帧（3帧前摇，3帧攻击时，2帧后摇）
-// 假设武器一次攻击总时长为0.8s
-// 则每一帧分配0.1s
-// 前摇阶段：除了前摇动画外，武器匀速位移到目标位置（和自己的范围属性有关）前。（武器的正常攻击范围处，每一个武器有自己的打击位置，这个属性是固定的）
-// 攻击时阶段：朝目标位置做攻击动画
-// 后摇阶段：除了后摇动画外，武器匀速位移回角色周边
+// 近战一次攻击设计基准耗时1秒，速度为1
+// 当武器结束攻击前摇时，开启攻击判定，进入攻击后摇时结束攻击判定
 
 // 面板攻速
 let atk_spd = 0.5;
 
-let weaponData = {
-    frames: 10,
-    atk_frame: 4,
-    aft_atk_frame: 7
+let db = {
+    "Weapon001-dagger-temp": {
+        id: "Weapon001-dagger-temp",
+        name: "测试匕首",
+        icon: "",
+        game_pic: "weapon-001-dagger",
+        type: "melee",
+        panel: {
+            range: 120,
+            atk_spd: 1.04,
+            dmg: 10
+        },
+        atk_type: "stab",
+        atk_type_desc: "stab -> 刺"
+    }
 }
+
+const weaponData = db["Weapon001-dagger-temp"];
+
 // 攻击动画时长
-let atk_ani_time = atk_spd * 2 / 3;
-// 根据攻击动画时长，调整播放速度
-let atk_ani_spd = Number((1 / atk_ani_time).toFixed(3));
+let atk_ani_time = weaponData.panel.atk_spd * 2 / 3;
+
+// TODO: 根据攻击范围决定位移的值（算法？）
+const stab_atk_frames = [
+    [0, 0],
+    [0.1, -10],
+    [0.2, -12],
+    [0.1, 0],
+    [0.1, 0],
+    [0.1, 0],
+]
 
 /**
  * 近战武器通用类
@@ -40,9 +55,6 @@ export class WeaponMelee extends OO_Component {
      * 动画运动的原点为武器的实际位置
      * 攻速决定武器的攻击动画播放速度
      * 范围决定动画进入攻击判定帧时移动的距离，以及碰撞盒大小/位置
-     * 攻击进入后摇阶段时，获得后摇的总时间，将动画收回（武器回到手上）
-     * 
-     * 
      * 2025.3.14
      * 为了更好的流畅度，近战武器只采用一张图片，使用动画引擎完成攻击动画
      * 将攻击类型分类：刺、砸...
@@ -65,7 +77,7 @@ export class WeaponMelee extends OO_Component {
         let animationComp: Animation = this.node.addComponent(Animation);
 
         let animationClip: AnimationClip = new AnimationClip();
-        // 整个动画的周期
+        // 整个动画的周期，动画周期由攻击速度决定
         animationClip.duration = 1;
         
         let track = new animation.VectorTrack();
@@ -73,15 +85,15 @@ export class WeaponMelee extends OO_Component {
         track.path = new animation.TrackPath().toProperty("position");
         let [x, y] = track.channels();
         x.curve.assignSorted([ // 为 x 通道的曲线添加关键帧
-            [0, ({ value: 0 })],
-            [0.1, ({ value: -10 })],
-            [0.2, ({ value: -12 })],
-            [0.3, ({ value: -14 })],
-            [0.4, ({ value: 40 })],
-            [0.5, ({ value: 55 })],
-            [0.6, ({ value: 65 })],
-            [0.7, ({ value: 70 })],
-            [1, ({ value: 0 })]
+            [0, { value: 0 }],
+            [0.1, { value: -10 }],
+            [0.2, { value: -12 }],
+            [0.3, { value: -14 }],
+            [0.4, { value: 40 }],
+            [0.5, { value: 55 }],
+            [0.6, { value: 65 }],
+            [0.7, { value: 70 }],
+            [1, { value: 0 }]
         ]);
 
         animationClip.addTrack(track);
@@ -101,13 +113,7 @@ export class WeaponMelee extends OO_Component {
     }
 
     start() {
-        // this.animateCtx = this.node.getComponent(Animation);
-        // this.animateClip = this.animateCtx.clips[0];
-        // // this.animateClip.tracks
-        // // console.log(this.animateClip.getTrack(0))
-        // this.animateCtx.getState(this.animateClip.name).speed = atk_ani_spd;
-        // this.animateCtx.play("weapon-001-atk-temp");
-        // this.animateCtx.getComponent(AnimationClip)
+        
     }
 
     public intoAtkFrame() {
