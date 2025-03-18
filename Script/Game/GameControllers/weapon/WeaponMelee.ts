@@ -1,6 +1,7 @@
 import { _decorator, Component, Node, Animation, AnimationClip, animation, BoxCollider, Vec3, UITransform, Size, BoxCollider2D } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import { DBManager } from '../../CManager/DBManager';
+import { getFloatNumber } from '../../Common';
 const { ccclass, property } = _decorator;
 
 // 近战一次攻击设计基准耗时1秒，速度为1
@@ -28,18 +29,26 @@ let db = {
 
 const weaponData = db["Weapon001-dagger-temp"];
 
-// 攻击动画时长
-let atk_ani_time = weaponData.panel.atk_spd * 2 / 3;
+
 
 // TODO: 根据攻击范围决定位移的值（算法？）
-const stab_atk_frames = [
-    [0, 0],
-    [0.1, -10],
-    [0.2, -12],
-    [0.1, 0],
-    [0.1, 0],
-    [0.1, 0],
-]
+
+// done, 算法完成
+let range = 120;
+// 攻击动画时长
+let atkAniTime = getFloatNumber(weaponData.panel.atk_spd * 2 / 3, 3);
+// 原始动画帧（1秒基准）
+const stabAtkFrames = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1];
+// 原始位移帧（100范围基准）
+const stabMvFrames = [0, -10, -12, -14, 70, 85, 95, 100, 0];
+
+// 实际的攻击动画帧，结合原始动画帧和攻击动画时长决定
+let realAtkFrames = [];
+let realFrames = []
+stabAtkFrames.forEach((frames, i) => {
+    realAtkFrames.push(getFloatNumber(frames * atkAniTime, 3));
+    realFrames.push([getFloatNumber(frames * atkAniTime, 3), { value: stabMvFrames[i] * range / 100 }])
+});
 
 /**
  * 近战武器通用类
@@ -89,10 +98,10 @@ export class WeaponMelee extends OO_Component {
             [0.1, { value: -10 }],
             [0.2, { value: -12 }],
             [0.3, { value: -14 }],
-            [0.4, { value: 40 }],
-            [0.5, { value: 55 }],
-            [0.6, { value: 65 }],
-            [0.7, { value: 70 }],
+            [0.4, { value: 70 }],
+            [0.5, { value: 85 }],
+            [0.6, { value: 95 }],
+            [0.7, { value: 100 }],
             [1, { value: 0 }]
         ]);
 
@@ -128,5 +137,4 @@ export class WeaponMelee extends OO_Component {
     update(deltaTime: number) {
     }
 }
-
 
