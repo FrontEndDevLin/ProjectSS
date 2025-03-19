@@ -1,7 +1,8 @@
-import { _decorator, Component, Node, Animation, AnimationClip, animation, BoxCollider, Vec3, UITransform, Size, BoxCollider2D } from 'cc';
+import { _decorator, Component, Node, Animation, AnimationClip, animation, BoxCollider, Vec3, UITransform, Size, BoxCollider2D, v2, SpriteFrame, Sprite } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import { DBManager } from '../../CManager/DBManager';
 import { getFloatNumber } from '../../Common';
+import OO_ResourceManager from '../../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
 // 近战一次攻击设计基准耗时1秒，速度为1
@@ -27,29 +28,6 @@ let db = {
     }
 }
 
-const weaponData = db["Weapon001-dagger-temp"];
-
-
-
-// TODO: 根据攻击范围决定位移的值（算法？）
-
-// done, 算法完成
-let range = 120;
-// 攻击动画时长
-let atkAniTime = getFloatNumber(weaponData.panel.atk_spd * 2 / 3, 3);
-// 原始动画帧（1秒基准）
-const stabAtkFrames = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1];
-// 原始位移帧（100范围基准）
-const stabMvFrames = [0, -10, -12, -14, 70, 85, 95, 100, 0];
-
-// 实际的攻击动画帧，结合原始动画帧和攻击动画时长决定
-let realAtkFrames = [];
-let realFrames = []
-stabAtkFrames.forEach((frames, i) => {
-    realAtkFrames.push(getFloatNumber(frames * atkAniTime, 3));
-    realFrames.push([getFloatNumber(frames * atkAniTime, 3), { value: stabMvFrames[i] * range / 100 }])
-});
-
 /**
  * 近战武器通用类
  */
@@ -57,7 +35,7 @@ stabAtkFrames.forEach((frames, i) => {
 export class WeaponMelee extends OO_Component {
     // private animateCtx: Animation = null;
     // private animateClip: AnimationClip = null;
-    private colliderNode: Node = null;
+    private _colliderNode: Node = null;
 
     /**
      * 武器攻击时，只是武器的图片部分做动画，武器的实际位置不变
@@ -71,54 +49,66 @@ export class WeaponMelee extends OO_Component {
      */
 
     protected onLoad(): void {
+        OO_ResourceManager.instance.preloadResPkg([{
+            abName: "GP",
+            assetType: SpriteFrame,
+            urls: ["Materials/weapon/weapon-001-dagger/spriteFrame"]
+        }], () => {}, err => {
+            // 渲染武器图片
+            this._loadWeaponAsset();
+            // 加载武器碰撞盒
+            this._loadCollider();
+
+            let animationComp: Animation = this.node.addComponent(Animation);
+
+            let animationClip: AnimationClip = new AnimationClip();
+            // 整个动画的周期，动画周期由攻击速度决定
+            animationClip.duration = 1;
+            let track = new animation.VectorTrack();
+            track.componentsCount = 3;
+            track.path = new animation.TrackPath().toProperty("position");
+            let [x, y] = track.channels();
+            // 为 x 通道的曲线添加关键帧
+            const frames = getAtkFrames("Weapon001-dagger-temp");
+            x.curve.assignSorted(frames);
+
+            animationClip.addTrack(track);
+
+            animationClip.name = "test1";
+            animationClip.wrapMode = AnimationClip.WrapMode.Normal;
+
+            // 关键帧索引
+            const eventsFramsIdx = [3, 7];
+            // 自定义事件
+            animationClip.events = [
+                { frame: frames[eventsFramsIdx[0]][0], func: "intoAtkFrame", params: [] },
+                { frame: frames[eventsFramsIdx[1]][0], func: "endAtkFrame", params: [] }
+            ];
+
+            animationComp.addClip(animationClip);
+
+            animationComp.play("test1");
+        });
+    }
+
+    private _loadWeaponAsset() {
+        let gamePic = OO_ResourceManager.instance.getAssets("GP", "Materials/weapon/weapon-001-dagger/spriteFrame") as SpriteFrame;
+        this.node.getComponent(UITransform).contentSize = new Size(gamePic.width, gamePic.height);
+        let spriteComp: Sprite = this.node.addComponent(Sprite);
+        spriteComp.spriteFrame = gamePic;
+    }
+
+    private _loadCollider() {
         // 创建碰撞盒
-        this.colliderNode = new Node('ColliderNode')
-        this.node.addChild(this.colliderNode);
-        let uiTransform = this.colliderNode.addComponent(UITransform);
-        const collider = this.colliderNode.addComponent(BoxCollider2D);
+        this._colliderNode = new Node("WpCollider");
+        this.node.addChild(this._colliderNode);
+        let uiTransform = this._colliderNode.addComponent(UITransform);
+        const collider = this._colliderNode.addComponent(BoxCollider2D);
         let nodeSize: Size = this.node.getComponent(UITransform).contentSize;
         uiTransform.contentSize = nodeSize;
-        uiTransform.anchorX = 0.5;
-        uiTransform.anchorY = 0.5;
+        uiTransform.anchorPoint = v2(0.5, 0.5);
         collider.size = nodeSize;
-        this.colliderNode.active = false;
-
-        let animationComp: Animation = this.node.addComponent(Animation);
-
-        let animationClip: AnimationClip = new AnimationClip();
-        // 整个动画的周期，动画周期由攻击速度决定
-        animationClip.duration = 1;
-        
-        let track = new animation.VectorTrack();
-        track.componentsCount = 3;
-        track.path = new animation.TrackPath().toProperty("position");
-        let [x, y] = track.channels();
-        x.curve.assignSorted([ // 为 x 通道的曲线添加关键帧
-            [0, { value: 0 }],
-            [0.1, { value: -10 }],
-            [0.2, { value: -12 }],
-            [0.3, { value: -14 }],
-            [0.4, { value: 70 }],
-            [0.5, { value: 85 }],
-            [0.6, { value: 95 }],
-            [0.7, { value: 100 }],
-            [1, { value: 0 }]
-        ]);
-
-        animationClip.addTrack(track);
-
-        animationClip.name = "test1";
-        animationClip.wrapMode = AnimationClip.WrapMode.Normal;
-
-        // 自定义事件
-        animationClip.events = [
-            { frame: 0.3, func: "intoAtkFrame", params: [] },
-            { frame: 0.7, func: "endAtkFrame", params: [] }
-        ]
-
-        animationComp.addClip(animationClip);
-
-        animationComp.play("test1");
+        this._colliderNode.active = false;
     }
 
     start() {
@@ -126,15 +116,40 @@ export class WeaponMelee extends OO_Component {
     }
 
     public intoAtkFrame() {
-        console.log('进入攻击判定帧')
-        this.colliderNode.active = true;
+        // console.log('进入攻击判定帧')
+        this._colliderNode.active = true;
     }
     public endAtkFrame() {
-        console.log('离开攻击判定帧')
-        this.colliderNode.active = false;
+        // console.log('离开攻击判定帧')
+        this._colliderNode.active = false;
     }
 
     update(deltaTime: number) {
     }
 }
 
+const getAtkFrames = (weaponId: string) => {
+    const weaponData = db[weaponId];
+    if (weaponData.atk_type === "stab") {
+        return getStabAtkFrames(weaponId);
+    }
+}
+
+// 近战武器 -> “刺” 类武器的关键帧
+const getStabAtkFrames = (stabWeaponId: string) => {
+    const weaponData = db[stabWeaponId];
+    let range = weaponData.panel.range;
+    // 攻击动画时长
+    let atkAniTime = getFloatNumber(weaponData.panel.atk_spd * 2 / 3, 3);
+    // 原始动画帧（1秒基准）
+    const stabAtkFrames = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1];
+    // 原始位移帧（100范围基准）
+    const stabMvFrames = [0, -10, -12, -14, 70, 85, 95, 100, 0];
+
+    // 实际的攻击动画帧，结合原始动画帧和攻击动画时长决定
+    let realFrames = []
+    stabAtkFrames.forEach((frames, i) => {
+        realFrames.push([getFloatNumber(frames * atkAniTime, 3), { value: stabMvFrames[i] * range / 100 }])
+    });
+    return realFrames;
+}

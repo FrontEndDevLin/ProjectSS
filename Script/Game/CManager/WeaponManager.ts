@@ -93,7 +93,7 @@ export default class WeaponManager extends OO_UIManager {
         //     iconUrls.push(`Meterials/weapon/icon/${WeaponDB.icon}`);
         // }
         // return console.log(`preload weapon icon: ${iconUrls.join(',')}`);
-        // OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: SpriteFrame, urls: iconUrls }], () => {}, err => {
+        // OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: SpriteFrame, urls: ["Meterials/weapon/icon/weapon-001-dagger"] }], () => {}, err => {
         //     console.log('武器图标加载完毕');
         // })
     }
