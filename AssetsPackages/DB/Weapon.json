@@ -19,12 +19,15 @@
     "id": "Weapon001-dagger-temp",
     "name": "测试匕首",
     "icon": "",
+    "game_pic": "weapon-001-dagger",
     "type": "melee",
     "panel": {
-      "range": 120,
+      "range": 4,
+      "alert": 2,
       "atk_spd": 1.04,
       "dmg": 10
     },
+    "cld": 501,
     "atk_type": "stab",
     "atk_type_desc": "stab -> 刺"
   }

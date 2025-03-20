@@ -76,7 +76,10 @@ export default class WeaponManager extends OO_UIManager {
             console.log('武器预设体外壳加载完毕')
         })
 
-        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: ["Prefabs/weapon/Weapon001"] }], () => {}, err => {
+        OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [
+            "Prefabs/weapon/Weapon001",
+            "Prefabs/weapon/WeaponGP"
+        ] }], () => {}, err => {
             console.log('武器预设体加载完毕')
         })
 
@@ -85,6 +88,12 @@ export default class WeaponManager extends OO_UIManager {
         ] }], (total, current) => {
         }, (err, data: any) => {
         })
+
+        OO_ResourceManager.instance.preloadResPkg([{
+            abName: "GP",
+            assetType: SpriteFrame,
+            urls: ["Materials/weapon/weapon-001-dagger/spriteFrame"]
+        }], () => {}, err => {})
     }
     // 预加载所有图标
     private _preloadWeaponIcon() {
@@ -152,7 +161,7 @@ export default class WeaponManager extends OO_UIManager {
         if (!this.rootNode) {
             // this.rootNode = find("Canvas/")
         }
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 1; i++) {
             this.addWeapon(weaponIds[i])
         }
         console.log('武器初始面板')
@@ -192,11 +201,12 @@ export default class WeaponManager extends OO_UIManager {
         const weaponCnt = this.weaponList.length;
         const weaponLocMap = this._weaponLoc[weaponCnt - 1];
         this.weaponList.forEach((item, i) => {
-            let scriptName = item.script || "WeaponCtrl";
-            let weaponNode: Node = this.loadUINode("weapon/Weapon001", scriptName);
+            // let scriptName = item.script || "WeaponBase";
+            let scriptName = "WeaponMelee";
+            let weaponNode: Node = this.loadUINode("weapon/WeaponGP", scriptName);
+            weaponNode.OO_param1 = { weaponId: "Weapon001-dagger-temp" };
+            this.appendUINode(weaponNode, WeaponSheel)
             weaponNode.setPosition(weaponLocMap[i]);
-            const scriptComp: WeaponCtrl = this.appendUINode(weaponNode, WeaponSheel).getComponent(scriptName) as WeaponCtrl;
-            scriptComp.initAttr(this.getWeaponDataByWeaponId("Weapon001"));
         });
 
         this.appendUINode(WeaponSheel, find("Canvas/Character"));

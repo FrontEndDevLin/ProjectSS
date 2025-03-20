@@ -1,11 +1,13 @@
-import { _decorator, BoxCollider2D, CircleCollider2D, Component, Contact2DType, Node, v3, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, CircleCollider2D, Component, Contact2DType, Node, Size, Sprite, SpriteFrame, UITransform, v3, Vec3, Animation } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import { GP_GROUP, WEAPON_DOMAIN } from '../../ColliderType';
 import { Callback } from '../../Interface';
 import { EnemyInfo, EnemyManager } from '../../CManager/EnemyManager';
 import CharacterManager from '../../CManager/CharacterManager';
-import { getVectorByAngle } from '../../Common';
+import { getVectorByAngle, GP_UNIT } from '../../Common';
 import { ChapterManager } from '../../CManager/ChapterManager';
+import WeaponManager from '../../CManager/WeaponManager';
+import OO_ResourceManager from '../../../OO/Manager/OO_ResourceManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -26,11 +28,44 @@ export class WeaponBase extends OO_Component {
     // 是否在攻击动画中
     private _attacking: boolean = false;
 
+    protected animationComp: Animation = null;
+    public weaponId: string = "";
+    public weaponData: any = null;
+
     protected onLoad(): void {
         super.onLoad();
+        this.weaponId = this.node.OO_param1 ? this.node.OO_param1.weaponId : "";
+        if (!this.weaponId) {
+            return console.error("Missing param OO_param1.weaponId");
+        }
+        this.weaponData = WeaponManager.instance.getWeaponDataByWeaponId(this.weaponId);
 
-        // 武器警戒、攻击碰撞盒子处理
-        // TODO: 动态添加
+        this._loadWeaponAsset();
+        this._initRangeCollider();
+    }
+
+    start() {
+
+    }
+
+    // 渲染武器图片
+    private _loadWeaponAsset() {
+        let gamePic = OO_ResourceManager.instance.getAssets("GP", `Materials/weapon/${this.weaponData.game_pic}/spriteFrame`) as SpriteFrame;
+        let picSize: Size = new Size(gamePic.width, gamePic.height);
+        this.node.getComponent(UITransform).contentSize = picSize;
+        this.views["PIC/SF"].getComponent(UITransform).contentSize = picSize;
+        this.views["PIC/SF"].getComponent(Sprite).spriteFrame = gamePic;
+
+        this.animationComp = this.views["PIC/SF"].addComponent(Animation);
+
+        this.animationComp.on(Animation.EventType.FINISHED, (type, state) => {
+            this._attacking = false;
+        });
+    }
+
+    // 武器警戒、攻击碰撞盒子处理
+    private _initRangeCollider(): void {
+        // 最好动态添加，目前是写死在节点上
         let colliders: CircleCollider2D[] = this.node.getComponents(CircleCollider2D);
         for (let collider of colliders) {
             switch (collider.tag) {
@@ -44,13 +79,9 @@ export class WeaponBase extends OO_Component {
             collider.on(Contact2DType.BEGIN_CONTACT, this._onWeaponDomainBeginContact, this);
             collider.on(Contact2DType.END_CONTACT, this._onWeaponDomainEndContact, this);
         }
-        // let { range, alert } = this.weaponPanel;
-        // this._attackRangeCollider.radius = range * GP_UNIT;
-        // this._alertRangeCollider.radius = (range + alert) * GP_UNIT;
-    }
-
-    start() {
-
+        let { range, alert } = this.weaponData.panel;
+        this._attackRangeCollider.radius = range * GP_UNIT;
+        this._alertRangeCollider.radius = (range + alert) * GP_UNIT;
     }
 
     private _onWeaponDomainBeginContact(selfCollider: CircleCollider2D, otherCollider: BoxCollider2D) {
@@ -120,7 +151,7 @@ export class WeaponBase extends OO_Component {
 
             this.views["PIC"].angle = angle;
             this.views["PIC"].setScale(v3(scaleX, 1));
-        });
+        }); 
     }
     private _tryAttack(dt: number) {
         if (this._cd <= 0) {
@@ -135,27 +166,42 @@ export class WeaponBase extends OO_Component {
                 return;
             }
     
-            // 通知BulletManager发射子弹，带上当前坐标，向量
-            // 坐标为当前坐标转化为世界坐标，向量为当前节点的方向
-            let { x, y } = this.node.position;
-            // 获取当前角色的坐标, 与武器坐标相加，得到武器的世界坐标
-            const ctLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
-            if (!ctLoc) {
-                return;
-            }
-            let worldLoc: Vec3 = v3(ctLoc.x + x, ctLoc.y + y);
-            // 向量要根据贴图的旋转角度计算
-            let angle = this.views["PIC"].angle;
-            if (this.views["PIC"].getScale().x === -1) {
-                angle -= 180;
-            }
-            let vector = getVectorByAngle(angle);
-            // TODO:
+            console.log('攻击目标');
+            // 远程武器播放攻击动画、发射弹体
+            // 近战武器播放攻击动画、将自身变为碰撞体
+
+            // // 通知BulletManager发射子弹，带上当前坐标，向量
+            // // 坐标为当前坐标转化为世界坐标，向量为当前节点的方向
+            // let { x, y } = this.node.position;
+            // // 获取当前角色的坐标, 与武器坐标相加，得到武器的世界坐标
+            // const ctLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
+            // if (!ctLoc) {
+            //     return;
+            // }
+            // let worldLoc: Vec3 = v3(ctLoc.x + x, ctLoc.y + y);
+            // // 向量要根据贴图的旋转角度计算
+            // let angle = this.views["PIC"].angle;
+            // if (this.views["PIC"].getScale().x === -1) {
+            //     angle -= 180;
+            // }
+            // let vector = getVectorByAngle(angle);
+            // // TODO:
             // BulletManager.instance.createBullet(this.weaponData.bullet, worldLoc, vector);
-            // this._playAttackAni();
-            // this._cd = this.weaponPanel.atk_spd;
+            this._attacking = true;
+            this.playAttackAni();
+            this._cd = this.weaponData.panel.atk_spd;
         });
     }
+
+    protected playAttackAni() {}
+    // 播放攻击动画
+    // private _playAttackAni() {
+    //     const atk_speed = this.weaponPanel.atk_spd;
+    //     this._attacking = true;
+    //     // TODO: 攻击动画随着攻速变化而变化
+    //     // TODO: 攻击动画用帧动画，目前的效果有问题
+    //     this._animation.play(`${this.weaponData.id}-atk`);
+    // }
 
     protected onDestroy(): void {
         this._attackRangeCollider.off(Contact2DType.BEGIN_CONTACT, this._onWeaponDomainBeginContact, this);

@@ -72,7 +72,6 @@ export default class Main extends Component {
     }
 
     public runGame(): void {
-        return
         this.addCustomManager();
 
         this.preload((err) => {
@@ -80,7 +79,7 @@ export default class Main extends Component {
                 return;
             }
             // OO_UIManager.instance.showUI("ItemsUI");
-            // ChapterManager.instance.showCharacterSelect();
+            ChapterManager.instance.showCharacterSelect();
         });
     }
 
