@@ -1,11 +1,20 @@
 {
+  "desc": {
+    "type": "弹头类型 bullet -> 飞行子弹类; melee -> 近战武器类",
+    "cld": "弹头碰撞id"
+  },
   "BT001": {
     "id": "BT001",
     "prefab": "BT001",
+    "type": "bullet",
     "script": "BulletCtrl",
     "speed": 40,
     "max_dis": 10,
-    "cld": 500,
-    "cld_desc": "弹头碰撞id"
+    "cld": 500
+  },
+  "BLT001": {
+    "id": "BLT001",
+    "type": "melee",
+    "cld": 501
   }
 }

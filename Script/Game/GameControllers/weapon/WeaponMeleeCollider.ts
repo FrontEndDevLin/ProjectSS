@@ -8,6 +8,7 @@ export class WeaponMeleeCollider extends Component {
 
     protected onLoad(): void {
         let nodeSize: Size = this.node.OO_param1.nodeSize;
+        let tag: number = this.node.OO_param1.colliderTag;
 
         let wpColliderNode: Node = new Node("WpCollider");
         this.node.addChild(wpColliderNode);
@@ -15,9 +16,8 @@ export class WeaponMeleeCollider extends Component {
         let uiTransform = wpColliderNode.addComponent(UITransform);
         this._collider = wpColliderNode.addComponent(BoxCollider2D);
 
-        // temp
         this._collider.group = GP_GROUP.BULLET;
-        this._collider.tag = 500;
+        this._collider.tag = tag;
 
         uiTransform.contentSize = nodeSize;
         uiTransform.anchorPoint = v2(0.5, 0.5);

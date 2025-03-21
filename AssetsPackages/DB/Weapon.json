@@ -4,15 +4,18 @@
     "sort": 0,
     "name": "测试手枪",
     "icon": "weapon icon name",
-    "type": "attack type",
+    "type": "range",
+    "type_desc": "attack type",
     "script": "WeaponCtrl",
     "bullet": "BT001",
+    "bullet_desc": "武器攻击时形成的弹头id",
     "panel": {
       "range": 6,
       "alert": 2,
+      "alert_desc": "武器的警戒范围=range+alert",
       "atk_spd": 0.4,
-      "dmg": 0,
-      "dmg_desc": "当有bullet时，dmg由bullet提供"
+      "dmg": 4,
+      "dmg_desc": "伤害, 伤害会传入到bullet弹头数据里"
     }
   },
   "Weapon001-dagger-temp": {
@@ -21,14 +24,16 @@
     "icon": "",
     "game_pic": "weapon-001-dagger",
     "type": "melee",
+    "bullet": "BLT001",
+    "melee_dmg_boost": 50,
+    "melee_dmg_boost_desc": "受近战伤害的加成比例",
     "panel": {
       "range": 4,
       "alert": 2,
       "atk_spd": 1.04,
       "dmg": 10
     },
-    "cld": 501,
     "atk_type": "stab",
-    "atk_type_desc": "stab -> 刺"
+    "atk_type_desc": "stab -> 近战武器的刺击类型; 这个属性影响武器的攻击动画"
   }
 }

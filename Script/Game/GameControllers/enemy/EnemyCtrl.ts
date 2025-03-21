@@ -35,8 +35,7 @@ export class EnemyCtrl extends OO_Component {
     private _onBeginContact(selfCollider: BoxCollider2D, otherCollider: BoxCollider2D) {
         switch (otherCollider.group) {
             case GP_GROUP.BULLET: {
-                // TODO: 显示伤害由一个类单独管理
-                // 当前阶段敌人直接死，伤害随意计算
+                // 显示伤害由一个类单独管理
                 // 通过tag获取弹头数据（tag也存在弹头db里），获取的弹头数据要经过角色面板的补正
                 // console.log('被击中，扣血' + )
                 let bulletDamage: number = BulletManager.instance.getBulletDamage(otherCollider.tag);

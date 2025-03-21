@@ -1,33 +1,8 @@
-import { _decorator, Component, Node, Animation, AnimationClip, animation, BoxCollider, Vec3, UITransform, Size, BoxCollider2D, v2, SpriteFrame, Sprite } from 'cc';
-import { OO_Component } from '../../../OO/OO';
-import { DBManager } from '../../CManager/DBManager';
+import { _decorator, AnimationClip, animation, UITransform, Size } from 'cc';
 import { getFloatNumber, GP_UNIT } from '../../Common';
-import OO_ResourceManager from '../../../OO/Manager/OO_ResourceManager';
 import { WeaponBase } from './WeaponBase';
+import { BulletManager } from '../../CManager/BulletManager';
 const { ccclass, property } = _decorator;
-
-// 近战一次攻击设计基准耗时1秒，速度为1
-// 当武器结束攻击前摇时，开启攻击判定，进入攻击后摇时结束攻击判定
-
-// 面板攻速
-let atk_spd = 0.5;
-
-let db = {
-    "Weapon001-dagger-temp": {
-        id: "Weapon001-dagger-temp",
-        name: "测试匕首",
-        icon: "",
-        game_pic: "weapon-001-dagger",
-        type: "melee",
-        panel: {
-            range: 120,
-            atk_spd: 1.04,
-            dmg: 10
-        },
-        atk_type: "stab",
-        atk_type_desc: "stab -> 刺"
-    }
-}
 
 /**
  * 近战武器通用类
@@ -78,9 +53,10 @@ export class WeaponMelee extends WeaponBase {
 
     private _loadCollider() {
         let nodeSize: Size = this.node.getComponent(UITransform).contentSize;
+        let colliderTag: number = BulletManager.instance.getBulletTag(this.weaponData.bullet);
 
         // 碰撞盒由子脚本控制，因为这里无法触发 intoAtkFrame, endAtkFrame 方法
-        this.views["PIC/SF"].OO_param1 = { nodeSize };
+        this.views["PIC/SF"].OO_param1 = { nodeSize, colliderTag };
         this.views["PIC/SF"].addComponent("WeaponMeleeCollider");
     }
 

@@ -164,7 +164,7 @@ export default class WeaponManager extends OO_UIManager {
         for (let i = 0; i < 1; i++) {
             this.addWeapon(weaponIds[i])
         }
-        console.log('武器初始面板')
+        // console.log('武器初始面板')
     }
     // 能否购买武器，除了判断武器槽位外可能还需要做其他判断(合成武器)
     public isCanByWeapon(): boolean {
@@ -174,7 +174,7 @@ export default class WeaponManager extends OO_UIManager {
     public addWeapon(weaponId: string): boolean {
         if (this.weaponList.length < this.slot) {
             // 临时处理
-            this.weaponList.push(WeaponDB["Weapon001"]);
+            this.weaponList.push(WeaponDB["Weapon001-dagger-temp"]);
             return true;
         } else {
             return false;
@@ -184,11 +184,8 @@ export default class WeaponManager extends OO_UIManager {
     public updateWeaponPanel() {
         // let panel = CharacterManager.instance.getCharacterProp();
         for (let weaponId in WeaponDB) {
-            let weaponAttr = WeaponDB[weaponId];
-            let originPanel = weaponAttr.panel;
-            weaponAttr.r_panel = { ...originPanel };
-            // 伤害修正
-            weaponAttr.r_panel.dmg = DamageManager.instance.calcBulletDamage(weaponAttr.bullet);
+            // 属性修正
+            this.amendWeaponPanel(weaponId);
         }
     }
 
@@ -217,6 +214,25 @@ export default class WeaponManager extends OO_UIManager {
          * 面板需要提前计算好，这里只做返回
          */
         return WeaponDB[weaponId];
+    }
+    // 计算武器伤害，主要用于反馈到面板上
+    public getWeaponDamage(weaponId: string) {
+        let weaponPanel = this.getWeaponDataByWeaponId(weaponId).r_panel;
+        let dmg: number = weaponPanel.dmg;
+        return dmg;
+    }
+    // 通过角色当前属性，获得修正指定武器的面板
+    public amendWeaponPanel(weaponId) {
+        let weaponData = WeaponDB[weaponId];
+        let originPanel = weaponData.panel;
+        if (!weaponData.r_panel) {
+            weaponData.r_panel = { ...originPanel };
+        }
+        // TODO: 做错了，完全没拿角色的属性数据过来
+        let oriDmg: number = weaponData.panel.dmg;
+        let dmgBoost: number = (weaponData.dmg_boost || 0) / 100;
+        weaponData.r_panel.dmg = Math.round((oriDmg + oriDmg * weaponData.melee_dmg_boost / 100) * (1 + dmgBoost));
+        // TODO: 还有其他属性要修正，如攻速、穿透等...
     }
 
     update(deltaTime: number) {

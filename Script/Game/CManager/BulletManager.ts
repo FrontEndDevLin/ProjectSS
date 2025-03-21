@@ -66,15 +66,18 @@ export class BulletManager extends OO_UIManager {
         let weaponList: any[] = WeaponManager.instance.weaponList;
         // 根据该列表，生成新的列表格式为 { 弹头Tag: { 弹头数据 } }，弹头数据需要结合角色面板进行计算
         for (let data of weaponList) {
+            let weaponId: string = data.id;
             let bulletId = data.bullet;
             let bData = bulletDb[bulletId];
-            // TODO: 临时设置，伤害需要经过DamageManager类面板计算后
-            bData.damage = DamageManager.instance.calcBulletDamage(bulletId);
+            bData.damage = WeaponManager.instance.getWeaponDamage(weaponId);
             this._bulletCldMap[bData.cld] = bData;
         }
     }
     public getBulletDamage(cldTag: number) {
         return this._bulletCldMap[cldTag].damage;
+    }
+    public getBulletTag(bulletId: string) {
+        return bulletDb[bulletId].cld;
     }
 
     public createBullet(bulletId: string, position: Vec3, vector: Vec3) {

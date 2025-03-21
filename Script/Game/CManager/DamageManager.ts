@@ -31,7 +31,7 @@ export class DamageManager extends OO_UIManager {
         this.rootNode = rootNode;
     }
 
-    // 计算武器伤害
+    // 原本的计算武器伤害（作废）
     public calcBulletDamage(bulletId: string) {
         // TODO: 结合角色面板
         return 5;

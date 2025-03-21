@@ -40,6 +40,15 @@ export default class Main extends Component {
          * Daylight
          * Heart Linked
          * Wild
+         * 
+         * TODO:
+         *  武器增加属性: 伤害加成 done
+         *  近战武器面板计算，受“近战伤害”、“伤害”修正
+         *  触发更新武器面板
+         *  第二把近战武器 “长矛” “刺” (画图即可)
+         *  第三把近战武器 “长剑” “挥砍” (画图+设计挥砍动作)
+         *  商店界面显示武器图标
+         *  
          * TODO:
          *  道具系统
          *      限制数量类道具
@@ -58,7 +67,7 @@ export default class Main extends Component {
          *  武器列表
          *      近战
          *          匕首、长剑、大剑、太刀
-         *          拳、长茅、
+         *          拳、长矛、
          *          木棍、晨星锤、战斧、飞龙剑
          *      远程
          *          手枪、冲锋枪、霰弹枪、加特林、狙击枪
@@ -66,6 +75,10 @@ export default class Main extends Component {
          * 
          *  实现一个基础武器类
          *      实现远程武器类、近战武器类继承基础武器类
+         */
+
+        /**
+         * TODO: 近战武器攻击判定
          */
 
         PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape

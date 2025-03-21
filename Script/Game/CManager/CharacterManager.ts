@@ -51,6 +51,8 @@ export default class CharacterManager extends OO_UIManager {
         this.characterId = characterId;
 
         CharacterPropManager.instance.initProp(characterId);
+        // TODO: 武器面板放这里不妥
+        WeaponManager.instance.updateWeaponPanel();
 
         WeaponManager.instance.initWeapon(['test']);
         BulletManager.instance.updateBulletList();
@@ -91,7 +93,6 @@ export default class CharacterManager extends OO_UIManager {
     }
     public showWeapon() {
         WeaponManager.instance.showWeapon();
-        WeaponManager.instance.updateWeaponPanel();
     }
     public removeCharacter() {
         this.removeUI("Character", this.rootNode);
