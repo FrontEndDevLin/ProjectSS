@@ -103,12 +103,12 @@ export default class Main extends Component {
             OO_AddManager(CountdownManager);
             OO_AddManager(MapManager);
             OO_AddManager(CharacterManager);
+            OO_AddManager(CharacterPropManager);
             OO_AddManager(EnemyManager);
             OO_AddManager(WeaponManager);
             OO_AddManager(BulletManager);
             OO_AddManager(DamageManager);
             OO_AddManager(StoreManager);
-            OO_AddManager(CharacterPropManager);
             OO_AddManager(ItemsManager);
         })
     }

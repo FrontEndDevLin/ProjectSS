@@ -1,11 +1,13 @@
 import { _decorator, Component, find, Label, Node, Prefab, SpriteFrame, v3, Vec3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
-import { Callback, WeaponData, WeaponSlotInfo } from '../Interface';
+import { BProp, Callback, WeaponData, WeaponSlotInfo } from '../Interface';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { WeaponCtrl } from '../GameControllers/weapon/WeaponCtrl';
 import { DBManager } from './DBManager';
 import CharacterManager from './CharacterManager';
 import { DamageManager } from './DamageManager';
+import { CharacterPropManager } from './CharacterPropManager';
+import { CEVENT_CHARACTER } from '../CEvent';
 const { ccclass, property } = _decorator;
 
 /**
@@ -63,6 +65,11 @@ export default class WeaponManager extends OO_UIManager {
          */
         WeaponDB = DBManager.instance.getDbData("Weapon");
         this._preload();
+
+        CharacterPropManager.instance.on(CEVENT_CHARACTER.PROP_CHANGE, () => {
+            console.log('属性变化');
+            this.updateWeaponPanel();
+        })
     }
 
     start() {
@@ -228,11 +235,20 @@ export default class WeaponManager extends OO_UIManager {
         if (!weaponData.r_panel) {
             weaponData.r_panel = { ...originPanel };
         }
-        // TODO: 做错了，完全没拿角色的属性数据过来
-        let oriDmg: number = weaponData.panel.dmg;
-        let dmgBoost: number = (weaponData.dmg_boost || 0) / 100;
-        weaponData.r_panel.dmg = Math.round((oriDmg + oriDmg * weaponData.melee_dmg_boost / 100) * (1 + dmgBoost));
-        // TODO: 还有其他属性要修正，如攻速、穿透等...
+
+        if (weaponData.type === "melee") {
+            let baseDmg: number = weaponData.panel.dmg;
+            let dmgProp: BProp = CharacterPropManager.instance.dmg;
+            let meleeDmgProp: BProp = CharacterPropManager.instance.melee_dmg;
+            let dmgBoost: number = 1 + (dmgProp.value || 0) / 100;
+            console.log(`baseDmg: ${baseDmg}, mellDmg: ${meleeDmgProp.value}, meleeBoost: ${weaponData.melee_dmg_boost}, dmgBoost: ${dmgBoost}`)
+    
+            // (基础伤害 + 近战加成伤害) * 总伤害百分比
+            weaponData.r_panel.dmg = Math.round((baseDmg + meleeDmgProp.value * weaponData.melee_dmg_boost / 100) * dmgBoost);
+            // TODO: 其他位置可能没有使用r_panel，而是错误使用了panel
+            console.log(weaponData.r_panel.dmg)
+            // TODO: 还有其他属性要修正，如攻速、穿透等...
+        }
     }
 
     update(deltaTime: number) {
