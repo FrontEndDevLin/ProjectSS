@@ -8,6 +8,7 @@ import CharacterManager from './CharacterManager';
 import { DamageManager } from './DamageManager';
 import { CharacterPropManager } from './CharacterPropManager';
 import { CEVENT_CHARACTER } from '../CEvent';
+import { BulletManager } from './BulletManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -69,6 +70,7 @@ export default class WeaponManager extends OO_UIManager {
         CharacterPropManager.instance.on(CEVENT_CHARACTER.PROP_CHANGE, () => {
             console.log('属性变化');
             this.updateWeaponPanel();
+            BulletManager.instance.updateBulletList();
         })
     }
 
@@ -99,7 +101,10 @@ export default class WeaponManager extends OO_UIManager {
         OO_ResourceManager.instance.preloadResPkg([{
             abName: "GP",
             assetType: SpriteFrame,
-            urls: ["Materials/weapon/weapon-001-dagger/spriteFrame"]
+            urls: [
+                "Materials/weapon/weapon-001-dagger/spriteFrame",
+                "Materials/weapon/weapon-101-gun/spriteFrame"
+            ]
         }], () => {}, err => {})
     }
     // 预加载所有图标
@@ -169,7 +174,7 @@ export default class WeaponManager extends OO_UIManager {
             // this.rootNode = find("Canvas/")
         }
         for (let i = 0; i < 1; i++) {
-            this.addWeapon(weaponIds[i])
+            this.addWeapon(weaponIds[i]);
         }
         // console.log('武器初始面板')
     }
@@ -181,7 +186,7 @@ export default class WeaponManager extends OO_UIManager {
     public addWeapon(weaponId: string): boolean {
         if (this.weaponList.length < this.slot) {
             // 临时处理
-            this.weaponList.push(WeaponDB["Weapon001-dagger-temp"]);
+            this.weaponList.push(WeaponDB[weaponId]);
             return true;
         } else {
             return false;
@@ -205,11 +210,16 @@ export default class WeaponManager extends OO_UIManager {
         const weaponCnt = this.weaponList.length;
         const weaponLocMap = this._weaponLoc[weaponCnt - 1];
         this.weaponList.forEach((item, i) => {
+            let scriptName = "";
+            if (item.type === "melee") {
+                scriptName = "WeaponMelee"
+            } else if (item.type === "range") {
+                scriptName = "WeaponRange";
+            }
             // let scriptName = item.script || "WeaponBase";
-            let scriptName = "WeaponMelee";
             let weaponNode: Node = this.loadUINode("weapon/WeaponGP", scriptName);
-            weaponNode.OO_param1 = { weaponId: "Weapon001-dagger-temp" };
-            this.appendUINode(weaponNode, WeaponSheel)
+            weaponNode.OO_param1 = { weaponId: item.id };
+            this.appendUINode(weaponNode, WeaponSheel);
             weaponNode.setPosition(weaponLocMap[i]);
         });
 
@@ -241,12 +251,10 @@ export default class WeaponManager extends OO_UIManager {
             let dmgProp: BProp = CharacterPropManager.instance.dmg;
             let meleeDmgProp: BProp = CharacterPropManager.instance.melee_dmg;
             let dmgBoost: number = 1 + (dmgProp.value || 0) / 100;
-            console.log(`baseDmg: ${baseDmg}, mellDmg: ${meleeDmgProp.value}, meleeBoost: ${weaponData.melee_dmg_boost}, dmgBoost: ${dmgBoost}`)
-    
+
             // (基础伤害 + 近战加成伤害) * 总伤害百分比
             weaponData.r_panel.dmg = Math.round((baseDmg + meleeDmgProp.value * weaponData.melee_dmg_boost / 100) * dmgBoost);
             // TODO: 其他位置可能没有使用r_panel，而是错误使用了panel
-            console.log(weaponData.r_panel.dmg)
             // TODO: 还有其他属性要修正，如攻速、穿透等...
         }
     }

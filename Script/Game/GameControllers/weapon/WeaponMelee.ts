@@ -88,7 +88,8 @@ export class WeaponMelee extends WeaponBase {
     }
 
     // 由WeaponBase类调用
-    protected playAttackAni(): void {
+    protected playAttack(): void {
+        super.playAttack();
         this.animationComp.play("attack");
     }
 

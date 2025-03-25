@@ -26,7 +26,7 @@ export class WeaponBase extends OO_Component {
 
     private _cd: number = 0;
     // 是否在攻击动画中
-    private _attacking: boolean = false;
+    private _animateAttacking: boolean = false;
 
     protected animationComp: Animation = null;
     public weaponId: string = "";
@@ -51,7 +51,7 @@ export class WeaponBase extends OO_Component {
     // 渲染武器图片
     private _loadWeaponAsset() {
         let gamePic = OO_ResourceManager.instance.getAssets("GP", `Materials/weapon/${this.weaponData.game_pic}/spriteFrame`) as SpriteFrame;
-        let picSize: Size = new Size(gamePic.width, gamePic.height);
+        let picSize: Size = gamePic.originalSize;
         this.node.getComponent(UITransform).contentSize = picSize;
         this.views["PIC/SF"].getComponent(UITransform).contentSize = picSize;
         this.views["PIC/SF"].getComponent(Sprite).spriteFrame = gamePic;
@@ -59,7 +59,7 @@ export class WeaponBase extends OO_Component {
         this.animationComp = this.views["PIC/SF"].addComponent(Animation);
 
         this.animationComp.on(Animation.EventType.FINISHED, (type, state) => {
-            this._attacking = false;
+            this._animateAttacking = false;
         });
     }
 
@@ -127,7 +127,7 @@ export class WeaponBase extends OO_Component {
     }
     // 旋转武器(改变贴图朝向)
     private _rotateWeapon() {
-        if (this._attacking) {
+        if (this._animateAttacking) {
             return;
         }
         this._chooseTarget((hasAtkTarget: boolean, target: EnemyInfo) => {
@@ -169,39 +169,15 @@ export class WeaponBase extends OO_Component {
             console.log('攻击目标');
             // 远程武器播放攻击动画、发射弹体
             // 近战武器播放攻击动画、将自身变为碰撞体
-
-            // // 通知BulletManager发射子弹，带上当前坐标，向量
-            // // 坐标为当前坐标转化为世界坐标，向量为当前节点的方向
-            // let { x, y } = this.node.position;
-            // // 获取当前角色的坐标, 与武器坐标相加，得到武器的世界坐标
-            // const ctLoc: Vec3 = CharacterManager.instance.getCharacterLoc();
-            // if (!ctLoc) {
-            //     return;
-            // }
-            // let worldLoc: Vec3 = v3(ctLoc.x + x, ctLoc.y + y);
-            // // 向量要根据贴图的旋转角度计算
-            // let angle = this.views["PIC"].angle;
-            // if (this.views["PIC"].getScale().x === -1) {
-            //     angle -= 180;
-            // }
-            // let vector = getVectorByAngle(angle);
-            // // TODO:
-            // BulletManager.instance.createBullet(this.weaponData.bullet, worldLoc, vector);
-            this._attacking = true;
-            this.playAttackAni();
+            this.playAttack();
             this._cd = this.weaponData.panel.atk_spd;
         });
     }
 
-    protected playAttackAni() {}
-    // 播放攻击动画
-    // private _playAttackAni() {
-    //     const atk_speed = this.weaponPanel.atk_spd;
-    //     this._attacking = true;
-    //     // TODO: 攻击动画随着攻速变化而变化
-    //     // TODO: 攻击动画用帧动画，目前的效果有问题
-    //     this._animation.play(`${this.weaponData.id}-atk`);
-    // }
+    // 播放攻击动画, 在子类中实现
+    protected playAttack() {
+        this._animateAttacking = true;
+    }
 
     protected onDestroy(): void {
         this._attackRangeCollider.off(Contact2DType.BEGIN_CONTACT, this._onWeaponDomainBeginContact, this);

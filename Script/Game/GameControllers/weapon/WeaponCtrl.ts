@@ -188,12 +188,12 @@ export class WeaponCtrl extends OO_Component {
             }
             let vector = getVectorByAngle(angle);
             BulletManager.instance.createBullet(this.weaponData.bullet, worldLoc, vector);
-            this._playAttackAni();
+            this._playAttack();
             this._cd = this.weaponPanel.atk_spd;
         });
     }
     // 播放攻击动画
-    private _playAttackAni() {
+    private _playAttack() {
         const atk_speed = this.weaponPanel.atk_spd;
         this._attacking = true;
         // TODO: 攻击动画随着攻速变化而变化
