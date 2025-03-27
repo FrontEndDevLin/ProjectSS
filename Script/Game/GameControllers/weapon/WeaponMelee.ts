@@ -25,14 +25,14 @@ export class WeaponMelee extends WeaponBase {
         this._loadCollider();
 
         let animationClip: AnimationClip = new AnimationClip();
-        // 整个动画的周期，动画周期由攻击速度决定
-        animationClip.duration = 1;
         let track = new animation.VectorTrack();
         track.componentsCount = 3;
         track.path = new animation.TrackPath().toProperty("position");
         let [x, y] = track.channels();
         // 为 x 通道的曲线添加关键帧
         const frames = this._getAtkFrames();
+        // 整个动画的周期，动画周期由攻击速度决定
+        animationClip.duration = frames[frames.length - 1][0];
         x.curve.assignSorted(frames);
 
         animationClip.addTrack(track);
@@ -71,13 +71,13 @@ export class WeaponMelee extends WeaponBase {
         // 攻击动画时长
         let atkAniTime = getFloatNumber(this.weaponData.panel.atk_spd * 2 / 3, 3);
         // 原始动画帧（1秒基准）
-        const stabAtkFrames = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1];
+        const baseAtkFrames = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1];
         // 原始位移帧（100范围基准）
         const stabMvFrames = [0, -10, -12, -14, 70, 85, 95, 100, 0];
 
         // 实际的攻击动画帧，结合原始动画帧和攻击动画时长决定
         let realFrames = []
-        stabAtkFrames.forEach((frames, i) => {
+        baseAtkFrames.forEach((frames, i) => {
             realFrames.push([getFloatNumber(frames * atkAniTime, 3), { value: stabMvFrames[i] * range / 100 }])
         });
         return realFrames;
