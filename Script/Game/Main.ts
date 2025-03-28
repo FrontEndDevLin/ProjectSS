@@ -73,6 +73,19 @@ export default class Main extends Component {
          *      远程
          *          手枪、冲锋枪、霰弹枪、加特林、狙击枪
          *          弹弓、弩箭、弓箭、飞镖、飞刀
+         * 
+         * 
+         *  UI设计
+         *  游戏界面
+         *      背景: #1A1A1A
+         *      地面网格: #3D3D3D
+         *      主角: #FFD54F
+         *      主角武器/子弹: #9575CD
+         *      敌人: #9575CD
+         *      血条边框: #757575	
+         *      血条背景: #424242
+         *      血条填充：#FFD54F
+         *      经验条填充: #80CBC4
          */
 
         PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
