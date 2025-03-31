@@ -88,7 +88,7 @@ export default class Main extends Component {
          *      经验条填充: #80CBC4
          */
 
-        PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
+        // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
     }
 
     public runGame(): void {
