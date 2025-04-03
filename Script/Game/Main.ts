@@ -86,6 +86,11 @@ export default class Main extends Component {
          *      血条背景: #424242
          *      血条填充：#FFD54F
          *      经验条填充: #80CBC4
+         * 
+         *      战利品: #80CBC4
+         *      宝箱: #80CBC4
+         * 
+         * 库存，金币图标更换 40*36
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
