@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Prefab, v3, Vec3 } from 'cc';
+import { _decorator, Component, Node, Prefab, Size, Sprite, SpriteFrame, UITransform, v3, Vec3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import { EnemyManager } from './EnemyManager';
 import { ChapterManager } from './ChapterManager';
@@ -61,6 +61,18 @@ export class DropItemManager extends OO_UIManager {
             }
         );
 
+        OO_ResourceManager.instance.preloadResPkg([{
+            abName: this.abName,
+            assetType: SpriteFrame,
+            urls: [
+                "Materials/dropItem/exp-1/spriteFrame",
+                "Materials/dropItem/exp-2/spriteFrame",
+                "Materials/dropItem/exp-3/spriteFrame",
+                "Materials/dropItem/exp-4/spriteFrame",
+                "Materials/dropItem/exp-5/spriteFrame"
+            ]
+        }], () => {}, err => {})
+
         let rootNode: Node = new Node("DropItemBox");
         this.node.addChild(rootNode);
         this.rootNode = rootNode;
@@ -106,6 +118,14 @@ export class DropItemManager extends OO_UIManager {
             for (let i = 0; i < dropExpCnt; i++) {
                 // 生成经验值预制体，在position周围掉落(掉落滑动动画)
                 let expNode: Node = this.loadUINode("dropItem/ExpBlock", "ExpBlockCtrl");
+                
+                let randomNum: number = getRandomNumber(1, 5);
+                let pic = OO_ResourceManager.instance.getAssets("GP", `Materials/dropItem/exp-${randomNum}/spriteFrame`) as SpriteFrame;
+                const { width, height } = pic.rect;
+                let picSize: Size = new Size(width, height);
+                expNode.getComponent(UITransform).setContentSize(picSize);
+                expNode.getComponent(Sprite).spriteFrame = pic;
+
                 let expCnt = 1;
                 // 经验块大小缩放
                 if (i < expandExpCnt) {
@@ -235,7 +255,7 @@ export class DropItemManager extends OO_UIManager {
     private _beenChest() {
         // TODO: 战利品掉落有几率变成箱子，和角色幸运值挂钩。目前临时处理
         let num = getRandomNumber(1, 100);
-        if (num < 50) {
+        if (num < 10) {
             return TROPHY_TYPE.CHEST;
         } else {
             return TROPHY_TYPE.NORMAL;

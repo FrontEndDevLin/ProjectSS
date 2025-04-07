@@ -90,7 +90,9 @@ export default class Main extends Component {
          *      战利品: #80CBC4
          *      宝箱: #80CBC4
          * 
-         * 库存，金币图标更换 40*36
+         * 库存，金币图标更换 40*36 done
+         * 掉落物图标：材料(多个不规则矩形) done、战利品(十字架) done、宝箱 
+         * 右上角图标：升级、宝箱
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
