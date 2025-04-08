@@ -91,8 +91,11 @@ export default class Main extends Component {
          *      宝箱: #80CBC4
          * 
          * 库存，金币图标更换 40*36 done
-         * 掉落物图标：材料(多个不规则矩形) done、战利品(十字架) done、宝箱 
+         * 掉落物图标：材料(多个不规则矩形) done、战利品(十字架) done、宝箱 done
          * 右上角图标：升级、宝箱
+         * 
+         * 宝箱箱体要拉高
+         * 所有单位都要描边
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
@@ -106,6 +109,8 @@ export default class Main extends Component {
                 return;
             }
             // OO_UIManager.instance.showUI("ItemsUI");
+            // 16.20.1
+            // 20.13.1
             ChapterManager.instance.showCharacterSelect();
         });
     }

@@ -255,7 +255,7 @@ export class DropItemManager extends OO_UIManager {
     private _beenChest() {
         // TODO: 战利品掉落有几率变成箱子，和角色幸运值挂钩。目前临时处理
         let num = getRandomNumber(1, 100);
-        if (num < 10) {
+        if (num < 50) {
             return TROPHY_TYPE.CHEST;
         } else {
             return TROPHY_TYPE.NORMAL;
