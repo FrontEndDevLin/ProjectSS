@@ -90,8 +90,17 @@ export default class Main extends Component {
          *      战利品: #80CBC4
          *      宝箱: #80CBC4
          * 
-         * 掉落宝箱图标设计
-         * 所有单位都要描边
+         * TODO:
+         * GamePlay图标改成彩色
+         * 掉落宝箱贴图设计
+         * 所有单位加描边
+         * 第一把远程武器（贴图，图标暂时不做，子弹发射粒子效果）
+         * 第一把近战武器（贴图重做）
+         * 第二把近战武器（贴图、图标用之前的，动画）
+         * 商店UI配色更换
+         * 三把武器图标更换
+         * 
+         * 武器系统 ...
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
