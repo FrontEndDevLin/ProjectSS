@@ -86,6 +86,8 @@ export class BulletManager extends OO_UIManager {
         let scriptName = bulletScriptMap[bulletId] || "BulletCtrl";
         const bulletNode: Node = this.loadUINode(`bullet/${bulletAttr.id}`, scriptName);
         bulletNode.setPosition(position);
+        // TODO: 旋转
+        
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
         const scriptComp: BulletCtrl = this.appendUINode(bulletNode).getComponent(scriptName);
         scriptComp.initAttr({ attr: bulletAttr, vector });
