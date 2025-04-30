@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Prefab, Vec3, tween } from 'cc';
+import { _decorator, Component, Node, Prefab, Vec3, tween, v3 } from 'cc';
 import OO_UIManager from '../../OO/Manager/OO_UIManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { BulletAttr } from '../Interface';
@@ -86,7 +86,18 @@ export class BulletManager extends OO_UIManager {
         let scriptName = bulletScriptMap[bulletId] || "BulletCtrl";
         const bulletNode: Node = this.loadUINode(`bullet/${bulletAttr.id}`, scriptName);
         bulletNode.setPosition(position);
-        // TODO: 旋转
+
+        // 旋转子弹
+        let vX: number = vector.x;
+        let vY: number = vector.y;
+        let angle = Number((Math.atan(vY / vX) * 57.32).toFixed(2));
+        let scaleX = 1;
+        if (vX < 0) {
+            scaleX = -1;
+        }
+        let sfNode: Node = bulletNode.getChildByName("SF");
+        sfNode.angle = angle;
+        sfNode.setScale(v3(scaleX, 1));
         
         // 直接断言脚本是BulletCtrl的实例即可，需要实现initAttr方法
         const scriptComp: BulletCtrl = this.appendUINode(bulletNode).getComponent(scriptName);

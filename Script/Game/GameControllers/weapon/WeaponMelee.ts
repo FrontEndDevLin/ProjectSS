@@ -13,7 +13,7 @@ const { ccclass, property } = _decorator;
  * 范围决定动画进入攻击判定帧时移动的距离，以及碰撞盒大小/位置
  * 2025.3.14
  * 为了更好的流畅度，近战武器只采用一张图片，使用动画引擎完成攻击动画
- * 将攻击类型分类：刺、砸...
+ * 将攻击类型分类：刺、打...
  * 采用程序化编辑动画剪辑，https://blog.csdn.net/Hai_ou1011/article/details/144429985
  */
 @ccclass('WeaponMelee')
@@ -81,6 +81,11 @@ export class WeaponMelee extends WeaponBase {
             realFrames.push([getFloatNumber(frames * atkAniTime, 3), { value: stabMvFrames[i] * range / 100 }])
         });
         return realFrames;
+    }
+
+    // 近战武器 -> “打击” 类武器的关键帧
+    private _getStrikeAtkFrames() {
+        
     }
 
     start() {

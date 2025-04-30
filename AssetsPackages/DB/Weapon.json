@@ -1,6 +1,6 @@
 {
-  "Weapon001-dagger-temp": {
-    "id": "Weapon001-dagger-temp",
+  "Weapon001-dagger": {
+    "id": "Weapon001-dagger",
     "name": "测试匕首",
     "icon": "",
     "game_pic": "weapon-001-dagger",

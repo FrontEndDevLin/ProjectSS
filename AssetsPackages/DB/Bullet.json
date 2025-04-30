@@ -8,7 +8,7 @@
     "prefab": "BT001",
     "type": "bullet",
     "script": "BulletCtrl",
-    "speed": 40,
+    "speed": 10,
     "max_dis": 10,
     "cld": 500
   },
