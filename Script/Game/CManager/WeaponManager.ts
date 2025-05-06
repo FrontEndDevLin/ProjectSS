@@ -9,6 +9,7 @@ import { DamageManager } from './DamageManager';
 import { CharacterPropManager } from './CharacterPropManager';
 import { CEVENT_CHARACTER } from '../CEvent';
 import { BulletManager } from './BulletManager';
+import { getRandomNumber } from '../Common';
 const { ccclass, property } = _decorator;
 
 /**
@@ -120,10 +121,21 @@ export default class WeaponManager extends OO_UIManager {
     }
 
     private _getRandomWeapon() {
+        let weaponItem: any = null;
+
         let keys: string[] = Object.keys(WeaponDB);
-        let len = keys.length;
-        let randomKey = keys[Math.floor(Math.random() * len)];
-        return WeaponDB[randomKey];
+        let pool: string[] = [];
+        for (let key of keys) {
+            if (this._randomWeapaonKeys.indexOf(key) === -1) {
+                pool.push(key)
+            }
+        }
+        if (pool.length) {
+            let idx: number = getRandomNumber(0, pool.length - 1)
+            let key = pool[idx];
+            weaponItem = WeaponDB[key]
+        }
+        return weaponItem;
     }
 
     public getWeaponPanelNode(weaponId): Node {
@@ -158,14 +170,25 @@ export default class WeaponManager extends OO_UIManager {
         return wpPanelNode;
     }
 
+    // 获取多个随机武器时用到，用于防止重复
+    private _randomWeapaonKeys: string[] = [];
     // 获取随机的n个武器，用于商店刷新
     public getRandomWeapons(n?: number): any[] {
-        n = n || 4;
-        let res: any = [];
-        for (let i = 0; i < n; i++) {
-            res.push(this._getRandomWeapon());
+        this._randomWeapaonKeys = [];
+        let weapons: any = [];
+        if (n === 0) {
+            return weapons;
         }
-        return res;
+        n = n || 4;
+        for (let i = 0; i < n; i++) {
+            let weaponItem: any = this._getRandomWeapon();
+            if (weaponItem) {
+                this._randomWeapaonKeys.push(weaponItem.id);
+                weapons.push(weaponItem);
+            }
+        }
+        this._randomWeapaonKeys = [];
+        return weapons;
     }
 
     // 初始化武器，应在职业选后调用

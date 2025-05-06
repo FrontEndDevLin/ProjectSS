@@ -5,6 +5,8 @@ import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { EventBus } from '../../OO/Manager/OO_MsgManager';
 import { CEVENT_PREPARE } from '../CEvent';
 import { BProp, Buff } from '../Interface';
+import { ChapterManager } from './ChapterManager';
+import { getRandomNumber } from '../Common';
 const { ccclass, property } = _decorator;
 
 /**
@@ -50,8 +52,17 @@ export class StoreManager extends OO_UIManager {
         })
     }
 
+    // 随机刷出武器和道具，目前只刷武器
     private _refreshStore() {
-        let randomWeapons: any[] = WeaponManager.instance.getRandomWeapons();
+        // 前3波时，固定刷出两把武器和两件道具
+        // 之后每次普通刷新武器数量和道具数量随机，总和为4
+        let weaponCount: number = 2;
+        if (ChapterManager.instance.getCurrentChapter() > 2) {
+            weaponCount = getRandomNumber(0, 4);
+        }
+        let itemCount: number = 4 - weaponCount;
+
+        let randomWeapons: any[] = WeaponManager.instance.getRandomWeapons(weaponCount);
         // TODO: 还需要获取随机道具
         this.currentStore = randomWeapons;
     }

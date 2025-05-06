@@ -106,7 +106,7 @@ export class ItemsManager extends OO_UIManager {
         let item: BItem = null;
         switch (chestQuality) {
             case TROPHY_TYPE.CHEST: {
-                item = this.getRandomItem(chestQuality);
+                item = this._getRandomItem(chestQuality);
                 this._chestItem = item;
             } break;
             case TROPHY_TYPE.GREAT_CHEST: {
@@ -125,15 +125,39 @@ export class ItemsManager extends OO_UIManager {
         this._chestItem = null;
         this._popChestList();
     }
-    public getRandomItem(quality: number = TROPHY_TYPE.CHEST): BItem {
+
+    // 获取多个随机道具时用到，用于防止重复
+    // 注意当道具数量不够时会有死循环风险
+    private _randomItemKeys: string[] = [];
+    // 随机获取指定数量的道具，不可重复
+    public getRandomItems(n?: number): BItem[] {
+        this._randomItemKeys = [];
+        let items: BItem[] = []
+        if (n === 0) {
+            return items;
+        }
+        n = n || 4;
+        for (let i = 0; i < n; i++) {
+            let item: BItem = this._getRandomItem();
+            if (item) {
+                this._randomItemKeys.push(item.key);
+                items.push(item);
+            }
+        }
+        this._randomItemKeys = [];
+        return items;
+    }
+    private _getRandomItem(quality: number = TROPHY_TYPE.CHEST): BItem {
         let item: BItem = null;
         switch (quality) {
             // TODO: 普通宝箱，大概率获得白色、蓝色道具；小概率获得紫色道具；极小概率获得红色道具(概率也要随着关卡变动)
             case TROPHY_TYPE.CHEST: {
                 let itemKeysPool: string[] = this._getItemsPool();
-                let idx: number = getRandomNumber(0, itemKeysPool.length - 1);
-                let key: string = itemKeysPool[idx];
-                item = this.itemsMap[key];
+                if (itemKeysPool.length) {
+                    let idx: number = getRandomNumber(0, itemKeysPool.length - 1);
+                    let key: string = itemKeysPool[idx];
+                    item = this.itemsMap[key];
+                }
             } break;
             // 极品宝箱，百分百获得红色道具
             case TROPHY_TYPE.GREAT_CHEST: {
@@ -215,6 +239,10 @@ export class ItemsManager extends OO_UIManager {
         let pool: string[] = [];
         for (let key in this.itemsMap) {
             if (key.includes("CR")) {
+                continue;
+            }
+            // 排除已进入当前商店列表的项目
+            if (this._randomItemKeys.indexOf(key) !== -1) {
                 continue;
             }
             pool.push(key)
