@@ -39,6 +39,12 @@ export class StoreCtrl extends OO_Component {
         })
     }
 
+    // 点击刷新调用
+    private _refStore() {
+        // TODO: 需要检查是否够刷新，结合商店刷新次数
+        StoreManager.instance.refreshStore();
+    }
+
     update(deltaTime: number) {
         
     }

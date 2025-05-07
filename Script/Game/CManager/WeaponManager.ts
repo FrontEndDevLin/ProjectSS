@@ -138,8 +138,8 @@ export default class WeaponManager extends OO_UIManager {
         return weaponItem;
     }
 
-    public getWeaponPanelNode(weaponId): Node {
-        const weaponItem = this.getWeaponDataByWeaponId(weaponId);
+    public getWeaponPanelNode(weaponKey): Node {
+        const weaponItem = this.getWeaponDataByWeaponKey(weaponKey);
         let ary: any = [];
         if (weaponItem.r_panel.dmg) {
             ary.push({
@@ -183,7 +183,7 @@ export default class WeaponManager extends OO_UIManager {
         for (let i = 0; i < n; i++) {
             let weaponItem: any = this._getRandomWeapon();
             if (weaponItem) {
-                this._randomWeapaonKeys.push(weaponItem.id);
+                this._randomWeapaonKeys.push(weaponItem.key);
                 weapons.push(weaponItem);
             }
         }
@@ -192,12 +192,12 @@ export default class WeaponManager extends OO_UIManager {
     }
 
     // 初始化武器，应在职业选后调用
-    public initWeapon(weaponIds: string[]) {
+    public initWeapon(weaponKeys: string[]) {
         if (!this.rootNode) {
             // this.rootNode = find("Canvas/")
         }
         for (let i = 0; i < 1; i++) {
-            this.addWeapon(weaponIds[i]);
+            this.addWeapon(weaponKeys[i]);
         }
         // console.log('武器初始面板')
     }
@@ -206,10 +206,10 @@ export default class WeaponManager extends OO_UIManager {
         return this.weaponList.length < this.slot;
     }
     // 购买武器调用
-    public addWeapon(weaponId: string): boolean {
+    public addWeapon(weaponKey: string): boolean {
         if (this.weaponList.length < this.slot) {
             // 临时处理
-            this.weaponList.push(WeaponDB[weaponId]);
+            this.weaponList.push(WeaponDB[weaponKey]);
             return true;
         } else {
             return false;
@@ -218,9 +218,9 @@ export default class WeaponManager extends OO_UIManager {
     // 更新武器数据，根据角色面板、道具
     public updateWeaponPanel() {
         // let panel = CharacterManager.instance.getCharacterProp();
-        for (let weaponId in WeaponDB) {
+        for (let weaponKey in WeaponDB) {
             // 属性修正
-            this.amendWeaponPanel(weaponId);
+            this.amendWeaponPanel(weaponKey);
         }
     }
 
@@ -241,7 +241,7 @@ export default class WeaponManager extends OO_UIManager {
             }
             // let scriptName = item.script || "WeaponBase";
             let weaponNode: Node = this.loadUINode("weapon/WeaponGP", scriptName);
-            weaponNode.OO_param1 = { weaponId: item.id };
+            weaponNode.OO_param1 = { weaponKey: item.key };
             this.appendUINode(weaponNode, WeaponSheel);
             weaponNode.setPosition(weaponLocMap[i]);
         });
@@ -249,21 +249,21 @@ export default class WeaponManager extends OO_UIManager {
         this.appendUINode(WeaponSheel, find("Canvas/Character"));
     }
     // 通过武器名获取面板
-    public getWeaponDataByWeaponId(weaponId: string) {
+    public getWeaponDataByWeaponKey(weaponKey: string) {
         /**
          * 面板需要提前计算好，这里只做返回
          */
-        return WeaponDB[weaponId];
+        return WeaponDB[weaponKey];
     }
     // 计算武器伤害，主要用于反馈到面板上
-    public getWeaponDamage(weaponId: string) {
-        let weaponPanel = this.getWeaponDataByWeaponId(weaponId).r_panel;
+    public getWeaponDamage(weaponKey: string) {
+        let weaponPanel = this.getWeaponDataByWeaponKey(weaponKey).r_panel;
         let dmg: number = weaponPanel.dmg;
         return dmg;
     }
     // 通过角色当前属性，获得修正指定武器的面板
-    public amendWeaponPanel(weaponId) {
-        let weaponData = WeaponDB[weaponId];
+    public amendWeaponPanel(weaponKey) {
+        let weaponData = WeaponDB[weaponKey];
         let originPanel = weaponData.panel;
         if (!weaponData.r_panel) {
             weaponData.r_panel = { ...originPanel };

@@ -35,6 +35,17 @@ export const transportWorldPosition = function (postion: Vec3): Vec3 {
   return v3(postion.x - SCREEN_WIDTH / 2, postion.y - SCREEN_HEIGHT / 2, 0);
 }
 
+// 打乱数组
+export const shuffleArray = function (ary: any[]): any[] {
+  let len: number = ary.length;
+  while (len > 0) {
+    let randomIdx: number = Math.floor(Math.random() * len);
+    [ary[len - 1], ary[randomIdx]] = [ary[randomIdx], ary[len - 1]];
+    len--;
+  }
+  return ary;
+}
+
 export const COLOR = {
   NORMAL: "#F5F5F5",
   SUCCESS: "#67C23A",

@@ -29,16 +29,16 @@ export class WeaponBase extends OO_Component {
     private _animateAttacking: boolean = false;
 
     protected animationComp: Animation = null;
-    public weaponId: string = "";
+    public weaponKey: string = "";
     public weaponData: any = null;
 
     protected onLoad(): void {
         super.onLoad();
-        this.weaponId = this.node.OO_param1 ? this.node.OO_param1.weaponId : "";
-        if (!this.weaponId) {
-            return console.error("Missing param OO_param1.weaponId");
+        this.weaponKey = this.node.OO_param1 ? this.node.OO_param1.weaponKey : "";
+        if (!this.weaponKey) {
+            return console.error("Missing param OO_param1.weaponKey");
         }
-        this.weaponData = WeaponManager.instance.getWeaponDataByWeaponId(this.weaponId);
+        this.weaponData = WeaponManager.instance.getWeaponDataByWeaponKey(this.weaponKey);
 
         this._loadWeaponAsset();
         this._initRangeCollider();

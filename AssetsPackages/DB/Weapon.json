@@ -1,6 +1,7 @@
 {
   "Weapon001-dagger": {
-    "id": "Weapon001-dagger",
+    "key": "Weapon001-dagger",
+    "item_type": "weapon",
     "name": "测试匕首",
     "icon": "",
     "game_pic": "weapon-001-dagger",
@@ -18,7 +19,8 @@
     "atk_type_desc": "stab -> 近战武器的刺击类型; 这个属性影响武器的攻击动画"
   },
   "Weapon101-gun": {
-    "id": "Weapon101-gun",
+    "key": "Weapon101-gun",
+    "item_type": "weapon",
     "sort": 0,
     "name": "测试手枪",
     "icon": "weapon-101-gun",

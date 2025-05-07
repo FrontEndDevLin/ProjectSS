@@ -4,6 +4,7 @@
   },
   "item1": {
     "key": "item1",
+    "item_type": "item",
     "level": 1,
     "label": "道具1",
     "groupLabel": "道具",
@@ -23,6 +24,7 @@
   },
   "item2": {
     "key": "item2",
+    "item_type": "item",
     "level": 1,
     "label": "道具2",
     "groupLabel": "道具",
@@ -37,6 +39,7 @@
   },
   "item3": {
     "key": "item3",
+    "item_type": "item",
     "level": 1,
     "label": "道具3",
     "groupLabel": "道具",
@@ -56,6 +59,7 @@
   },
   "item4": {
     "key": "item4",
+    "item_type": "item",
     "level": 1,
     "label": "道具4",
     "groupLabel": "道具",
@@ -75,6 +79,7 @@
   },
   "item5": {
     "key": "item5",
+    "item_type": "item",
     "level": 1,
     "label": "脚本道具5",
     "groupLabel": "道具",

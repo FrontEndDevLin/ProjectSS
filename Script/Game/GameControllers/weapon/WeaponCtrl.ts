@@ -14,7 +14,7 @@ const { ccclass, property } = _decorator;
  * 通用武器控制类
  * 特殊武器需要继承该类
  * 
- * 武器在做出攻击动画时不可转向
+ * 武器在做出攻击动画时不可转向 
  */
 
 @ccclass('WeaponCtrl')
@@ -198,7 +198,7 @@ export class WeaponCtrl extends OO_Component {
         this._attacking = true;
         // TODO: 攻击动画随着攻速变化而变化
         // TODO: 攻击动画用帧动画，目前的效果有问题
-        this._animation.play(`${this.weaponData.id}-atk`);
+        this._animation.play(`${this.weaponData.key}-atk`);
     }
 
     update(deltaTime: number) {

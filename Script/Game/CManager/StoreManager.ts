@@ -4,9 +4,10 @@ import WeaponManager from './WeaponManager';
 import OO_ResourceManager from '../../OO/Manager/OO_ResourceManager';
 import { EventBus } from '../../OO/Manager/OO_MsgManager';
 import { CEVENT_PREPARE } from '../CEvent';
-import { BProp, Buff } from '../Interface';
+import { BItem, BProp, Buff } from '../Interface';
 import { ChapterManager } from './ChapterManager';
-import { getRandomNumber } from '../Common';
+import { getRandomNumber, shuffleArray } from '../Common';
+import { ItemsManager } from './ItemsManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -61,10 +62,16 @@ export class StoreManager extends OO_UIManager {
             weaponCount = getRandomNumber(0, 4);
         }
         let itemCount: number = 4 - weaponCount;
-
+        // 获取随机武器
         let randomWeapons: any[] = WeaponManager.instance.getRandomWeapons(weaponCount);
-        // TODO: 还需要获取随机道具
-        this.currentStore = randomWeapons;
+        // 获取随机道具
+        let randomItems: BItem[] = ItemsManager.instance.getRandomItems(itemCount);
+
+        let storeAry: any[] = randomWeapons.concat(randomItems);
+
+        storeAry = shuffleArray(storeAry);
+
+        this.currentStore = storeAry;
     }
 
     // 在每回合初次进入商店时调用
@@ -76,21 +83,41 @@ export class StoreManager extends OO_UIManager {
     }
 
     public buyItem(idx) {
-        // TODO: 确认是否能买武器
+        // 确认是否能买武器
         const item = this.currentStore[idx];
         const itemId = item.id;
 
-        if (!WeaponManager.instance.isCanByWeapon()) {
-            console.log("槽位已满，无法购买武器");
+        if (!item) {
+            return;
+        }
+        const itemWhiteList: string[] = ["weapon", "item"];
+        const itemType: string = item.item_type;
+        if (itemWhiteList.indexOf(itemType) === -1) {
             return;
         }
 
-        WeaponManager.instance.addWeapon(itemId);
+        switch (itemType) {
+            case "weapon": {
+                if (!WeaponManager.instance.isCanByWeapon()) {
+                    console.log("槽位已满，无法购买武器");
+                    return;
+                }
+                WeaponManager.instance.addWeapon(itemId);
+                // PrepareWeaponCtrl.updateWeaponView
+                // TODO: 这里通知更新视图集成到addWeapon方法里？
+                EventBus.emit(CEVENT_PREPARE.UPDATE_WEAPON);
+            } break;
+            case "item": {
+                // 购买道具处理
+                ItemsManager.instance.addItem(itemId);
+            } break;
+        }
+
         this.currentStore[idx] = null;
 
-        // 调用StoreCtrl的_updateView和PrepareWeaponCtrl.updateWeaponView
+        // 调用StoreCtrl的_updateView
         EventBus.emit(CEVENT_PREPARE.UPDATE_STORE);
-        EventBus.emit(CEVENT_PREPARE.UPDATE_WEAPON);
+        
     }
 
     public refreshStore() {
@@ -98,6 +125,8 @@ export class StoreManager extends OO_UIManager {
         this._storeRefTime++;
         // TODO: 刷新价格根据当前关卡决定
         this.storeRefCost = this._storeRefTime * 0;
+
+        EventBus.emit(CEVENT_PREPARE.UPDATE_STORE);
     }
 
     // 每回合初次进入升级界面时调用

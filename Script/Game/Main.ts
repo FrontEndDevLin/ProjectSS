@@ -98,6 +98,7 @@ export default class Main extends Component {
          * 第2把远程武器（贴图、图标、动画、子弹与子弹粒子效果）
          * 第2把远程武器穿透(2)，伤害衰减
          * 商店刷新逻辑更换（刷武器和道具，目前只刷武器）done
+         * 商店显示道具
          * 商店刷新功能（目前不消耗金币）
          * 购买道具逻辑（buff角色，和开箱子逻辑一致）
          * 高阶武器实现（实际是贴图相同，属性不同的另一件武器）
@@ -105,6 +106,8 @@ export default class Main extends Component {
          * 武器合成逻辑（合成方法实现，格子够时，相同武器不合成；不够时自动合成）
          * 第1个近战敌人设计（动画，数据）
          * 第1个远程敌人设计（动画，移动逻辑，发射子弹，数据）
+         * 
+         * 
          */
 
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Shape
