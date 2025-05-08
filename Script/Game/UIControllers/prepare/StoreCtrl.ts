@@ -16,6 +16,8 @@ export class StoreCtrl extends OO_Component {
         console.log('StoreCtrl loaded')
 
         this._updateView();
+
+        this.views["StoreInfo/RefBtn"].on(Node.EventType.TOUCH_END, this._refStore);
     }
 
     private _updateView() {
@@ -36,7 +38,7 @@ export class StoreCtrl extends OO_Component {
     start() {
         EventBus.on(CEVENT_PREPARE.UPDATE_STORE, () => {
             this._updateView();
-        })
+        });
     }
 
     // 点击刷新调用
@@ -47,6 +49,10 @@ export class StoreCtrl extends OO_Component {
 
     update(deltaTime: number) {
         
+    }
+
+    protected onDestroy(): void {
+        this.views["StoreInfo/RefBtn"].off(Node.EventType.TOUCH_END, this._refStore);
     }
 }
 

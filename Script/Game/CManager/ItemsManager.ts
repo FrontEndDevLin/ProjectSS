@@ -64,6 +64,26 @@ export class ItemsManager extends OO_UIManager {
 
     }
 
+    private _loadItemsMap() {
+        let itemsDbData: ItemsMap = DBManager.instance.getDbData("Items");
+        let characterDbData: ItemsMap = DBManager.instance.getDbData("Character");
+        for (let key in itemsDbData) {
+            if (key.includes("desc")) {
+                continue;
+            }
+            let bItem: BItem = itemsDbData[key];
+            this.itemsMap[bItem.key] = bItem;
+        }
+        for (let key in characterDbData) {
+            if (!key.includes("CR")) {
+                continue;
+            }
+            let bItem: BItem = characterDbData[key];
+            bItem.level = 1;
+            this.itemsMap[bItem.key] = bItem;
+        }
+    }
+
     // 右上角宝箱列表
     public showChestIconUI() {
         this._chestIconUINode = this.showUI("common/ChestIconWrap", this.rootNode, "NONE");
@@ -180,6 +200,8 @@ export class ItemsManager extends OO_UIManager {
     public addItem(key: string) {
         // 如果是角色
         let item: BItem = this.itemsMap[key];
+        console.log(key)
+        console.log(item)
         if (!item) {
             return;
         }
@@ -192,6 +214,8 @@ export class ItemsManager extends OO_UIManager {
         }
 
         this.runEventFn(CEVENT_CHARACTER.ITEMS_CHANGE);
+
+        console.log(item)
 
         let buffList: Buff[] = item.buff;
 
@@ -212,26 +236,6 @@ export class ItemsManager extends OO_UIManager {
             return 0;
         }
         return this.itemsList[itemsIdx].cnt;
-    }
-
-    private _loadItemsMap() {
-        let itemsDbData: ItemsMap = DBManager.instance.getDbData("Items");
-        let characterDbData: ItemsMap = DBManager.instance.getDbData("Character");
-        for (let key in itemsDbData) {
-            if (key.includes("desc")) {
-                continue;
-            }
-            let bItem: BItem = itemsDbData[key];
-            this.itemsMap[bItem.key] = bItem;
-        }
-        for (let key in characterDbData) {
-            if (!key.includes("CR")) {
-                continue;
-            }
-            let bItem: BItem = characterDbData[key];
-            bItem.level = 1;
-            this.itemsMap[bItem.key] = bItem;
-        }
     }
     
     private _getItemsPool(): string[] {
@@ -264,6 +268,26 @@ export class ItemsManager extends OO_UIManager {
             })
         });
         return list;
+    }
+
+    // 获取指定道具的富文本属性标签词条
+    public getItemsPanelRichTxt(key: string): string {
+        if (!key) {
+            return "";
+        }
+        let item: BItem = this.itemsMap[key];
+        if (!item) {
+            return "";
+        }
+        let buffList: Buff[] = item.buff;
+        let buffTxt = "";
+        buffList.forEach((buff, i) => {
+            buffTxt += CharacterPropManager.instance.getBuffTxt(buff);
+            if (i !== buffList.length - 1) {
+                buffTxt += "<br/>";
+            }
+        });
+        return buffTxt;
     }
 
     update(deltaTime: number) {

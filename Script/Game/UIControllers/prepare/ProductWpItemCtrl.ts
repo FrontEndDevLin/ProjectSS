@@ -2,6 +2,7 @@ import { _decorator, Component, Label, Node } from 'cc';
 import { OO_Component } from '../../../OO/OO';
 import WeaponManager from '../../CManager/WeaponManager';
 import { StoreManager } from '../../CManager/StoreManager';
+import { ItemsManager } from '../../CManager/ItemsManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('ProductWpItemCtrl')
@@ -33,6 +34,9 @@ export class ProductWpItemCtrl extends OO_Component {
         } else if (itemType === 'item') {
             this.views["Card/ImgTxt/WName/Name"].getComponent(Label).string = storeItem.label;
             // TODO: 商店 道具类面板界面还没做，这一块和武器的面板界面实现不统一，需要重新评估
+            // 武器面板实现采用的是多节点，而道具面板采用单节点富文本实现
+            let itemPanelTxt: string = ItemsManager.instance.getItemsPanelRichTxt(storeItem.key);
+            console.log(itemPanelTxt);
         }
     }
 

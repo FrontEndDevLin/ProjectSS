@@ -37,14 +37,7 @@ export class ChestCheckoutUICtrl extends OO_Component {
             let item: BItem = ItemsManager.instance.openChest();
             this.views["Wrap/ItemsCard/Card/ImgTxt/WName/Name"].getComponent(Label).string = item.label;
             this.views["Wrap/ItemsCard/Card/ImgTxt/WName/Types"].getComponent(Label).string = item.groupLabel;
-            let buffList: Buff[] = item.buff;
-            let buffTxt: string = "";
-            buffList.forEach((buff, i) => {
-                buffTxt += CharacterPropManager.instance.getBuffTxt(buff);
-                if (i !== buffList.length - 1) {
-                    buffTxt += "<br/>";
-                }
-            });
+            let buffTxt: string = ItemsManager.instance.getItemsPanelRichTxt(item.key);
             this.views["Wrap/ItemsCard/Card/Content"].getComponent(RichText).string = buffTxt;
         } else {
             let afterWaveUICtrl: AfterWaveUICtrl = this.node.parent.getComponent("AfterWaveUICtrl") as AfterWaveUICtrl;

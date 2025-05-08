@@ -85,7 +85,7 @@ export class StoreManager extends OO_UIManager {
     public buyItem(idx) {
         // 确认是否能买武器
         const item = this.currentStore[idx];
-        const itemId = item.id;
+        const itemKey = item.key;
 
         if (!item) {
             return;
@@ -102,14 +102,14 @@ export class StoreManager extends OO_UIManager {
                     console.log("槽位已满，无法购买武器");
                     return;
                 }
-                WeaponManager.instance.addWeapon(itemId);
+                WeaponManager.instance.addWeapon(itemKey);
                 // PrepareWeaponCtrl.updateWeaponView
                 // TODO: 这里通知更新视图集成到addWeapon方法里？
                 EventBus.emit(CEVENT_PREPARE.UPDATE_WEAPON);
             } break;
             case "item": {
                 // 购买道具处理
-                ItemsManager.instance.addItem(itemId);
+                ItemsManager.instance.addItem(itemKey);
             } break;
         }
 
