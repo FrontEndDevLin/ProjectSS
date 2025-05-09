@@ -4,7 +4,7 @@ import { GP_GROUP, WEAPON_DOMAIN } from '../../ColliderType';
 import { Callback } from '../../Interface';
 import { EnemyInfo, EnemyManager } from '../../CManager/EnemyManager';
 import CharacterManager from '../../CManager/CharacterManager';
-import { getVectorByAngle, GP_UNIT } from '../../Common';
+import { getFloatNumber, getVectorByAngle, GP_UNIT } from '../../Common';
 import { ChapterManager } from '../../CManager/ChapterManager';
 import WeaponManager from '../../CManager/WeaponManager';
 import OO_ResourceManager from '../../../OO/Manager/OO_ResourceManager';
@@ -55,6 +55,23 @@ export class WeaponBase extends OO_Component {
         this.node.getComponent(UITransform).contentSize = picSize;
         this.views["PIC/SF"].getComponent(UITransform).contentSize = picSize;
         this.views["PIC/SF"].getComponent(Sprite).spriteFrame = gamePic;
+
+        // TODO: 设置中心点
+        // weaponData.point_x, weaponData.point_y
+        // 如果未设置，则默认使用0.5, 0.5
+        let pointX: number = this.weaponData.point_x;
+        let pointY: number = this.weaponData.point_y;
+        if (pointX) {
+            let centerX: number = (picSize.width / 2) + pointX;
+            let anchorX: number = getFloatNumber(centerX / picSize.width, 2);
+            this.node.getComponent(UITransform).anchorX = anchorX;
+        }
+        if (pointY) {
+            let centerY: number = (picSize.height / 2) + pointY;
+            let anchorY: number = getFloatNumber(centerY / picSize.height, 2);
+            this.node.getComponent(UITransform).anchorY = anchorY;
+        }
+        // console.log(this.node.getComponent(UITransform).anchorPoint)
 
         this.animationComp = this.views["PIC/SF"].addComponent(Animation);
 

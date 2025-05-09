@@ -85,7 +85,12 @@ export class WeaponMelee extends WeaponBase {
 
     // 近战武器 -> “打击” 类武器的关键帧
     private _getStrikeAtkFrames() {
-        
+        /**
+         * 动画拆解:
+         *  前摇: 武器移动到打击位置，同时以把手为原点逆时针旋转武器
+         *  攻击: 武器顺时针快速旋转，做出挥舞的效果，此时碰撞体生效
+         *  后摇: 武器回到手里，同时逆时针旋转回原位
+         */
     }
 
     start() {

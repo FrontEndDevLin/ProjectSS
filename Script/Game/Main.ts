@@ -90,7 +90,7 @@ export default class Main extends Component {
          *  子弹拖尾效果 done
          * 第1把近战武器 刺（贴图重做）done
          * 第2把近战武器 打击（贴图，动画，动画脚本）
-         *  贴图
+         *  贴图 done
          *  动画
          *  动画脚本
          * 商店UI配色更换

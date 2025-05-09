@@ -54,7 +54,7 @@ export default class CharacterManager extends OO_UIManager {
         // TODO: 武器面板放这里不妥
         WeaponManager.instance.updateWeaponPanel();
 
-        WeaponManager.instance.initWeapon(['Weapon001-dagger']);
+        WeaponManager.instance.initWeapon(['Weapon101-gun']);
         BulletManager.instance.updateBulletList();
 
         OO_ResourceManager.instance.preloadResPkg([{ abName: this.abName, assetType: Prefab, urls: [`Prefabs/character/${characterId}`] }], () => {}, err => {
